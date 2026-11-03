@@ -345,7 +345,7 @@ function viewPart(p){
       ${p.need?`<div><b>What it must do:</b> ${esc(p.need)}</div>`:''}${p.yearsOfUse?`<div><b>Years of use assumed:</b> ${esc(p.yearsOfUse)}${p.yearsOfUseNote?' · '+md1(p.yearsOfUseNote):''}</div>`:''}
     </div></details>
   </div></div>
-  <details class="more" style="border-top:0;padding-top:0"><summary>Other candidates (${others.length}): price, score, why</summary>
+  <details class="more" open style="border-top:0;padding-top:0"><summary>Other candidates (${others.length}): price, score, why</summary>
   <div class="stack" style="margin-top:10px">${others.map(c=>candCard(c,p)).join('')}</div></details>
   </div>`;
 }

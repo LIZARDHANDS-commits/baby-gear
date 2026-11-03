@@ -57,7 +57,7 @@ nav.index{min-width:0;position:sticky;top:env(safe-area-inset-top,0px);height:ca
 nav.index a.home{display:inline-block;font-size:.8rem;color:var(--muted);text-decoration:none;margin-bottom:6px;border:1px solid var(--line);border-radius:999px;padding:2px 10px}
 nav.index a.home:hover{color:var(--accent);border-color:var(--accent)}
 nav.index .brand{font-family:var(--display);font-weight:700;font-size:1.1rem;margin-bottom:14px;display:block;color:var(--ink);text-decoration:none}
-.wbtn{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 10px;font:inherit;font-family:var(--display);font-weight:600;font-size:.9rem;background:var(--accent-soft);color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:6px 12px;cursor:pointer;text-align:left}
+.wbtn{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;width:100%;margin:0 0 10px;font:inherit;font-family:var(--display);font-weight:600;font-size:.9rem;background:var(--accent-soft);color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:6px 12px;cursor:pointer;text-align:left}
 .wbtn:hover{background:var(--accent);color:var(--accent-ink)}
 .wbtn .st{margin-left:auto;font-size:.75rem;font-weight:400;opacity:.85}
 #wpop{position:fixed;top:max(8px,env(safe-area-inset-top,0px));right:8px;z-index:50;width:min(440px,calc(100vw - 16px));background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.22);padding:14px 16px}
@@ -215,7 +215,7 @@ function rest(t){ t=String(t||''); const f=first(t); return t.slice(f.length).tr
 function dots(n){ n=Math.max(0,Math.min(5,Math.round(n||0))); return '●'.repeat(n)+'○'.repeat(5-n); }
 function liveTotal(c, w){ w=w||W; if(!c||!c.score) return null; const same=CRIT.every(([k])=>w[k]===W0[k]); return (same&&c.score.total!=null)?c.score.total:total(c,w); }
 function scoreTable(c, w, ci){ w=w||W; if(!c||!c.score) return ''; const tot=liveTotal(c,w); const R=c.score.reasons||{}; const custom=!CRIT.every(([k])=>w[k]===W0[k]);
-  return `<div class="scorebox"${ci!=null?` data-sb="${ci}"`:''}><h4>Score <span class="num">${tot}</span> of 100${custom?' with your weights':''}: how it was scored</h4>
+  return `<div class="scorebox"${ci!=null?` data-sb="${ci}"`:''}><h4>Score <span class="num">${tot}</span> of 100${custom?' with your weighting':''}: how it was scored</h4>
   <table class="st"><thead><tr><th>Criterion</th><th>Weight</th><th>1 to 5</th><th>Why this number</th></tr></thead><tbody>${CRIT.map(([k,l])=>`<tr><td class="c">${l}</td><td class="w num">${w[k]}</td><td class="d" aria-label="${c.score[k]??'not scored'} of 5">${dots(c.score[k])}<small class="num">${c.score[k]??'–'}/5</small></td><td class="r">${R[k]?md1(R[k]):'<span class="muted">reason not written by the researcher</span>'}</td></tr>`).join('')}</tbody></table>
   <p class="small muted" style="margin-top:8px">Each 1 to 5 is the researcher's judgement, and the one-line reason beside it is its only basis; there is no fixed rubric. Total = sum of score ÷ 5 × weight (${CRIT.map(([k])=>`${c.score[k]??'?'}/5×${w[k]}`).join(' + ')} = ${tot}${custom?`, as shares of ${CRIT.reduce((a,[k])=>a+(w[k]||0),0)}`:''}). Safety is pass or fail and is never scored. ${custom?`The report's weights give ${c.score.total??total(c,W0)}.`:''} <a href="#" class="wopen">Change the weights.</a></p></div>`; }
 function gateChip(v,label){ const m={pass:'ok',partly:'warn',fail:'bad'}; return `<span class="chip ${m[v]||''}">${esc(label)}: ${esc(v||'unknown')}</span>`; }
@@ -249,13 +249,31 @@ const partById = Object.fromEntries(parts.map(p=>[p.id,p]));
 function pickOf(p){ return (p.candidates||[]).find(c=>c.role==='lead\'s pick') || (p.candidates||[]).find(c=>p.pick && c.name===p.pick.candidate) || null; }
 function pickPrice(p){ const c=pickOf(p); if(!c) return null; return (c.storePrice&&c.storePrice.amount)||(c.price&&c.price.amount)||null; }
 
+function pickLine(p){ const pk=pickOf(p); if(!pk) return '<p class="small muted">No top pick yet.</p>'; const price=pickPrice(p); const tot=pk.score?liveTotal(pk,W):null;
+  return `<div class="row" style="align-items:center;gap:10px;margin:4px 0 8px">${photoEl(pk,'thumb').replace('class="thumb"','class="thumb" style="width:56px;height:56px;object-fit:contain;border-radius:6px;background:#fff;border:1px solid var(--line)"')}<div><div class="small muted">Top pick in this category${tot!=null?`, scored <span class="num">${tot}</span> of 100`:''}</div><b>${esc(pk.name)}</b> ${price?`<span class="num">${money(price)}</span>`:''} ${buyBtn(pk)}</div></div>`; }
+function forJuliaPanel(p,fj,showPick){ return `<div class="panel" style="border:2px solid var(--pick)"><div class="eyebrow" style="color:var(--pick)">For Julia${showPick?` · <a href="#part-${p.id}" style="color:inherit">${esc(p.name)}</a>`:''}</div><h2 style="margin:4px 0 6px">${esc(fj.question)}</h2>${showPick?pickLine(p):''}
+    ${fj.options?`<div class="optrow">${fj.options.map(o=>`<div class="opt"><b>${esc(o.name)}</b> <span class="num">${esc(o.price)}</span></div>`).join('')}</div>`:''}
+    ${fj.answer?`<p class="small" style="color:var(--pick)"><b>Answer:</b> ${md1(fj.answer)}</p>`:''}
+    <p class="small"><b>${md1(fj.ask)}</b></p>
+    <details class="more" style="margin-top:8px;border-top:0;padding-top:0"><summary>More: ${fj.options?'for and against each':'why wait, why buy now'}</summary><p class="small" style="margin-top:8px">${md1(fj.pick)}</p>${fj.options?`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${fj.options.map(o=>`<div class="panel" style="padding:10px 12px"><h4 style="margin:0">${esc(o.name)}</h4><div class="num" style="font-weight:700;margin:2px 0 6px">${esc(o.price)}</div><div class="small"><b>For</b><ul class="small">${o.pros.map(x=>`<li>${md1(x)}</li>`).join('')}</ul><b>Against</b><ul class="small">${o.cons.map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`).join('')}</div>`:`<div class="grid two"><div><h4>Why wait</h4><ul class="small">${(fj.wait||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div><div><h4>Why buy now</h4><ul class="small">${(fj.now||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`}</details></div>`; }
+
+function viewDecisions(){
+  const fj=parts.filter(p=>p.forJulia), dd=parts.filter(p=>p.decision&&p.decision.state==='decided'&&!p.forJulia), rest=parts.filter(p=>!p.forJulia&&!(p.decision&&p.decision.state==='decided'));
+  return `<div class="eyebrow">For Julia</div><h1>Decisions</h1><p class="lead" style="margin:8px 0 18px">Each item is the <b>top pick in its category</b>: the candidate that scored highest after the safety gate. Say yes, or choose between the options. Nothing is bought until Pat and Julia both say yes.</p>
+  <div class="stack">
+  ${fj.length?`<h2 style="margin:0">Open: ${fj.length}</h2>${fj.map(p=>forJuliaPanel(p,p.forJulia,true)).join('')}`:'<p class="muted">Nothing is waiting on Julia.</p>'}
+  ${dd.length?`<h2 style="margin:10px 0 0">Decided: ${dd.length}</h2>${dd.map(p=>`<div class="panel"><div class="eyebrow" style="color:var(--pick)"><a href="#part-${p.id}" style="color:inherit">${esc(p.name)}</a></div><div class="small" style="margin:4px 0"><span class="chip accent" style="font-weight:600">${esc(p.decision.label)}</span></div>${pickLine(p)}</div>`).join('')}`:''}
+  <details class="more"><summary>Top picks not yet put to Julia (${rest.length}): confirm later</summary><div class="grid" style="margin-top:8px">${rest.map(p=>`<a class="phasecard" href="#part-${p.id}">${(()=>{const c=pickOf(p);return c?photoEl(c,'thumb').replace('class="thumb"','class="thumb" style="width:56px;height:56px;object-fit:contain;border-radius:6px;background:#fff;border:1px solid var(--line)"'):'<div class="nophoto">no pick yet</div>';})()}<div><b>${esc(p.name)}</b><div class="small">${(()=>{const c=pickOf(p);return c?esc(c.name):'<span class="muted">open</span>';})()}</div><div class="small num muted">${pickPrice(p)?money(pickPrice(p)):''}</div></div></a>`).join('')}</div></details>
+  </div>`;
+}
+
 function viewOverview(){
   const totals = phases.map(ph=>{ const ps=ph.parts.map(id=>partById[id]).filter(Boolean); const sum=ps.reduce((a,p)=>a+(pickPrice(p)||0),0); return {ph,ps,sum}; });
   const all = totals.reduce((a,t)=>a+t.sum,0);
   return `<div class="hero"><div><div class="eyebrow">Baby due April 2027 · Greenwood, Nova Scotia</div><h1>Greenwood Baby Gear</h1><p class="lead" style="margin-top:8px">Twelve things to buy. Each pick is a proposal; you and Julia decide. Built ${esc(P.built)}.</p><p class="howto"><span class="chip accent" style="border:1.5px solid var(--accent)">▸ More</span> buttons open details. <span class="chip pick">Buy</span> buttons open the store page.</p></div>
   <div class="row"><div class="stat"><span class="v num">${money(all)}</span><span class="l">picks before tax, both phases</span></div><div class="stat"><span class="v num">$4,500</span><span class="l">working cap before tax and delivery</span></div></div></div>
   <div class="stack">
-  ${(()=>{const fj=parts.filter(p=>p.forJulia), dd=parts.filter(p=>p.decision&&p.decision.state==='decided'); return (fj.length||dd.length)?`<div class="panel" style="border:2px solid var(--pick)"><h2>Decisions</h2>${fj.map(p=>`<p><b>For Julia:</b> <a href="#part-${p.id}">${esc(p.name)}</a>: ${esc(p.forJulia.question)}</p>`).join('')}${dd.length?`<p class="small muted">Decided: ${dd.map(p=>`<a href="#part-${p.id}">${esc(p.name)}</a> (${esc(p.decision.label.replace(/^Decided [^:]*: /,''))})`).join(' · ')}</p>`:''}</div>`:'';})()}
+  ${(()=>{const fj=parts.filter(p=>p.forJulia), dd=parts.filter(p=>p.decision&&p.decision.state==='decided'); return (fj.length||dd.length)?`<a class="phasecard" href="#decisions" style="border:2px solid var(--pick);display:flex;justify-content:space-between;align-items:center"><div><b>Decisions for Julia</b><div class="small">${fj.length} open (${fj.map(p=>esc(p.name.split(' (')[0])).join(', ')})${dd.length?` · ${dd.length} decided`:''}. Each is the top pick in its category.</div></div><span class="chip pick">Open ›</span></a>`:'';})()}
   ${totals.map(({ph,ps,sum})=>`<div class="panel"><div class="row" style="justify-content:space-between;align-items:baseline"><div><h2>${esc(ph.name)}</h2><div class="muted small">${esc(ph.deadline||'')}</div></div><div class="stat"><span class="v num">${money(sum)}</span><span class="l">picks · share ${money(ph.budgetShare)}</span></div></div>
     <div class="bar" style="margin:10px 0"><i class="${sum>ph.budgetShare?'over':''}" style="width:${Math.min(100,sum/ph.budgetShare*100)}%"></i></div>
     <div class="grid">${ps.map(p=>{const c=pickOf(p); return `<a class="phasecard" href="#part-${p.id}">${c?photoEl(c,'thumb').replace('class="thumb"','class="thumb" style="width:72px;height:72px;object-fit:contain;border-radius:6px;background:#fff;border:1px solid var(--line)"'):'<div class="nophoto">no pick yet</div>'}<div><b>${esc(p.name)}</b><div class="small">${c?esc(c.name):'<span class="muted">open</span>'}</div><div class="small num muted">${pickPrice(p)?money(pickPrice(p)):''}</div></div></a>`;}).join('')}</div></div>`).join('')}
@@ -278,7 +296,7 @@ function viewMethod(){
 
 function viewWeights(){
   const sum=CRIT.reduce((a,[k])=>a+W[k],0);
-  let html=`<div class="eyebrow">Weights lab</div><h1>Change the weights, watch the pick</h1><p class="lead" style="margin:8px 0 18px">Move a slider and every part is re-scored from its 1-to-5 criterion scores. The report's own pick is marked; a different leader means the pick depends on how much you care about that criterion. Gates still apply: a candidate that fails safety is never a pick.</p>
+  let html=`<div class="eyebrow">Evaluation weighting lab</div><h1>Change the weighting, watch the pick</h1><p class="lead" style="margin:8px 0 18px">Move a slider and every part is re-scored from its 1-to-5 criterion scores. The report's own pick is marked; a different leader means the pick depends on how much you care about that criterion. Gates still apply: a candidate that fails safety is never a pick.</p>
   <div class="panel stack" style="gap:10px">${CRIT.map(([k,l])=>`<div class="slider"><label for="w-${k}">${l}</label><input type="range" id="w-${k}" min="0" max="60" value="${W[k]}" data-k="${k}"><b class="num" id="wv-${k}">${W[k]}</b></div>`).join('')}
   <div class="row" style="align-items:center"><span class="small muted">Weights are read as shares of their sum (${sum}).</span><button class="ghost" id="w-reset" type="button">Reset to the report's weights</button></div></div>
   <div class="stack" style="margin-top:16px" id="w-results"></div>`;
@@ -334,11 +352,7 @@ function viewPart(p){
   return `<div class="eyebrow">${esc(ph.name||'')} · ${esc(p.waypoint||'')}</div><h1>${esc(p.name)}</h1>
   <div class="row small muted" style="margin:8px 0 16px">${p.decision?`<span class="chip ${p.decision.state==='for-julia'?'pick':'accent'}" style="font-weight:600">${esc(p.decision.label)}</span>`:''}${cal&&cal.latestOrder?`<span class="chip">order by ${esc(cal.latestOrder)}</span>`:''}${p.readyBy?`<span class="chip">ready by ${esc(p.readyBy.split('(')[0].trim())}</span>`:''}</div>
   <div class="stack">
-  ${fj?`<div class="panel" style="border:2px solid var(--pick)"><div class="eyebrow" style="color:var(--pick)">For Julia</div><h2 style="margin:4px 0 6px">${esc(fj.question)}</h2>
-    ${fj.options?`<div class="optrow">${fj.options.map(o=>`<div class="opt"><b>${esc(o.name)}</b> <span class="num">${esc(o.price)}</span></div>`).join('')}</div>`:''}
-    ${fj.answer?`<p class="small" style="color:var(--pick)"><b>Answer:</b> ${md1(fj.answer)}</p>`:''}
-    <p class="small"><b>${md1(fj.ask)}</b></p>
-    <details class="more" style="margin-top:8px;border-top:0;padding-top:0"><summary>More: ${fj.options?'for and against each':'why wait, why buy now'}</summary><p class="small" style="margin-top:8px">${md1(fj.pick)}</p>${fj.options?`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${fj.options.map(o=>`<div class="panel" style="padding:10px 12px"><h4 style="margin:0">${esc(o.name)}</h4><div class="num" style="font-weight:700;margin:2px 0 6px">${esc(o.price)}</div><div class="small"><b>For</b><ul class="small">${o.pros.map(x=>`<li>${md1(x)}</li>`).join('')}</ul><b>Against</b><ul class="small">${o.cons.map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`).join('')}</div>`:`<div class="grid two"><div><h4>Why wait</h4><ul class="small">${(fj.wait||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div><div><h4>Why buy now</h4><ul class="small">${(fj.now||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`}</details></div>`:''}
+  ${fj?forJuliaPanel(p,fj,false):''}
   <div class="pickcard">${pk?photoEl(pk):'<div class="nophoto">no pick yet</div>'}<div><div class="eyebrow" style="color:var(--pick)">${p.decision&&p.decision.state==='decided'?'The pick':'Pick to confirm'}</div><h2>${esc(pk?pk.name:(pick.candidate||'Open'))}</h2>
     <div class="row" style="margin-top:8px;align-items:center">${price?`<span class="price num">${money(price)}</span>`:''}${pk?buyBtn(pk):''}${statusShort?`<span class="chip warn">${esc(statusShort)}</span>`:''}</div>
     <p class="tldr">${md1(first(pick.why))}</p>
@@ -444,8 +458,9 @@ function viewDisclaimers(){
 /* ---------- routing ---------- */
 const views = [
   {id:'overview', label:'Overview', group:'Start', fn:viewOverview},
+  {id:'decisions', label:'Decisions for Julia', group:'Start', fn:viewDecisions},
   {id:'method', label:'How the picks are chosen', group:'Start', fn:viewMethod},
-  {id:'weights', label:'Weights lab', group:'Start', fn:viewWeights},
+  {id:'weights', label:'Evaluation weighting lab', group:'Start', fn:viewWeights},
   ...phases.flatMap(ph=>ph.parts.map((id,i)=>partById[id]).filter(Boolean).map(p=>({id:'part-'+p.id, label:p.name, group:ph.name, n:p.waypoint, fn:()=>viewPart(p)}))),
   {id:'calendar', label:'Buying calendar', group:'Plan', fn:viewCalendar},
   {id:'research-next', label:'Still to research', group:'Plan', fn:viewResearchNext},
@@ -454,7 +469,7 @@ const views = [
 ];
 function buildNav(){
   const groups=[...new Set(views.map(v=>v.group))];
-  document.getElementById('nav').innerHTML = `${P.public?'<a class="home" href="../">‹ Home</a>':''}<a class="brand" href="#overview">Greenwood Baby Gear</a><button class="wbtn" id="wbtn" type="button" aria-controls="wpop" aria-expanded="false">⚖ Weights <span class="st" id="wstate"></span></button><div class="groups">${groups.map(g=>`<div class="grp"><div class="group">${esc(g)}</div>${views.filter(v=>v.group===g).map(v=>`<a class="item" href="#${v.id}" data-v="${v.id}">${v.n?`<span class="n">${esc(v.n)}</span>`:''}<span>${esc(v.label)}</span></a>`).join('')}</div>`).join('')}</div>`;
+  document.getElementById('nav').innerHTML = `${P.public?'<a class="home" href="../">‹ Home</a>':''}<a class="brand" href="#overview">Greenwood Baby Gear</a><button class="wbtn" id="wbtn" type="button" aria-controls="wpop" aria-expanded="false">⚖ Adjust Evaluation Weighting <span class="st" id="wstate"></span></button><div class="groups">${groups.map(g=>`<div class="grp"><div class="group">${esc(g)}</div>${views.filter(v=>v.group===g).map(v=>`<a class="item" href="#${v.id}" data-v="${v.id}">${v.n?`<span class="n">${esc(v.n)}</span>`:''}<span>${esc(v.label)}</span></a>`).join('')}</div>`).join('')}</div>`;
 }
 function sortByLive(cs){ return cs.slice().sort((a,b)=>{const ta=a.gate1==='fail'?-1:(liveTotal(a,W)??-2), tb=b.gate1==='fail'?-1:(liveTotal(b,W)??-2); return tb-ta;}); }
 function leaderLine(p){ const pk=pickOf(p); const cs=sortByLive((p.candidates||[]).filter(c=>c.score&&c.gate1!=='fail')); if(!cs.length) return ''; const lead=cs[0]; const custom=!CRIT.every(([k])=>W[k]===W0[k]);
@@ -465,7 +480,7 @@ function saveW(){ try{ localStorage.setItem('bg-weights', JSON.stringify(W)); }c
 function loadW(){ try{ const j=JSON.parse(localStorage.getItem('bg-weights')||'null'); if(j&&CRIT.every(([k])=>typeof j[k]==='number')) W=Object.assign({},W0,j); }catch(e){} }
 function wCustom(){ return !CRIT.every(([k])=>W[k]===W0[k]); }
 function applyWeights(){
-  const st=document.getElementById('wstate'); if(st) st.textContent=wCustom()?'custom':'report';
+  const st=document.getElementById('wstate'); if(st) st.textContent=wCustom()?'adjusted':'';
   document.querySelectorAll('#wpop input[type=range]').forEach(r=>{ r.value=W[r.dataset.k]; const v=document.getElementById('wp-'+r.dataset.k); if(v) v.textContent=W[r.dataset.k]; });
   const sumEl=document.getElementById('wp-sum'); if(sumEl) sumEl.textContent=CRIT.reduce((a,[k])=>a+W[k],0);
   const cands=document.getElementById('cands');
@@ -479,8 +494,8 @@ function applyWeights(){
   if(document.getElementById('w-results')){ renderWeightResults(); document.querySelectorAll('#main input[type=range]').forEach(r=>{ r.value=W[r.dataset.k]; const v=document.getElementById('wv-'+r.dataset.k); if(v) v.textContent=W[r.dataset.k]; }); }
 }
 function buildWeightsPop(){
-  const d=document.createElement('div'); d.id='wpop'; d.hidden=true; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Weights');
-  d.innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><h3>Weights</h3><button class="ghost" id="wp-close" type="button" aria-label="Close">✕</button></div>
+  const d=document.createElement('div'); d.id='wpop'; d.hidden=true; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Adjust evaluation weighting');
+  d.innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><h3>Adjust evaluation weighting</h3><button class="ghost" id="wp-close" type="button" aria-label="Close">✕</button></div>
   <p class="small muted" style="margin-top:4px">Move a slider: scores and the candidate order update as you drag, on every page. Shares of the sum (<span class="num" id="wp-sum"></span>).</p>
   ${CRIT.map(([k,l])=>`<div class="slider"><label for="wp-${k}-r">${l}</label><input type="range" id="wp-${k}-r" min="0" max="60" value="${W[k]}" data-k="${k}"><b class="num" id="wp-${k}">${W[k]}</b></div>`).join('')}
   <div class="foot"><button class="ghost" id="wp-reset" type="button">Reset to the report's weights</button><a href="#weights" id="wp-lab">Full lab: every part at once</a></div>`;

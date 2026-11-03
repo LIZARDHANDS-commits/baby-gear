@@ -82,7 +82,19 @@ figcaption{font-size:14px;color:var(--muted)}
 .offer ul{margin:0;padding-left:20px;display:grid;gap:6px}
 
 /* decisions */
-.wants{font-size:15px;color:var(--muted);max-width:65ch}
+.wants{font-size:14px;color:var(--muted);max-width:65ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--chip);border-radius:8px;padding:5px 10px;font-size:14px}
+.chip b{font-weight:700}
+.nextline{display:grid;gap:10px}
+.nextline p{font-size:15px}
+.meter{display:grid;gap:6px}
+.meter .bar{height:6px;border-radius:999px;background:var(--chip);overflow:hidden}
+.meter .bar i{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
+.detail details{background:var(--chip);border:0}
+.detail details summary{font-size:15px;padding:10px 14px}
+.detail details .detail{padding:0 14px 14px}
+.detail details details{background:var(--panel);border:1px solid var(--line)}
 .declist{display:grid;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 details.dec{background:transparent;border:0;border-radius:0;border-top:1px solid var(--line)}
 details.dec:first-child{border-top:0}
@@ -169,7 +181,15 @@ footer a{color:var(--accent)}
     <details>
       <summary>How we score <span class="more">Show more</span></summary>
       <div class="detail">
-        <p>Four tests, adapted from the ones Canada's housing agency (CMHC) uses in its Housing Market Assessment. A test with no data reads "no data", never green. Lines marked "ours" are our judgement, not tested values.</p>
+        <p>We use the four warning tests Canada's housing agency (CMHC) uses in its Housing Market Assessment, adapted to the Valley. Green means no warning, yellow means be careful, red means don't overpay. The data: detached homes, Middleton to Kentville, from recorded sales (Nova Scotia assessment data) and listing counts. A test with no data reads "no data", never green. Lines marked "ours" are our judgement, not tested values.</p>
+        <ul>
+          <li><b>Overheating:</b> are homes selling faster than new ones come up?</li>
+          <li><b>Price acceleration:</b> is the yearly price rise speeding up quarter after quarter?</li>
+          <li><b>Overvaluation:</b> does owning cost far more than renting a similar home, or are prices far above local incomes?</li>
+          <li><b>Overbuilding:</b> are unsold new builds or empty rentals piling up? That would mean prices could soften.</li>
+        </ul>
+        <p class="muted">No official test exists for a market as small as the Valley (about 650 sales a year), so we read the tests over 6 to 12 months and treat them as signals, not proof. The riskiest assumption is that Valley data is enough: a quarter holds 150 to 170 sales.</p>
+        <h4>The rules</h4>
         <ol>
           <li><b>Overheating:</b> Valley sales ÷ new listings, rolling 6 months. Green under 60%, yellow 60 to 70%, red over 70% for 2 windows in a row. The 70% line is CMHC's national line read off a chart; 60% is brokerage commentary. We have no new-listing counts yet, so months of supply and days on market stand in with no agreed line.</li>
           <li><b>Price acceleration (ours):</b> the yearly change in price per square foot, quarter by quarter. Green if not speeding up, or for 1 to 2 quarters. Yellow if speeding up 3 or more quarters in a row. Red if 4 or more in a row and the yearly rise is over 10%. Back-tested: it would have shown red through the 2021 to 2022 run-up.</li>
@@ -201,6 +221,16 @@ footer a{color:var(--accent)}
         <li><b>The middle of the market for a home like ours is about $497,000.</b> Middleton sits far below it, Kentville above.</li>
         <li><b>Sales run about 1.16 times the assessed value now, down from 1.8.</b> Use the assessment as a cross-check, never the asking price.</li>
       </ul>
+      <details class="flat">
+        <summary>More <span class="more">Show more</span></summary>
+        <div class="detail"><ul>
+          <li><b>Paying more does not mean buying at the frothiest end.</b> Pricier homes have risen least since 2022. That evidence is moderate, so it guides, it doesn't decide.</li>
+          <li><b>Only 2 of 4 tests have data.</b> Rents and incomes arrive with the agent in December; sales are 26% below 2022 and prices are not inflation-adjusted.</li>
+          <li><b>If the reading turns yellow:</b> offer at or below the comparable median, no bidding war, keep every condition. <b>Red:</b> no offer unless the home clears our fair price at a discount; otherwise rent and re-check each quarter. The 15 February switch date still applies.</li>
+          <li><b>Overbuilding red on its own is not a reason to rush:</b> it means prices may soften, which favours waiting or bargaining.</li>
+          <li><b>Before any viewing,</b> write the fair-price range from 3 or more recorded sales and a walk-away price. Under 3 comparable sales means no basis for an offer.</li>
+        </ul></div>
+      </details>
     </div>
 
     <details>
@@ -262,8 +292,25 @@ footer a{color:var(--accent)}
 
   <section aria-labelledby="t-dec">
     <h2 id="t-dec">Decisions</h2>
-    <p class="wants">We want 3 bedrooms plus an office, a garage, 2 or more bathrooms, Middleton to Kentville, cosmetic work only, priced from recorded sales. ★ marks our current lean; nothing is final until both of us say yes.</p>
+    <div class="chips" aria-label="What we're looking for">
+      <span class="chip"><b>3 bedrooms</b> + an office</span>
+      <span class="chip"><b>Garage</b></span>
+      <span class="chip"><b>2+ bathrooms</b></span>
+      <span class="chip"><b>Middleton</b> to <b>Kentville</b></span>
+      <span class="chip">Town or country, by the listing</span>
+      <span class="chip"><b>Cosmetic work only</b></span>
+      <span class="chip">Priced from <b>recorded sales</b></span>
+    </div>
+    <p class="wants">★ marks our current lean; nothing is final until both of us say yes.</p>
     <div class="declist" id="decs"></div>
+    <div class="nextline panel">
+      <p><b>Next:</b> <span id="next-line"></span></p>
+      <div class="meter"><div class="bar"><i id="meter-fill" style="width:0%"></i></div><p class="small muted"><b id="meter-text">0 of 0</b> steps done.</p></div>
+      <details class="flat">
+        <summary>All steps, by person <span class="more">Show more</span></summary>
+        <div class="detail wide"><p class="muted small">Tick a box as you finish a step; the page remembers it on this phone or computer only.</p><div class="people" id="people"></div></div>
+      </details>
+    </div>
     <details class="diagram">
       <summary>How the hunt resolves <span class="more">Show more</span></summary>
       <div class="detail wide">
@@ -323,47 +370,73 @@ footer a{color:var(--accent)}
       <li>Yearly property tax for 2026-27 is $0.853 per $100 of assessed value in Kings County and $1.46620 per $100 in Kentville.<sup><a href="#src-costs-2">2</a></sup></li>
       <li>The FHSA gives $8,000 of room in the first year. Both of us can open one on or after 1 Jan 2027. This is our reading of the rules, not yet confirmed by the tax agency.<sup><a href="#src-costs-4">4</a></sup></li>
       <li>The Home Buyers' Plan lets each person take out up to $60,000 from RRSPs, and it can be combined with the FHSA for one purchase.<sup><a href="#src-costs-5">5</a></sup></li>
-      <li>The move benefits cover some closing costs and inspections, if we close inside the allowed window.<sup><a href="#src-costs-6">6</a></sup></li>
+      <li>Employer relocation programs may cover some buying costs; we're checking ours.</li>
     </ul>
 
-    <p>Lawyer and inspection fees also apply at closing. Our sources give only rough, secondary ranges, so we leave out the numbers.<sup><a href="#src-costs-6">6</a></sup></p>
+    <details>
+      <summary>One-time closing costs <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>Deed transfer tax is a percentage of the price, paid once at closing.</p>
+        <div class="tablewrap"><table>
+          <tr><th>Place</th><th class="n">Deed transfer tax</th></tr>
+          <tr><td>Kings County</td><td class="n">1.5%</td></tr>
+          <tr><td>Annapolis County</td><td class="n">1.5%</td></tr>
+          <tr><td>Middleton</td><td class="n">1.5%</td></tr>
+          <tr><td>Kentville</td><td class="n">1.5%</td></tr>
+          <tr><td>Wolfville</td><td class="n">1.5%</td></tr>
+          <tr><td>Berwick</td><td class="n">1.25%</td></tr>
+        </table></div>
+        <p>Rates are as of July 2026.<sup><a href="#src-costs-1">1</a></sup> Lawyer and inspection fees also apply. Our sources only give rough ranges for these (secondary: legal about $1,200 to $1,800, an inspection $500 to $1,000) and we have not confirmed them.<sup><a href="#src-costs-6">6</a></sup> A first-time buyer may qualify for a provincial rebate or a deed-transfer exemption; not yet checked.<sup><a href="#src-costs-7">7</a></sup></p>
+      </div>
+    </details>
 
-    <h4>Yearly property tax</h4>
-    <p>The bill is the rate times the assessed value, divided by 100. Nova Scotia caps assessment rises (2.6% for 2026), but the cap is removed the year after a sale, so a new owner's assessment can jump to market value before the cap restarts.<sup><a href="#src-costs-7">7</a></sup></p>
+    <details>
+      <summary>Yearly property tax and running costs <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>The bill is the rate times the assessed value, divided by 100. Nova Scotia caps how fast the assessment can rise, at 2.6% for 2026. The cap is removed the year after a sale to a non-family buyer, so a new owner's assessment can jump to market value. The cap then restarts the year after.<sup><a href="#src-costs-7">7</a></sup></p>
+        <p>Electricity: the residential rate is 19.128 cents per kWh plus a $20.08 monthly base charge from 1 May 2026.<sup><a href="#src-costs-7">7</a></sup></p>
+      </div>
+    </details>
 
-    <h4>FHSA basics and timing</h4>
-    <ul>
-      <li>To open one, you must not have lived in a home you owned (or your spouse owned) in this year or the previous 4 calendar years.<sup><a href="#src-costs-4">4</a></sup></li>
-      <li>The same look-back is repeated when you withdraw, for your own home only. Moving back into a home we own before withdrawing would fail the test.<sup><a href="#src-costs-3">3</a></sup></li>
-      <li>The home must not have been acquired more than 30 days before the withdrawal.<sup><a href="#src-costs-3">3</a></sup></li>
-      <li>A rental you have never lived in may not block opening. No case confirms this, so we will ask the tax agency in writing.<sup><a href="#src-costs-8">8</a></sup></li>
-      <li>Only the account holder deducts the contribution. The refund comes with the 2027 tax return, in spring 2028.<sup><a href="#src-costs-4">4</a></sup></li>
-    </ul>
+    <details>
+      <summary>FHSA basics and timing <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>To open one, you must not have lived in a home you owned (or your spouse owned) in this year or the previous 4 calendar years.<sup><a href="#src-costs-4">4</a></sup></li>
+          <li>The same look-back is repeated when you withdraw, for your own home only. The 30 days before the withdrawal are left out. Moving back into a home we own before withdrawing would fail the test.<sup><a href="#src-costs-3">3</a></sup></li>
+          <li>The home must not have been acquired more than 30 days before the withdrawal. You must live in it, or intend to, within a year, and buy it before 1 October of the year after the withdrawal. Form RC725 makes the withdrawal.<sup><a href="#src-costs-3">3</a></sup></li>
+          <li>A rental you have never lived in may not block opening. We found no case of the tax agency confirming or rejecting this, so a written question to them is planned.<sup><a href="#src-costs-8">8</a></sup></li>
+          <li>A spouse's home counts at opening but not at purchase (secondary). Moving into a rental you already own is not a new purchase, so it never counts as a qualifying withdrawal (a tax-agency answer, reported second-hand).<sup><a href="#src-costs-8">8</a></sup></li>
+          <li>Only the account holder deducts the contribution. The refund comes with the 2027 tax return, in spring 2028.<sup><a href="#src-costs-4">4</a></sup></li>
+        </ul>
+      </div>
+    </details>
 
-    <h4>Home Buyers' Plan and other programs</h4>
-    <ul>
-      <li>The home must become your main home within one year. Repayment timing is not yet confirmed.<sup><a href="#src-costs-5">5</a></sup></li>
-      <li>The Home Buyers' Amount is a $10,000 credit, worth about $1,500. The official page is not yet read.<sup><a href="#src-costs-5">5</a></sup></li>
-      <li>New builds only: a federal GST rebate of up to $50,000 and a Nova Scotia rebate of up to $3,000.<sup><a href="#src-costs-5">5</a></sup></li>
-    </ul>
+    <details>
+      <summary>Home Buyers' Plan and other programs <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>The Home Buyers' Plan uses the same four-year "lived in an owned home" test. The home must become your main home within one year. Repayment is reported to start in the 5th year after the first withdrawal for 2026 to 2028 withdrawals, but this is not yet confirmed.<sup><a href="#src-costs-5">5</a></sup></li>
+          <li>The Home Buyers' Amount is $10,000, worth about $1,500 in tax credit. Our source did not fetch the official page.<sup><a href="#src-costs-5">5</a></sup></li>
+          <li>Newly built homes only: a federal GST rebate of up to $50,000 (full to $1 million, tapering, none at $1.5 million), and a Nova Scotia rebate of 18.75% of provincial HST, up to $3,000, for a first house owned and occupied in Canada in the last 5 years.<sup><a href="#src-costs-5">5</a></sup></li>
+          <li>Nova Scotia's down-payment assistance program closed to new applicants on 2 July 2026. The Moderate Income Rebate and the Home Energy Assistance programs can stack to a maximum of $10,000; the rebate's income limits run from $37,260 (1 person) to $126,500 (5 or more).<sup><a href="#src-costs-7">7</a></sup></li>
+          <li>Turning a home you lived in into a rental: an election (section 45(2)) can defer the capital gain at the change of use, as long as no depreciation is claimed on it. It can stay designated as the main home for up to 4 more years, longer when an employer move is the reason.<sup><a href="#src-costs-6">6</a></sup></li>
+        </ul>
+      </div>
+    </details>
 
-    <h4>What the move benefits cover</h4>
-    <ul>
-      <li>Window: closing no more than 1 year before, or 2 years after, the move date (or the household goods load date, if later).<sup><a href="#src-costs-6">6</a></sup></li>
-      <li>Renting first and buying later keeps the purchase benefits, less any advance-rent and rental-finder reimbursements. The rental-to-house move is not paid.<sup><a href="#src-costs-6">6</a></sup></li>
-      <li>Reimbursed: legal fees including deed transfer tax, survey and title insurance, and the main inspections (structural, heating, well and septic).<sup><a href="#src-costs-6">6</a></sup></li>
-    </ul>
+    
 
     <h4>Sources</h4>
     <ol class="sources">
       <li id="src-costs-1">Municipal deed transfer tax rates and the Kings County by-law, July 2026 (no link yet) (read Nov 2026)</li>
       <li id="src-costs-2">Kings County and Kentville 2026-27 tax rate notices (no link yet) (read Nov 2026)</li>
-      <li id="src-costs-3"><a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/first-home-savings-account/definitions.html">Canada Revenue Agency, Definitions for FHSAs</a> (read Nov 2026)</li>
-      <li id="src-costs-4"><a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/first-home-savings-account/opening-your-fhsas.html">Canada Revenue Agency, Opening your FHSAs</a> (read Nov 2026)</li>
+      <li id="src-costs-3"><a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/first-home-savings-account/definitions.html">Canada Revenue Agency, Definitions for FHSAs</a> and the withdrawals page (read Nov 2026)</li>
+      <li id="src-costs-4"><a href="https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/first-home-savings-account/opening-your-fhsas.html">Canada Revenue Agency, Opening your FHSAs</a> and Participating in your FHSAs (read Nov 2026)</li>
       <li id="src-costs-5">Canada Revenue Agency pages on the Home Buyers' Plan, Home Buyers' Amount and first-time buyer rebates, as summarised in our research (read Nov 2026)</li>
-      <li id="src-costs-6">Federal employer relocation rules, 1 April 2026 version, purchase sections (read Nov 2026)</li>
-      <li id="src-costs-7">Nova Scotia assessment cap, 2026 rate, as summarised in our research (read Nov 2026)</li>
-      <li id="src-costs-8"><a href="https://advisor.ca/tax/what-are-the-fhsa-eligibility-rules/">Advisor.ca, What are the FHSA eligibility rules?</a> (read Nov 2026)</li>
+      <li id="src-costs-6">Our research notes on closing costs and Canada Revenue Agency guidance on the change-of-use election (read Nov 2026)</li>
+      <li id="src-costs-7">Nova Scotia assessment cap, 2026 rate; Nova Scotia Power rates from 1 May 2026; provincial housing program pages, as summarised in our research (read Nov 2026)</li>
+      <li id="src-costs-8"><a href="https://advisor.ca/tax/what-are-the-fhsa-eligibility-rules/">Advisor.ca, What are the FHSA eligibility rules?</a>; MoneySense columns; a summary of a Nov 2023 tax-agency roundtable answer (read Nov 2026)</li>
     </ol>
   </div>
 </details>
@@ -378,28 +451,58 @@ footer a{color:var(--accent)}
       <li>Wells: test for bacteria every year and for chemistry every five years.<sup><a href="#src-house-1">1</a></sup></li>
       <li>In the sales data, 25,727 of 67,394 sales since 1 January 2025 show a price of 0, so some sales cannot be used.<sup><a href="#src-house-2">2</a></sup></li>
     </ul>
-    <h4>Checks before an offer</h4>
-    <ul>
-      <li>Radon: the guideline is 200 Bq/m3. If a home is over it, fix it within 1 year.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Well water: the minimum test covers arsenic, uranium, manganese, lead, nitrate, fluoride and hardness. Health Canada limits include arsenic 0.010, uranium 0.02 and no E. coli at all.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Oil tank: it must be installed by a licensed Oil Burner Technician, and used tanks are not allowed. Corrosion causes 35-45% of failures. The provincial checklist asks if the tank is under 15 years old. An insurer rule of 20-25 years is not yet confirmed.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Noise: Kings County planning limits building next to the airport, especially in the NEF 35 and above zone. NEF is a measure of aircraft noise.<sup><a href="#src-house-1">1</a></sup></li>
-    </ul>
-    <h4>Forms and conditions</h4>
-    <ul>
-      <li>The Property Condition Disclosure Statement (Form 211) is optional. A buyer can ask for it as a condition. Form 431 is the water and septic schedule. Since 1 July 2025 it can also ask about flooding, coastal erosion and drainage.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>An agreement has dated conditions for inspection, financing and a lawyer. The deposit comes back if a valid financing condition is used in time. This comes from a secondary source. After conditions are removed, the deal is binding and the deposit is at risk.<sup><a href="#src-house-1">1</a></sup></li>
-    </ul>
-    <h4>Judging a fair price</h4>
-    <p>The plan is to compare a home with recent recorded sales nearby. The sales table has price, date and location only. Size, style, age and bedrooms come from a separate assessment file, which may be out of date. It holds nothing on condition or renovations. Sales at 0 may hide family sales, which are not true market prices.<sup><a href="#src-house-2">2</a></sup></p>
-    <p>An assessment is a useful cross-check, but it reflects market value on 1 January of the prior year. The assessor also warns that a sale price may not match market value.<sup><a href="#src-house-2">2</a></sup></p>
-    <p>Sellers who would sell at a loss tend to ask 25-35% of the gap above the expected price.<sup><a href="#src-house-2">2</a></sup></p>
-    <p class="muted">Not yet confirmed: the sources do not set out the exact time adjustment, the walk-away price rule or the number of calibration viewings. Those steps are still to be tested. People tend to stop looking too early, so viewing a first batch of homes without buying is the idea; the "37%" rule of thumb is from research, not tested here.<sup><a href="#src-house-2">2</a></sup></p>
-    <p class="muted">Costs for wells, treatment, septic, tanks, radon systems, rewiring and foundations are rough ranges and not yet confirmed.<sup><a href="#src-house-1">1</a></sup></p>
+
+    <details>
+      <summary>Checks before an offer <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>Radon: the guideline is 200 Bq/m3. If a home is over it, fix it within 1 year. Provincial radon zones run from 55% of homes over the guideline in the highest zone to 31% and 19% in the others.<sup><a href="#src-house-1">1</a></sup></li>
+          <li>Well water: the minimum test covers arsenic, uranium, manganese, lead, nitrate, fluoride and hardness. Health Canada limits: arsenic 0.010, uranium 0.02, lead 0.005, manganese 0.12 (all mg/L), nitrate 45 as nitrate, and no E. coli at all.<sup><a href="#src-house-1">1</a></sup></li>
+          <li>Oil tank: it must be installed by a licensed Oil Burner Technician to the CSA B139 code, and used tanks are not allowed. Corrosion causes 35-45% of failures. The provincial 21-point checklist asks if the tank is under 15 years old. An insurer rule of 20-25 years is not yet confirmed.<sup><a href="#src-house-1">1</a></sup></li>
+          <li>Noise: Kings County planning limits building next to the airport, especially in the NEF 35 and above zone. NEF is a measure of aircraft noise.<sup><a href="#src-house-1">1</a></sup></li>
+          <li>Commute times, schools, childcare lists and resale to base buyers were looked at but not confirmed.<sup><a href="#src-house-1">1</a></sup></li>
+        </ul>
+        <p class="muted">Costs for wells, treatment, septic, tanks, radon systems, rewiring and foundations are rough ranges and not yet confirmed.<sup><a href="#src-house-1">1</a></sup></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Forms and conditions <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>The Property Condition Disclosure Statement (Form 211) is optional. A buyer can ask for it as a condition. Form 431 is the water and septic schedule; Form 400 is the agreement of purchase and sale. Since 1 July 2025 the disclosure can also ask about flooding, coastal erosion and drainage.<sup><a href="#src-house-1">1</a></sup></li>
+          <li>An agreement has dated conditions for inspection, financing and a lawyer. The deposit comes back if a valid financing condition is used in time. This comes from a secondary source. After conditions are removed, the deal is binding and the deposit is at risk.<sup><a href="#src-house-1">1</a></sup></li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>Judging a fair price <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>The plan is to compare a home with recent recorded sales nearby. The sales table has price, date and location only. Size, style, age and bedrooms come from a separate assessment file, which may be out of date. It holds nothing on condition or renovations. Sales at 0 may hide family sales, which are not true market prices.<sup><a href="#src-house-2">2</a></sup></p>
+        <p>An assessment is a useful cross-check, but it reflects market value on 1 January of the prior year. The assessor also warns that a sale price may not match market value.<sup><a href="#src-house-2">2</a></sup></p>
+        <p>Sellers who would sell at a loss tend to ask 25-35% of the gap above the expected price. Buyers tend to anchor on the asking price, which is why we price from recorded sales first.<sup><a href="#src-house-2">2</a></sup></p>
+        <p class="muted">Not yet confirmed: the sources do not set out the exact time adjustment, the walk-away price rule or the number of calibration viewings. Those steps are still to be tested. People tend to stop looking too early, so viewing a first batch of homes without buying is the idea; the "37%" rule of thumb is from research, not tested here.<sup><a href="#src-house-2">2</a></sup></p>
+        <details>
+          <summary>How assessors judge their own accuracy <span class="more">Show more</span></summary>
+          <div class="detail">
+            <p>The assessors' standard (IAAO 2013) says the spread of sale-to-assessment ratios (COD) should be 5 to 10 for newer, similar homes and 5 to 15 for older, mixed ones; a COD under 5 can mean the assessor is chasing sales. The price-related differential (PRD) should sit between 0.98 and 1.03. We use these to judge how far to trust an assessment as a cross-check.<sup><a href="#src-house-2">2</a></sup></p>
+          </div>
+        </details>
+      </div>
+    </details>
+
+    <details>
+      <summary>Scoring homes <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>For six criteria ranked from most to least important, research weights are 40.8, 24.2, 15.8, 10.3, 6.1 and 2.8% (the rank-order-centroid method). The tracker will use them for its shortlist score.<sup><a href="#src-house-2">2</a></sup></p>
+      </div>
+    </details>
+
     <h4>Sources</h4>
     <ol class="sources">
       <li id="src-house-1">Our research notes on Nova Scotia house checks, drawn from provincial and Health Canada guidance (Nov 2026)</li>
-      <li id="src-house-2">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
+      <li id="src-house-2">Our analysis of Nova Scotia assessment data (PVSC via datazONE) and our valuation-method research notes, Nov 2026</li>
     </ol>
   </div>
 </details>
@@ -413,39 +516,77 @@ footer a{color:var(--accent)}
       <li>Private rent: a Halifax 2-bedroom turnover rent was $2,058 in Oct 2025, down from $2,116.<sup><a href="#src-options-2">2</a></sup></li>
       <li>Stress test: lenders qualify you at your contract rate plus 2%, or 5.25%, whichever is greater.<sup><a href="#src-options-3">3</a></sup></li>
       <li>A pre-approved rate is guaranteed for up to 120 days at one big bank, but it is not a commitment to lend.<sup><a href="#src-options-4">4</a></sup></li>
-      <li>Keeping a rental while buying elsewhere has trade-offs on lending, tax and tenant rules.<sup><a href="#src-options-3">3</a></sup><sup><a href="#src-options-5">5</a></sup></li>
+      <li>Keeping a rental while buying elsewhere has trade-offs on lending, tax and tenant rules.<sup><a href="#src-options-3">3</a>, <a href="#src-options-5">5</a></sup></li>
     </ul>
 
-    <h4>Renting first</h4>
-    <div class="tablewrap"><table>
-      <tr><th>Base housing, 3-bedroom</th><th class="n">Average charge a month</th></tr>
-      <tr><td>Row (67 units)</td><td class="n">$747</td></tr>
-      <tr><td>Semi (62 units)</td><td class="n">$914</td></tr>
-      <tr><td>Single (118 units)</td><td class="n">$921</td></tr>
-    </table></div>
-    <p>Across all sizes, charges run from $654 to $1,591 over 560 units.<sup><a href="#src-options-1">1</a></sup> The housing page does not publish a wait time or a pet policy, so call the housing office to ask.<sup><a href="#src-options-1">1</a></sup></p>
-    <p>For private rent we only have the Halifax figure above. National vacancy was 3.1%, up from 2.2%, so renters have a little more choice.<sup><a href="#src-options-2">2</a></sup> We have no Valley rent figure yet.</p>
+    <details>
+      <summary>Renting first <span class="more">Show more</span></summary>
+      <div class="detail">
+        <div class="tablewrap"><table>
+          <tr><th>Base housing, 3-bedroom</th><th class="n">Average charge a month</th></tr>
+          <tr><td>Row (67 units)</td><td class="n">$747</td></tr>
+          <tr><td>Semi (62 units)</td><td class="n">$914</td></tr>
+          <tr><td>Single (118 units)</td><td class="n">$921</td></tr>
+        </table></div>
+        <p>Across all sizes, charges run from $654 to $1,591 over 560 units (207 two-bed, 247 three-bed, 103 four-bed, 3 five-bed); 4-bedroom averages are $1,002 (row), $921 (semi) and $995 (single).<sup><a href="#src-options-1">1</a></sup> The housing page does not publish a wait time or a pet policy, so call the housing office to ask. Applications open once the move is confirmed.<sup><a href="#src-options-1">1</a></sup></p>
+        <p>For private rent we only have the Halifax figure above. National vacancy was 3.1%, up from 2.2%, so renters have a little more choice.<sup><a href="#src-options-2">2</a></sup> We have no Valley rent figure yet; the agent will collect one in December.</p>
+        <details>
+          <summary>Rent or buy: the break-even (research model) <span class="more">Show more</span></summary>
+          <div class="detail">
+            <p>A research model (secondary, arithmetic checked) asks how fast prices must rise for buying to beat renting over 24 months. For a $450,000 home with 20% down, a 25-year mortgage at 4.75% and $2,100 rent: the payment is $2,052 a month, owning costs $71,600 over the two years, and buying breaks even if prices rise 4.5% a year when the home is kept afterwards, or 10.6% a year if it is sold after two years (selling costs counted). At $1,800 rent the lines are 6.1% and 11.8%; at $2,000, 5.0% and 10.8%; at $2,400, 2.9% and 8.6%. The Valley has risen about 5% a year since 2022, so buying to stay is about break-even against rent; buying to sell within two years is not.<sup><a href="#src-options-7">7</a></sup></p>
+          </div>
+        </details>
+      </div>
+    </details>
 
-    <h4>Pre-approval and the stress test</h4>
-    <p>A pre-approval is a lender's early check of what you could borrow. The stress test asks whether you could still pay if rates were higher. For a mortgage with a big down payment (uninsured), the test rate is the contract rate plus 2% or 5.25%, whichever is greater.<sup><a href="#src-options-3">3</a></sup></p>
-    <p>For an insured mortgage (small down payment) the limits are:<sup><a href="#src-options-3">3</a></sup></p>
-    <ul>
-      <li>Credit score of at least 600.</li>
-      <li>25-year amortization (the years to pay off the loan) and a price below $1,500,000.</li>
-      <li>The buyer must live in the home.</li>
-      <li>Minimum down payment is 5% of the first $500,000 plus 10% of the rest.</li>
-    </ul>
-    <p>How a lender counts rent from another property is not yet confirmed. Our best reading of the insurer's rules is that only rent minus its costs would count, and that this approach is not often used. We will ask both lenders.<sup><a href="#src-options-3">3</a></sup> Usual papers are a pay stub, an employment letter and a direct-deposit statement.<sup><a href="#src-options-4">4</a></sup></p>
+    <details>
+      <summary>Pre-approval and the stress test <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>A pre-approval is a lender's early check of what you could borrow. The stress test asks whether you could still pay if rates were higher. For a mortgage with a big down payment (uninsured), the test rate is the contract rate plus 2% or 5.25%, whichever is greater. It is not applied when an uninsured mortgage simply switches lender at renewal.<sup><a href="#src-options-3">3</a></sup></p>
+        <p>For an insured mortgage (small down payment) the limits are:<sup><a href="#src-options-3">3</a></sup></p>
+        <ul>
+          <li>Housing costs at most 39% of gross household income, and all debts at most 44% (the GDS and TDS ratios).</li>
+          <li>Credit score of at least 600.</li>
+          <li>25-year amortization (the years to pay off the loan) and a price below $1,500,000 (the cap rose from $1 million on 15 December 2024). A 30-year amortization is allowed for a first-time buyer or a newly built home; a 0.20% premium surcharge for amortizations beyond 25 years was flagged as possibly refinance-only.</li>
+          <li>The buyer must live in the home.</li>
+          <li>Minimum down payment is 5% of the first $500,000 plus 10% of the rest.</li>
+          <li>Insurance premiums: 2.80% of the loan at 80.01 to 85% loan-to-value, 3.10% at 85.01 to 90%, 4.00% at 90.01 to 95%, and 4.50% for a non-traditional down payment.</li>
+          <li>First-time buyer, for the insurer: never bought a home, or no owned home lived in as the main residence in the current year and the four before.</li>
+        </ul>
+        <p>How a lender counts rent from another property is not yet confirmed. Our best reading of the insurer's rules is that only rent minus its costs would count, and that this approach is not often used. We will ask both lenders.<sup><a href="#src-options-3">3</a></sup> Usual papers are a pay stub, an employment letter and a direct-deposit statement, plus two years of tax assessments if self-employed.<sup><a href="#src-options-4">4</a></sup> A car loan taken before pre-approval cuts how much a lender will offer (a research example put a $600-a-month payment at roughly $100,000 less room; an inference, not a lender figure).<sup><a href="#src-options-7">7</a></sup></p>
+        <details>
+          <summary>Which lenders <span class="more">Show more</span></summary>
+          <div class="detail">
+            <p>The plan is our bank plus a mortgage broker, each quoting two down-payment scenarios. A credit union is provincially regulated and not directly bound by the federal stress-test rule (not yet confirmed).<sup><a href="#src-options-3">3</a></sup> Posted rates: the 5-year conventional rate at the chartered banks was 6.19% on 28 October 2026; lenders quote below posted.<sup><a href="#src-options-6">6</a></sup></p>
+          </div>
+        </details>
+      </div>
+    </details>
 
-    <h4>A buyer's agent</h4>
-    <p>A buyer's agent finds listings, books viewings and helps with offers. Free searching helps too: sold prices need a free sign-up on the listing site, and the province's sales data can be read without a key.<sup><a href="#src-options-6">6</a></sup> Our sources do not give an agent's cost, so we have not confirmed it. Some relocation programs pay participating agents, and costs above the government rate may not be refunded.<sup><a href="#src-options-6">6</a></sup></p>
+    <details>
+      <summary>A buyer's agent, and listing data <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>A buyer's agent finds listings, books viewings and helps with offers. Free searching helps too: sold prices need a free sign-up on the listing site, and the province's sales data can be read without a key.<sup><a href="#src-options-6">6</a></sup> Our sources do not give an agent's cost, so we have not confirmed it. Some relocation programs pay participating agents, and costs above the government rate may not be refunded; the relocation guidance says to pick a lawyer, an agent and an inspector and to start 30 to 45 days before the move.<sup><a href="#src-options-6">6</a></sup></p>
+        <ul>
+          <li>Brokerages with Greenwood offices include Exit, RE/MAX Banner, Royal LePage and One Percent (not yet confirmed).<sup><a href="#src-options-6">6</a></sup></li>
+          <li>The listing site: registration is free for sold prices; saved searches can alert on new, price-change and sold listings; its assessment values are confirmed for Halifax only. Its terms allow personal use and have no scraping clause. The national listing site has no public data feed and sends cease-and-desist letters to scrapers.<sup><a href="#src-options-6">6</a></sup></li>
+          <li>The province's open sales data covers every Nova Scotia sale since July 2010 with price, date and address, and joins to the assessor's size, style, bedroom and year-built records.<sup><a href="#src-options-6">6</a></sup></li>
+        </ul>
+      </div>
+    </details>
 
-    <h4>Keep or sell a rental home: the general trade-offs</h4>
-    <ul>
-      <li>Rent is income, and interest, tax, insurance and management fees can be deducted.<sup><a href="#src-options-5">5</a></sup></li>
-      <li>Only one property per family can be named the principal residence for a given year. That affects tax when you later sell.<sup><a href="#src-options-5">5</a></sup></li>
-      <li>Nova Scotia caps rent rises at 5% until 31 Dec 2027.<sup><a href="#src-options-5">5</a></sup></li>
-    </ul>
+    <details>
+      <summary>Keep or sell a rental home: the general trade-offs <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>Keeping it: rent is income, and interest, tax, insurance and management fees can be deducted; depreciation cannot create a loss.<sup><a href="#src-options-5">5</a></sup></li>
+          <li>Selling it: frees cash for the down payment, which can mean a bigger loan at a better rate or no mortgage insurance. The move benefits pay the insurance premium in full only when all of a sold main home's sale proceeds go into the purchase; a home that is rented out does not count as the main home for that.<sup><a href="#src-options-5">5</a></sup></li>
+          <li>Only one property per family can be named the principal residence for a given year. That affects tax when you later sell: the exempt share is (1 + years designated) ÷ years owned.<sup><a href="#src-options-5">5</a></sup></li>
+          <li>Nova Scotia caps rent rises at 5% until 31 Dec 2027, and eviction for unpaid rent now takes 3 days' notice.<sup><a href="#src-options-5">5</a></sup></li>
+          <li>Lenders count the existing mortgage payment as debt and only part of the rent as income; how much is not yet confirmed.<sup><a href="#src-options-3">3</a></sup></li>
+        </ul>
+      </div>
+    </details>
 
     <h4>Sources</h4>
     <ol class="sources">
@@ -453,31 +594,126 @@ footer a{color:var(--accent)}
       <li id="src-options-2">Rent and vacancy report for Halifax and Canada, Oct 2025 (read Nov 2026)</li>
       <li id="src-options-3">OSFI minimum qualifying rate guidance (page modified 29 Jan 2026) and CMHC insured mortgage rules (read Nov 2026)</li>
       <li id="src-options-4">RBC mortgage pre-approval pages (read Nov 2026)</li>
-      <li id="src-options-5">Canada Revenue Agency rental income and principal residence guidance; Nova Scotia rent cap notice (read Nov 2026)</li>
-      <li id="src-options-6">Listing-site help pages and PVSC datazONE open sales data; relocation program guidance (read Nov 2026)</li>
+      <li id="src-options-5">Canada Revenue Agency rental income and principal residence guidance; Nova Scotia rent cap and tenancy notices; the federal relocation rules on mortgage default insurance (read Nov 2026)</li>
+      <li id="src-options-6">Listing-site help pages and terms, PVSC datazONE open sales data, Bank of Canada rate series; relocation program guidance (read Nov 2026)</li>
+      <li id="src-options-7">Our market-context and lender research notes, Nov 2026 (break-even arithmetic re-checked; car-loan effect inferred)</li>
     </ol>
   </div>
 </details>
 
 <details class="annex" id="annex-market">
-  <summary><span>Market: notes and sources</span> <span class="more">Show more</span></summary>
+  <summary><span>Market and price bands</span> <span class="more">Show more</span></summary>
   <div class="detail">
-    <p class="key"><b>In short:</b> The charts in The market section carry the research. These are the notes that go with them: what the data is, what it cannot see, and where it comes from.</p>
+    <p class="key"><b>In short:</b> The big jump came in 2020 to 2022. Since then prices have kept rising at a steady pace of about 5% a year, with fewer sales, not a frenzy. Pricier homes have gone up less than cheaper ones.</p>
     <ul class="keypoints">
+      <li>The Valley median sale price (detached homes, Middleton to Kentville) was $325,000 in 2022 and $399,200 in 2026 so far (to 28 Oct), up 22.8%. It rose every year after 2022, so there was no drop to wait for.<sup><a href="#src-market-1">1</a></sup></li>
       <li>No sign of a speculative run-up. Sales are about 26% below 2022 and 5% below 2025 for the same dates. Fewer sales with slowly rising prices looks like a tight, slow market, not quick flipping.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>Repeat sales of the same homes grew about 21.9% a year in 2019 to 2022 and 5.4% a year in 2022 to 2026. From 2022 to 2026, homes that started in the top third by price gained 2.0% a year, against 12.0% a year for the bottom third.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>The listing site shows about 3.7 months of supply in the west and 3.9 in the east, and homes take a median 35 to 36 days to sell. There is no tested warning line for these, so they read as calm, not as proof.<sup><a href="#src-market-2">2</a></sup></li>
-      <li>The monthly check shows no red or yellow flags, but only 2 of its 4 tests have data. Not an all-clear yet.<sup><a href="#src-market-3">3</a></sup></li>
+      <li>Pat's question: yes, partly. Since 2022 the top fifth of sales rose 13.2%, against 37.5% for the cheapest fifth. The evidence for the gap is moderate, not decisive.<sup><a href="#src-market-1">1</a></sup></li>
+      <li>Homes like ours (3+ bed, 2+ bath, garage, 1,400 to 2,600 sq ft) sold for a median of $497,250 in 2025 to 2026 (366 sales). 73% sold between $425,000 and $700,000.<sup><a href="#src-market-1">1</a></sup></li>
+      <li>The monthly check shows no red or yellow flags, but only 2 of its 4 tests have data so far. It is incomplete, not an all-clear.<sup><a href="#src-market-3">3</a></sup></li>
     </ul>
-    <h4>What the data is</h4>
-    <p>Recorded sales of detached homes in the Middleton to Kentville zone, 2015 to 28 October 2026, joined to the assessor's records for size, beds, baths and garage. Prices are not adjusted for inflation. Towns with few sales are only a rough guide. Some very low prices are probably not normal sales, so we use medians.<sup><a href="#src-market-1">1</a></sup></p>
+
+    <details>
+      <summary>Median price by year <span class="more">Show more</span></summary>
+      <div class="detail">
+        <div class="tablewrap"><table>
+          <tr><th>Year</th><th class="n">Median price</th><th class="n">Per sq ft</th></tr>
+          <tr><td>2019</td><td class="n">$186,500</td><td class="n">$122</td></tr>
+          <tr><td>2022</td><td class="n">$325,000</td><td class="n">$205</td></tr>
+          <tr><td>2026 (to 28 Oct)</td><td class="n">$399,200</td><td class="n">$261</td></tr>
+        </table></div>
+        <p class="muted">Prices are not adjusted for inflation. Repeat sales of the same homes grew about 21.9% a year in 2019 to 2022 and 5.4% a year in 2022 to 2026.<sup><a href="#src-market-1">1</a></sup> The full year-by-year table is under "Listing-site numbers and the tables" in The market section.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Growth by price band since 2022 <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>Each year's sales are split into five equal groups, cheapest to dearest. The table compares the middle price of each group in 2022 and 2026.</p>
+        <div class="tablewrap"><table>
+          <tr><th>Group</th><th class="n">2022</th><th class="n">2026</th><th class="n">Change</th></tr>
+          <tr><td>Cheapest fifth</td><td class="n">$160,000</td><td class="n">$220,000</td><td class="n">+37.5%</td></tr>
+          <tr><td>Second</td><td class="n">$255,000</td><td class="n">$330,000</td><td class="n">+29.4%</td></tr>
+          <tr><td>Middle</td><td class="n">$325,000</td><td class="n">$399,900</td><td class="n">+23.0%</td></tr>
+          <tr><td>Fourth</td><td class="n">$400,000</td><td class="n">$473,750</td><td class="n">+18.4%</td></tr>
+          <tr><td>Dearest fifth</td><td class="n">$530,000</td><td class="n">$600,000</td><td class="n">+13.2%</td></tr>
+        </table></div>
+        <p>From 2015 to 2022 all five groups rose about the same (+82% to +92%). The gap opened only after 2022. Repeat sales agree: from 2022 to 2026, homes that started in the top third by price gained 2.0% a year, against 12.0% a year for the bottom third. Some of the cheap-home gain is renovation, which this data cannot see.<sup><a href="#src-market-1">1</a></sup></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Sale price against the tax value <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>Homes sell above the tax assessment, but the gap is closing: 1.80 times in 2022, 1.47 in 2023, 1.31 in 2024, 1.22 in 2025, 1.16 in 2026. Assessments run 12 to 24 months behind the market, so some gap is normal. A shrinking gap means assessments are catching up, not that buyers pay more extra.<sup><a href="#src-market-1">1</a></sup></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>What homes like ours sell for, by area <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>By area, 2025 to 2026 (towns with few sales are only a rough guide):<sup><a href="#src-market-1">1</a></sup></p>
+        <ul>
+          <li>West side (Greenwood, Kingston, Middleton and nearby): median $470,000, $237 per sq ft (124 sales). Greenwood $480,000, Kingston $504,000, Middleton $337,750.</li>
+          <li>East side (Kentville, Coldbrook, Berwick and nearby): median $530,000, $280 per sq ft (123 sales). Kentville $578,900, Coldbrook $497,500, Berwick $442,500.</li>
+          <li>Other villages: median $515,000, $260 per sq ft (119 sales).</li>
+        </ul>
+        <p>Only 8 of the 366 sold above $700,000. Some very low prices in the data are probably not normal sales, so we use medians.<sup><a href="#src-market-1">1</a></sup></p>
+        <p class="muted">Listings now (secondary, not yet confirmed): 67 homes in the zone listed between $425,000 and $700,000, median 67 days on the market, 25 of 63 over 90 days.<sup><a href="#src-market-1">1</a></sup></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>What the monthly check watches <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>It runs four tests, once a month.<sup><a href="#src-market-3">3</a></sup></p>
+        <ul>
+          <li>Overheating: sales against new listings. No data yet. As a stand-in, ViewPoint shows about 3.7 months of supply in the west and 3.9 in the east, and homes take a median 35 to 36 days to sell.<sup><a href="#src-market-2">2</a></sup></li>
+          <li>Price speed: prices are up about 5.5% a year and slowing for three quarters. Green.<sup><a href="#src-market-3">3</a></sup></li>
+          <li>Overpricing: the sale-to-assessment gap shows no warning. Rent and income comparisons have no data yet.<sup><a href="#src-market-3">3</a></sup></li>
+          <li>Overbuilding: 26 new-build listings now (6 west, 13 east, 7 North Kentville), against about 30 sales a month. West new builds list at $449,000 to $680,000, above the resale medians. Empty-rental data is missing.<sup><a href="#src-market-3">3</a></sup></li>
+        </ul>
+        <p>Today's reading: offer a fair price based on recorded sales. There is no sign a bidding war is needed.<sup><a href="#src-market-3">3</a></sup></p>
+        <p class="muted">Re-run schedule: monthly through the hunt (early December, mid January, early February, 15 February), within 7 days before every offer, then each quarter until the decision is closed, then once a year.<sup><a href="#src-market-3">3</a></sup></p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Nova Scotia and the wider market <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>Nova Scotia, September 2026: 929 sales (down 6.4% on a year earlier), average price $463,312 (+1.2%), benchmark price $423,200 (down 2.5%), 6.1 months of inventory, 5,661 active listings (+13.4%).<sup><a href="#src-market-4">4</a></sup> Province-wide that reads like a buyer's market; the Valley's own sales data does not show a drop.</li>
+          <li>National forecast (CREA, Oct 2026): average price $681,681 in 2026 (+0.2%) and $689,909 in 2027 (+1.2%).<sup><a href="#src-market-4">4</a></sup></li>
+          <li>Nova Scotia population 1,103,419 on 1 July 2026, up 8,262 (+0.8%).<sup><a href="#src-market-4">4</a></sup></li>
+          <li>Brokerage figures for the Valley, first half of 2026 (low confidence, not confirmed): average $432,050, median $415,000, median 14 days on market, 575 sales, 725 new listings; town averages Kentville $508,269, Greenwood $471,796, Kingston $456,684.<sup><a href="#src-market-4">4</a></sup></li>
+          <li>Another listing-site summary (secondary, 3 Nov 2026): Kings County detached median $435,000 (+10.3%), about 62 days on market, about 280 listings; Annapolis County median $339,250, 212 listings.<sup><a href="#src-market-5">5</a></sup></li>
+          <li>The air base is set to grow: about 630 positions with families, 563 housing units getting $15 million in 2026-27, about $900 million in contracts, and 208 new apartment units by 2030 (secondary). That could lift prices and rents from 2027-28; an inference, not a forecast.<sup><a href="#src-market-4">4</a></sup></li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>Rates and the economy <span class="more">Show more</span></summary>
+      <div class="detail">
+        <ul>
+          <li>The Bank of Canada raised its policy rate to 2.50% on 28 October 2026 and said it may raise further. Next decisions: 9 December 2026 and 27 January 2027.<sup><a href="#src-market-4">4</a></sup></li>
+          <li>Inflation: about 3% since April, about 3.5% by year-end, averaging 3% in 2027 and back to 2% by mid-2028 (the Bank's outlook).<sup><a href="#src-market-4">4</a></sup></li>
+          <li>Posted 5-year conventional mortgage rate: 6.19% on 28 October 2026 (chartered banks). Another Bank of Canada series read 4.58% in August 2026, so which series you read matters. Lenders quote below posted.<sup><a href="#src-market-6">6</a></sup></li>
+        </ul>
+      </div>
+    </details>
+
     <h4>What this cannot tell us</h4>
-    <p>Direction and pace only: not whether prices are fair against local incomes or rents, nor a home's condition, lot or renovations. Past growth does not forecast the years we would own the home.<sup><a href="#src-market-1">1</a></sup></p>
+    <p>It shows direction and pace, not whether prices are fair against local incomes or rents. It cannot see condition, lot size or whether a sale was a true market deal. Past growth does not forecast the years we would own the home.<sup><a href="#src-market-1">1</a></sup></p>
+
     <h4>Sources</h4>
     <ol class="sources">
       <li id="src-market-1">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
       <li id="src-market-2">Our counts from the ViewPoint listing site (one read-only session, 2 Nov 2026; only the last 12 months of sales are shown)</li>
-      <li id="src-market-3">Our monthly market check, run 3 Nov 2026</li>
+      <li id="src-market-3">Our monthly market check, run 3 Nov 2026, and its method note</li>
+      <li id="src-market-4">Our market-context research, Nov 2026: Nova Scotia Association of Realtors September 2026 release, CREA October 2026 forecast, Statistics Canada population estimate, Bank of Canada 28 October 2026 decision, a Valley brokerage half-year report, and news reports on the air base (secondary)</li>
+      <li id="src-market-5">Wahi market page, read 3 Nov 2026 (secondary)</li>
+      <li id="src-market-6">Bank of Canada Valet rate series, read Nov 2026</li>
     </ol>
   </div>
 </details>
@@ -514,16 +750,12 @@ footer a{color:var(--accent)}
         <li>Write a walk-away price before any viewing, and never go past it. This is our rule; it hasn't been tested on real homes yet.</li>
       </ul></div>
     </details>
-    <details>
-      <summary>Next steps, by person <span class="more">Show more</span></summary>
-      <div class="detail wide"><p class="muted small">Tick a box as you finish a step; the page remembers it on this phone or computer only.</p><div class="people" id="people"></div></div>
-    </details>
     </div>
   </section>
 
   <footer>
     <p>Sources: Nova Scotia property assessment data (PVSC, via datazONE; our analysis, Nov 2026), ViewPoint.ca sold listings (counts only, 2 Nov 2026), our monthly market check (3 Nov 2026), CMHC Housing Market Assessment, Canada Revenue Agency FHSA pages, the federal relocation directive. Each annex lists its own.</p>
-    <p>Built from our planning files. Nothing here is advice; offers need both of us to say yes.</p>
+    <p>A decision page for the two of us. The short version is at the top; everything behind a Show more or Read more button is the detail. Built from our planning files. Nothing here is advice; offers need both of us to say yes.</p>
   </footer>
 </div>
 
@@ -816,7 +1048,14 @@ function todoHTML(s) {
   const d = isDone(s);
   return `<div class="todo${d ? ' is-done' : ''}" data-id="${s[0]}"><button type="button" class="${d ? 'done' : ''}" aria-pressed="${d}" aria-label="${d ? 'Done: ' : 'Mark done: '}${esc(s[1])}"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/></svg></button><span><span class="t">${esc(s[1])}</span><span class="when">${esc(s[2])}</span></span></div>`;
 }
-function renderSteps() { $('#people').innerHTML = STEPS.map(([who, items]) => `<div><h3 style="margin-bottom:10px">${who}</h3><ul>${items.map(s => `<li>${todoHTML(s)}</li>`).join('')}</ul></div>`).join(''); }
+const NEXT = { Pat: 'pat-move', Julia: 'jul-read' };
+function renderSteps() {
+  $('#people').innerHTML = STEPS.map(([who, items]) => `<div><h3 style="margin-bottom:10px">${who}</h3><ul>${items.map(s => `<li>${todoHTML(s)}</li>`).join('')}</ul></div>`).join('');
+  $('#next-line').innerHTML = Object.entries(NEXT).map(([who, id]) => { const s = all.find(x => x[0] === id); return `<b>${who}</b>, ${esc(s[1]).replace(/^./, c => c.toLowerCase())} (${esc(s[2])})${isDone(s) ? ' ✓' : ''}`; }).join(' · ');
+  const n = all.filter(isDone).length;
+  $('#meter-fill').style.width = Math.round(n / all.length * 100) + '%';
+  $('#meter-text').textContent = `${n} of ${all.length}`;
+}
 renderSteps();
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.todo button'); if (!b) return;

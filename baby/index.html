@@ -96,7 +96,22 @@ th{font-family:var(--display);font-weight:600;font-size:.82rem;color:var(--muted
 .panel,.cand,.pickcard,.stack>*,.cand>div,.pickcard>div,.grid>*{min-width:0}
 .tbl{width:100%}
 a{overflow-wrap:anywhere}
-.cand{display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:16px}
+.cand{display:grid;grid-template-columns:88px minmax(0,1fr);gap:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:12px}
+.cand .photo,.cand .nophoto{width:88px;height:88px;aspect-ratio:1;font-size:.7rem}
+.st{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px}
+.st td,.st th{padding:5px 8px;border-top:1px solid var(--line);vertical-align:top;text-align:left}
+.st th{font-family:var(--display);font-weight:600;font-size:.8rem;color:var(--muted)}
+.st td.c{white-space:nowrap;font-family:var(--display);font-weight:600}
+.st td.w{white-space:nowrap;color:var(--muted)}
+.st td.d{white-space:nowrap;letter-spacing:2px;color:var(--accent)}
+.st td.d small{letter-spacing:0;color:var(--muted);font-family:var(--display);margin-left:4px}
+.st td.r{color:var(--ink)}
+.scorebox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:10px}
+.scorebox h4{margin:0}
+.optrow{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.optrow .opt{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:6px 12px}
+.optrow .opt b{font-family:var(--display)}
+@media (max-width:600px){.st td.r{display:block;border-top:0;padding-top:0}.st tr{display:block;padding:4px 0;border-top:1px solid var(--line)}.st td{border-top:0;display:inline-block}.st thead{display:none}}
 .cand.pick{border-color:var(--pick);box-shadow:0 0 0 3px var(--pick-soft)}
 .cand.out{opacity:.78}
 .photo{width:100%;aspect-ratio:1;border-radius:8px;object-fit:contain;background:#fff;border:1px solid var(--line)}
@@ -186,6 +201,11 @@ function buyUrl(c){ const pr=c.price||{}; if(pr.url) return [pr.url, pr.seller||
 function buyBtn(c){ const u=buyUrl(c); return u?`<a class="buy" href="${esc(u[0])}" target="_blank" rel="noopener">Buy / view at ${esc(u[1].split(/[,(]/)[0].trim())} ↗</a>`:`<span class="chip">no purchase link found</span>`; }
 function first(t){ t=String(t||''); const m=t.match(/^.*?[.!?](\s|$)/); return m?m[0].trim():t; }
 function rest(t){ t=String(t||''); const f=first(t); return t.slice(f.length).trim(); }
+function dots(n){ n=Math.max(0,Math.min(5,Math.round(n||0))); return '●'.repeat(n)+'○'.repeat(5-n); }
+function scoreTable(c, w){ w=w||W0; if(!c||!c.score) return ''; const sum=CRIT.reduce((a,[k])=>a+(w[k]||0),0)||1; const tot=c.score.total??total(c,w); const R=c.score.reasons||{};
+  return `<div class="scorebox"><h4>Score <span class="num">${tot}</span> of 100: how it was scored</h4>
+  <table class="st"><thead><tr><th>Criterion</th><th>Weight</th><th>1 to 5</th><th>Why this number</th></tr></thead><tbody>${CRIT.map(([k,l])=>`<tr><td class="c">${l}</td><td class="w num">${w[k]}</td><td class="d" aria-label="${c.score[k]??'not scored'} of 5">${dots(c.score[k])}<small class="num">${c.score[k]??'–'}/5</small></td><td class="r">${R[k]?md1(R[k]):'<span class="muted">reason not written by the researcher</span>'}</td></tr>`).join('')}</tbody></table>
+  <p class="small muted" style="margin-top:8px">Each 1 to 5 is the researcher's judgement, and the one-line reason beside it is its only basis; there is no fixed rubric. Total = sum of score ÷ 5 × weight (${CRIT.map(([k])=>`${c.score[k]??'?'}/5×${w[k]}`).join(' + ')} = ${tot}). Safety is pass or fail and is never scored. <a href="#weights">Change the weights.</a></p></div>`; }
 function gateChip(v,label){ const m={pass:'ok',partly:'warn',fail:'bad'}; return `<span class="chip ${m[v]||''}">${esc(label)}: ${esc(v||'unknown')}</span>`; }
 
 /* markdown, enough for the block records: headings, tables, lists, bold, code, links */
@@ -226,8 +246,8 @@ function viewOverview(){
   ${(()=>{const fj=parts.filter(p=>p.forJulia), dd=parts.filter(p=>p.decision&&p.decision.state==='decided'); return (fj.length||dd.length)?`<div class="panel" style="border:2px solid var(--pick)"><h2>Decisions</h2>${fj.map(p=>`<p><b>For Julia:</b> <a href="#part-${p.id}">${esc(p.name)}</a>: ${esc(p.forJulia.question)}</p>`).join('')}${dd.length?`<p class="small muted">Decided: ${dd.map(p=>`<a href="#part-${p.id}">${esc(p.name)}</a> (${esc(p.decision.label.replace(/^Decided [^:]*: /,''))})`).join(' · ')}</p>`:''}</div>`:'';})()}
   ${totals.map(({ph,ps,sum})=>`<div class="panel"><div class="row" style="justify-content:space-between;align-items:baseline"><div><h2>${esc(ph.name)}</h2><div class="muted small">${esc(ph.deadline||'')}</div></div><div class="stat"><span class="v num">${money(sum)}</span><span class="l">picks · share ${money(ph.budgetShare)}</span></div></div>
     <div class="bar" style="margin:10px 0"><i class="${sum>ph.budgetShare?'over':''}" style="width:${Math.min(100,sum/ph.budgetShare*100)}%"></i></div>
-    <div class="grid">${ps.map(p=>{const c=pickOf(p); return `<a class="phasecard" href="#part-${p.id}">${c?photoEl(c,'thumb').replace('class="thumb"','class="thumb" style="width:72px;height:72px;object-fit:contain;border-radius:6px;background:#fff;border:1px solid var(--line)"'):'<div class="nophoto">no pick yet</div>'}<div><b>${esc(p.name)}</b><div class="small">${c?esc(c.name):'<span class="muted">open</span>'}</div><div class="small num muted">${pickPrice(p)?money(pickPrice(p)):''} ${p.pick&&p.pick.status?'· '+esc(p.pick.status.split(/[:(]/)[0].trim()):''}</div></div></a>`;}).join('')}</div></div>`).join('')}
-  <div class="panel"><h3>How to read this</h3><p class="small" style="margin-top:6px">Open a part from the index. The pick comes first with its reasons and the checks still owed; every other candidate follows with its photo, price, scores, strengths and weaknesses, owner reviews and the flags grading raised. <a href="#weights">Change the weights</a> to see whether the pick changes. <a href="#calendar">The buying calendar</a> says when the latest safe order date is and when sales are likely. <a href="#docs">Documentation</a> holds the whole project record.</p></div>
+    <div class="grid">${ps.map(p=>{const c=pickOf(p); return `<a class="phasecard" href="#part-${p.id}">${c?photoEl(c,'thumb').replace('class="thumb"','class="thumb" style="width:72px;height:72px;object-fit:contain;border-radius:6px;background:#fff;border:1px solid var(--line)"'):'<div class="nophoto">no pick yet</div>'}<div><b>${esc(p.name)}</b><div class="small">${c?esc(c.name):'<span class="muted">open</span>'}</div><div class="small num muted">${pickPrice(p)?money(pickPrice(p)):''}</div></div></a>`;}).join('')}</div></div>`).join('')}
+  <details class="more"><summary>How to read this page</summary><p class="small" style="margin-top:6px">Open a part from the index. The pick comes first with its reasons and the checks still owed; every other candidate follows with its photo, price, scores, strengths and weaknesses, owner reviews and the flags grading raised. <a href="#weights">Change the weights</a> to see whether the pick changes. <a href="#calendar">The buying calendar</a> says when the latest safe order date is and when sales are likely. <a href="#docs">Documentation</a> holds the whole project record.</p></details>
   </div>`;
 }
 
@@ -238,6 +258,7 @@ function viewMethod(){
   <div class="panel"><h3>The steps, in order</h3><ol class="small" style="margin-top:6px">${(m.steps||[]).map(s=>`<li>${md1(s)}</li>`).join('')}</ol></div>
   <div class="panel"><h3>Gates that come before any score</h3>${list(m.gates)}</div>
   <div class="panel"><h3>Weights (Pat, 3 Nov 2026: value is premium)</h3><div class="tbl"><table><tr>${CRIT.map(([k,l])=>`<th>${l}</th>`).join('')}</tr><tr>${CRIT.map(([k])=>`<td class="num">${W0[k]}</td>`).join('')}</tr></table></div><p class="small muted" style="margin-top:6px">${esc(m.scoringNote||'')} Each candidate gets 1 to 5 per criterion; the total out of 100 is the weighted sum. Safety is pass or fail and is never scored. <a href="#weights">Try other weights.</a></p></div>
+  ${(()=>{const ex=parts.map(p=>pickOf(p)).find(c=>c&&c.score&&c.score.reasons); return ex?`<div class="panel"><h3>A worked example: ${esc(ex.name)}</h3><p class="small muted" style="margin-top:4px">Every pick and candidate carries this same table, with the researcher's one-line reason for each number.</p>${scoreTable(ex)}</div>`:'';})()}
   <div class="panel"><h3>Rules Pat and Julia set</h3>${list(m.rules)}</div>
   <div class="panel"><h3>What the evidence is worth</h3><p class="small">${md1(m.evidenceNote||'')}</p></div>
   </div>`;
@@ -268,24 +289,23 @@ function renderWeightResults(){
 function candCard(c, p){
   const isPick = c.role==="lead's pick";
   const pr=c.price||{}; const sp=c.storePrice;
-  const flags=(c.flags||[]).slice(0,3).map(f=>`<span class="chip ${/recall|fail|final sale|not sold|out of stock/i.test(f)?'warn':''}">${esc(f)}</span>`).join(' ');
+  const flags=(c.flags||[]).filter(f=>/recall|fail|final sale|not sold|out of stock|disputed/i.test(f)).slice(0,1).map(f=>`<span class="chip warn">${esc(f)}</span>`).join(' ');
   const tot=c.score?(c.score.total??total(c,W0)):null;
   return `<article class="cand ${isPick?'pick':''} ${c.role==='out'?'out':''}" id="c-${p.id}-${esc((c.imageKey||c.name).replace(/\W+/g,'-'))}">
   <div title="Photo from the retailer or maker page, read 3 Nov 2026, matched by eye: check colour and bundle">${photoEl(c)}</div>
   <div>
     <div class="head"><div><h3>${esc(c.name)}</h3><div class="small muted">${esc(c.maker||'')}${c.role?' · '+esc(c.role):''}${c.group?' · '+esc(c.group):''}</div></div>
       <div style="text-align:right"><div class="price num">${pr.amount!=null?money(pr.amount):'<span class="muted small">no price read</span>'}</div><div class="small muted">${pr.amount!=null?esc((pr.seller||'').split(/[,(]/)[0])+(pr.readDate?', read '+esc(pr.readDate):''):''}</div></div></div>
-    <div class="row" style="margin-top:8px;align-items:center">${buyBtn(c)} ${isPick?'<span class="chip pick">pick</span>':''} ${tot!=null?`<span class="chip accent num">score ${tot}/100</span>`:'<span class="chip">not scored</span>'} ${gateChip(c.gate1,'safety')} ${c.availability?`<span class="chip">${esc(c.availability.split(/[;(]/)[0])}</span>`:''} ${flags}</div>
-    ${c.score?`<div class="scores">${CRIT.map(([k,l])=>`<div class="sc">${l}<b class="num">${c.score[k]??'–'}</b><div class="bar"><i style="width:${(c.score[k]||0)/5*100}%"></i></div></div>`).join('')}</div>`:''}
-    <details class="more" style="margin-top:10px"><summary>More: gates, warranty, returns, reviews, why these scores</summary>
-      <div class="small stack" style="gap:8px">
+    <div class="row" style="margin-top:8px;align-items:center">${buyBtn(c)} ${isPick?'<span class="chip pick">pick</span>':''} ${tot!=null?`<span class="chip accent num">score ${tot}/100</span>`:'<span class="chip">not scored</span>'} ${gateChip(c.gate1,'safety')} ${c.availability&&/sold out|out of stock|discontinued/i.test(c.availability)?`<span class="chip warn">${esc(c.availability.split(/[;(]/)[0])}</span>`:''} ${flags}</div>
+    <details class="more" style="margin-top:10px"><summary>More: why these scores, gates, warranty, returns, reviews</summary>
+      ${scoreTable(c)}
+      <div class="small stack" style="gap:8px;margin-top:8px">
         ${sp?`<div><b>Store check (Pat's PC, 3 Nov):</b> ${sp.amount!=null?money(sp.amount)+' at '+esc(sp.seller||''):''}${sp.rating?' · '+esc(sp.rating):''}${sp.score5!=null?' · score <span class="num">'+sp.score5+'</span> of 5':''}${sp.note?' · '+md1(sp.note):''}</div>`:''}
         ${pr.note?`<div><b>Price note:</b> ${md1(pr.note)}</div>`:''}${pr.perYear?`<div><b>Per year of use:</b> about ${money(pr.perYear)}</div>`:''}
         ${pr.otherPrices&&pr.otherPrices.length?`<div><b>Other prices seen:</b><ul>${pr.otherPrices.map(o=>`<li><span class="num">${money(o.amount)}</span> ${esc(o.seller||'')}${o.url?` · <a href="${esc(o.url)}" target="_blank" rel="noopener">page</a>`:''}${o.readDate?', read '+esc(o.readDate):''}</li>`).join('')}</ul></div>`:''}
         ${c.gate1Note?`<div><b>Safety gate (${esc(c.gate1||'unknown')}):</b> ${md1(c.gate1Note)}</div>`:''}${c.gate2Note?`<div><b>Quality bar (${esc(c.gate2||'unknown')}):</b> ${md1(c.gate2Note)}</div>`:''}
         ${c.warranty?`<div><b>Warranty:</b> ${md1(c.warranty)}</div>`:''}${c.returns?`<div><b>Returns:</b> ${md1(c.returns)}</div>`:''}
-        ${(c.flags||[]).length>3?`<div><b>All flags:</b> ${c.flags.map(f=>`<span class="chip">${esc(f)}</span>`).join(' ')}</div>`:''}
-        ${c.score&&c.score.reasons?`<div><b>Why these scores</b><ul>${CRIT.map(([k,l])=>c.score.reasons[k]?`<li><b>${l}:</b> ${md1(c.score.reasons[k])}</li>`:'').join('')}</ul></div>`:''}
+        ${(c.flags||[]).length?`<div><b>All flags:</b> ${c.flags.map(f=>`<span class="chip">${esc(f)}</span>`).join(' ')}</div>`:''}
         ${c.swot?`<div><b>Strengths, weaknesses, opportunities, threats</b><div class="swot"><div><h4>Strengths</h4>${list(c.swot.strengths)}</div><div><h4>Weaknesses</h4>${list(c.swot.weaknesses)}</div><div><h4>Opportunities</h4>${list(c.swot.opportunities)}</div><div><h4>Threats</h4>${list(c.swot.threats)}</div></div></div>`:''}
         ${c.ownerReviews?`<div><b>Owner reviews</b> ${c.ownerReviews.stars?`· ${esc(c.ownerReviews.stars)}`:''}<div class="swot"><div><h4>Praise</h4>${list(c.ownerReviews.praise)}</div><div><h4>Complaints</h4>${list(c.ownerReviews.complaints)}</div></div>${c.ownerReviews.longTerm?`<p style="margin-top:6px"><b>Long-term use:</b> ${md1(c.ownerReviews.longTerm)}</p>`:''}</div>`:''}
         ${c.specs&&c.specs.length?`<div><b>Specs</b>${list(c.specs)}</div>`:''}${c.notes&&c.notes.length?`<div><b>Notes</b>${list(c.notes)}</div>`:''}
@@ -297,32 +317,36 @@ function viewPart(p){
   const cal=(BUY.items||[]).find(i=>i.part===p.id);
   const price=pickPrice(p); const tot=pk&&pk.score?(pk.score.total??total(pk,W0)):null;
   const statusShort=pick.status?pick.status.split(/[:(]/)[0].trim():'';
+  const fj=p.forJulia;
+  const others=(p.candidates||[]).filter(c=>c!==pk);
   return `<div class="eyebrow">${esc(ph.name||'')} · ${esc(p.waypoint||'')}</div><h1>${esc(p.name)}</h1>
-  <div class="row small muted" style="margin:8px 0 16px">${p.readyBy?`<span class="chip">ready by ${esc(p.readyBy.split('(')[0].trim())}</span>`:''}${cal&&cal.latestOrder?`<span class="chip accent">order by ${esc(cal.latestOrder)}</span>`:''}${p.yearsOfUse?`<span class="chip">${esc(p.yearsOfUse)} yr of use</span>`:''}${p.decision?`<span class="chip ${p.decision.state==='for-julia'?'pick':'accent'}">${esc(p.decision.label)}</span>`:''}</div>
+  <div class="row small muted" style="margin:8px 0 16px">${p.decision?`<span class="chip ${p.decision.state==='for-julia'?'pick':'accent'}" style="font-weight:600">${esc(p.decision.label)}</span>`:''}${cal&&cal.latestOrder?`<span class="chip">order by ${esc(cal.latestOrder)}</span>`:''}${p.readyBy?`<span class="chip">ready by ${esc(p.readyBy.split('(')[0].trim())}</span>`:''}</div>
   <div class="stack">
-  ${p.forJulia?`<div class="panel" style="border:2px solid var(--pick)"><div class="eyebrow" style="color:var(--pick)">For Julia to review</div><h2 style="margin:4px 0 6px">${esc(p.forJulia.question)}</h2><p class="small">${md1(p.forJulia.pick)}</p>${p.forJulia.options?`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${p.forJulia.options.map(o=>`<div class="panel" style="padding:10px 12px"><h4 style="margin:0">${esc(o.name)}</h4><div class="num" style="font-weight:700;margin:2px 0 6px">${esc(o.price)}</div><div class="small"><b>For</b><ul class="small">${o.pros.map(x=>`<li>${md1(x)}</li>`).join('')}</ul><b>Against</b><ul class="small">${o.cons.map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`).join('')}</div>`:`<div class="grid two"><div><h4>Why wait</h4><ul class="small">${(p.forJulia.wait||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div><div><h4>Why buy now</h4><ul class="small">${(p.forJulia.now||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`}${p.forJulia.answer?`<p class="small" style="color:var(--pick)"><b>Answer:</b> ${md1(p.forJulia.answer)}</p>`:''}<p class="small"><b>${md1(p.forJulia.ask)}</b></p></div>`:''}
-  ${p.decision&&p.decision.state==='decided'?`<div class="panel" style="border-color:var(--accent)"><b>${esc(p.decision.label)}</b></div>`:''}
-  <div class="pickcard">${pk?photoEl(pk):'<div class="nophoto">no pick yet</div>'}<div><div class="eyebrow" style="color:var(--pick)">Pick to confirm</div><h2>${esc(pk?pk.name:(pick.candidate||'Open'))}</h2>
-    <div class="row" style="margin-top:8px;align-items:center">${price?`<span class="price num">${money(price)}</span>`:''}${pk?buyBtn(pk):''}${tot!=null?`<span class="chip accent num">score ${tot}/100</span>`:''}${statusShort?`<span class="chip warn">${esc(statusShort)}</span>`:''}</div>
+  ${fj?`<div class="panel" style="border:2px solid var(--pick)"><div class="eyebrow" style="color:var(--pick)">For Julia</div><h2 style="margin:4px 0 6px">${esc(fj.question)}</h2>
+    ${fj.options?`<div class="optrow">${fj.options.map(o=>`<div class="opt"><b>${esc(o.name)}</b> <span class="num">${esc(o.price)}</span></div>`).join('')}</div>`:''}
+    ${fj.answer?`<p class="small" style="color:var(--pick)"><b>Answer:</b> ${md1(fj.answer)}</p>`:''}
+    <p class="small"><b>${md1(fj.ask)}</b></p>
+    <details class="more" style="margin-top:8px;border-top:0;padding-top:0"><summary>More: ${fj.options?'for and against each':'why wait, why buy now'}</summary><p class="small" style="margin-top:8px">${md1(fj.pick)}</p>${fj.options?`<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${fj.options.map(o=>`<div class="panel" style="padding:10px 12px"><h4 style="margin:0">${esc(o.name)}</h4><div class="num" style="font-weight:700;margin:2px 0 6px">${esc(o.price)}</div><div class="small"><b>For</b><ul class="small">${o.pros.map(x=>`<li>${md1(x)}</li>`).join('')}</ul><b>Against</b><ul class="small">${o.cons.map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`).join('')}</div>`:`<div class="grid two"><div><h4>Why wait</h4><ul class="small">${(fj.wait||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div><div><h4>Why buy now</h4><ul class="small">${(fj.now||[]).map(x=>`<li>${md1(x)}</li>`).join('')}</ul></div></div>`}</details></div>`:''}
+  <div class="pickcard">${pk?photoEl(pk):'<div class="nophoto">no pick yet</div>'}<div><div class="eyebrow" style="color:var(--pick)">${p.decision&&p.decision.state==='decided'?'The pick':'Pick to confirm'}</div><h2>${esc(pk?pk.name:(pick.candidate||'Open'))}</h2>
+    <div class="row" style="margin-top:8px;align-items:center">${price?`<span class="price num">${money(price)}</span>`:''}${pk?buyBtn(pk):''}${statusShort?`<span class="chip warn">${esc(statusShort)}</span>`:''}</div>
     <p class="tldr">${md1(first(pick.why))}</p>
     ${(p.sub||[]).length?`<div class="small" style="margin-top:6px">${p.sub.map(s=>`<div><b>${esc(s.group)}:</b> ${md1(s.pick)}</div>`).join('')}</div>`:''}
-    <details class="more" style="margin-top:8px"><summary>More: full reasoning, both sides, runner-up</summary><div class="small stack" style="gap:8px">
+    ${pk?scoreTable(pk):''}
+    <details class="more" style="margin-top:10px"><summary>More: reasoning, checks before buying, questions</summary><div class="small stack" style="gap:8px;margin-top:8px">
       ${rest(pick.why)?`<p>${md1(rest(pick.why))}</p>`:''}
       ${pick.status?`<p><b>Status:</b> ${md1(pick.status)}</p>`:''}
       ${(p.sub||[]).some(s=>s.runnerUp)?`<div>${p.sub.map(s=>s.runnerUp?`<div><b>${esc(s.group)} runner-up:</b> ${md1(s.runnerUp)}</div>`:'').join('')}</div>`:''}
       ${pick.runnerUp?`<p><b>Runner-up:</b> ${md1(pick.runnerUp)}</p>`:''}
       ${(pick.bothSides||[]).length?`<div class="both"><b>Both sides, not settled here</b>${list(pick.bothSides)}</div>`:''}
       ${p.storeCheck&&(p.storeCheck.pick||p.storeCheck.note)?`<p><b>Pat's store check picked:</b> ${esc(p.storeCheck.pick||'')} ${p.storeCheck.note?'· '+md1(p.storeCheck.note):''}</p>`:''}
+      <div><b>Checks before buying (${(p.checksBeforeBuying||[]).length})</b>${list(p.checksBeforeBuying)}</div>
+      <div><b>Questions for Pat and Julia (${(p.questions||[]).length})</b>${(p.questions||[]).length?'<ul>'+p.questions.map(q=>`<li>${md1(q.text||q)}</li>`).join('')+'</ul>':'<span class="muted"> none</span>'}</div>
+      <div><b>What grading found (${(p.gradingNotes||[]).length})</b>${list(p.gradingNotes)}</div>
+      ${p.need?`<div><b>What it must do:</b> ${esc(p.need)}${p.yearsOfUse?` <span class="muted">Years of use assumed: ${esc(p.yearsOfUse)}.</span>`:''}</div>`:''}
     </div></details>
   </div></div>
-  <div class="panel"><div class="row">
-    <details class="more"><summary>Checks before buying (${(p.checksBeforeBuying||[]).length})</summary>${list(p.checksBeforeBuying)}</details>
-    <details class="more"><summary>Questions for Pat and Julia (${(p.questions||[]).length})</summary>${(p.questions||[]).length?'<ul>'+p.questions.map(q=>`<li>${md1(q.text||q)}</li>`).join('')+'</ul>':'<span class="muted">none</span>'}</details>
-    <details class="more"><summary>What grading found (${(p.gradingNotes||[]).length})</summary>${list(p.gradingNotes)}</details>
-    ${p.need?`<details class="more"><summary>What it must do</summary><p class="small">${esc(p.need)}</p></details>`:''}
-  </div></div>
-  <h2 style="margin-top:8px">Candidates (${(p.candidates||[]).length})</h2>
-  ${(p.candidates||[]).map(c=>candCard(c,p)).join('')}
+  <details class="more" style="border-top:0;padding-top:0"><summary>Other candidates (${others.length}): price, score, why</summary>
+  <div class="stack" style="margin-top:10px">${others.map(c=>candCard(c,p)).join('')}</div></details>
   </div>`;
 }
 

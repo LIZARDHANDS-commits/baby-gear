@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Greenwood Family Car</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one scrolling page, six numbered sections, a sticky chip rail to jump between them. Cards are photo-left like the baby-gear page. */
+:root{
+  --bg:#f6f5f1; --panel:#ffffff; --ink:#1d2a2e; --muted:#5b6b70; --line:#dcdfd8;
+  --accent:#1f5f6b; --accent-ink:#ffffff; --accent-soft:#e3eff1;
+  --pick:#b8651b; --pick-soft:#fbeedd;
+  --ok:#2e7d4f; --warn:#a66a00; --bad:#b23b3b; --chip:#eceee8;
+  --viz-1:#0891b2; --viz-2:#c2651a; --viz-band:rgba(91,107,112,.14); --viz-grid:#e6e8e3; --viz-track:#e4e7e1;
+  --display:"Outfit","Segoe UI",system-ui,sans-serif; --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15191b;--panel:#1e2427;--ink:#e8ebe6;--muted:#a3b0b4;--line:#2f383c;--accent:#6fb7c4;--accent-ink:#0f1c1f;--accent-soft:#1c3237;--pick:#e3a05a;--pick-soft:#3a2a17;--ok:#6fcf97;--warn:#e0b25a;--bad:#e07c7c;--chip:#2a3236;--viz-1:#0891b2;--viz-2:#d95926;--viz-band:rgba(163,176,180,.16);--viz-grid:#2a3236;--viz-track:#2a3236;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15191b;--panel:#1e2427;--ink:#e8ebe6;--muted:#a3b0b4;--line:#2f383c;--accent:#6fb7c4;--accent-ink:#0f1c1f;--accent-soft:#1c3237;--pick:#e3a05a;--pick-soft:#3a2a17;--ok:#6fcf97;--warn:#e0b25a;--bad:#e07c7c;--chip:#2a3236;--viz-1:#0891b2;--viz-2:#d95926;--viz-band:rgba(163,176,180,.16);--viz-grid:#2a3236;--viz-track:#2a3236;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+a{color:var(--accent);overflow-wrap:anywhere}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700}
+h2{font-size:clamp(1.35rem,3vw,1.8rem);font-weight:600}
+h3{font-size:1.15rem;font-weight:600}
+h4{font-size:1rem;font-weight:600}
+p{margin:0}
+ul{margin:4px 0 0;padding-left:1.2em}
+li{margin:3px 0}
+img{max-width:100%}
+.wrap{max-width:1100px;margin:0 auto;padding-block:0 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:0}
+header.top{padding-block:26px 14px;display:flex;flex-direction:column;gap:10px}
+a.home{align-self:flex-start;font-family:var(--display);font-weight:600;font-size:.85rem;text-decoration:none;background:var(--chip);color:var(--ink);border-radius:999px;padding:4px 12px}
+a.home:hover{background:var(--accent);color:var(--accent-ink)}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:var(--display);font-weight:600}
+.lead{font-size:1.08rem;max-width:68ch}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.num{font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:5px;background:var(--chip);border-radius:999px;padding:2px 10px;font-size:.8rem;max-width:100%}
+.chip.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.chip.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.chip.bad{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+.chip.pick{background:var(--pick);color:#fff}
+.chip.accent{background:var(--accent-soft);color:var(--accent)}
+.chip.est{border:1px dashed var(--muted);background:transparent;color:var(--muted)}
+nav.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 -16px;padding:8px 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav.rail .in{display:flex;gap:6px;white-space:nowrap}
+nav.rail a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:var(--ink);background:var(--chip);border-radius:999px;padding:5px 12px;font-family:var(--display);font-weight:600;font-size:.85rem;cursor:pointer}
+nav.rail a:hover{background:var(--accent);color:var(--accent-ink)}
+nav.rail a .n{font-size:.72rem;opacity:.7}
+section.sec{padding-block:30px 6px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:70px}
+section.sec>.hd{display:flex;flex-direction:column;gap:4px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+/* buttons: every clickable thing looks like one */
+.btn{font:inherit;font-family:var(--display);font-weight:600;font-size:.9rem;line-height:1.3;display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:var(--accent-ink);border:1.5px solid var(--accent);border-radius:999px;padding:7px 14px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:filter .12s,transform .06s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--accent-soft);color:var(--accent)}
+.btn.ghost:hover{background:var(--accent);color:var(--accent-ink);filter:none}
+.btn.go{background:var(--pick);border-color:var(--pick);color:#fff}
+.btn .chev{display:inline-block;transition:transform .15s;font-size:1em}
+.btn[aria-expanded="true"] .chev{transform:rotate(90deg)}
+.btn:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tap{font-size:.78rem;color:var(--muted);font-family:var(--display);font-weight:600;letter-spacing:.02em}
+.det{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px;display:flex;flex-direction:column;gap:8px;font-size:.93rem}
+/* 1. actions */
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.act{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--pick);border-radius:12px;padding:14px}
+.act .n{font-family:var(--display);font-weight:700;font-size:1.8rem;line-height:1;color:var(--pick)}
+.act h3{font-size:1.08rem}
+.act .when{font-weight:700}
+/* 2. score board */
+.board{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:16px}
+.ctrl{display:flex;flex-direction:column;gap:10px}
+.slider{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:center}
+.slider label{font-size:.9rem;display:flex;justify-content:space-between;gap:8px}
+.slider input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;grid-column:1/-1}
+.slider output{font-family:var(--display);font-weight:700;text-align:right;grid-column:2;grid-row:1}
+.seg{display:inline-flex;border:1.5px solid var(--accent);border-radius:999px;overflow:hidden}
+.seg button{font:inherit;font-family:var(--display);font-weight:600;font-size:.85rem;background:transparent;color:var(--accent);border:0;padding:6px 12px;cursor:pointer}
+.seg button:hover{background:var(--accent-soft)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.srow{display:grid;grid-template-columns:28px minmax(0,1fr) 54px auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.srow .rk{font-family:var(--display);font-weight:700;color:var(--muted);text-align:right}
+.srow.top .rk{color:var(--pick)}
+.srow .nm{font-family:var(--display);font-weight:600;font-size:.95rem;display:flex;flex-direction:column;gap:4px;min-width:0}
+.track{height:12px;border-radius:6px;background:var(--viz-track);overflow:hidden}
+.track i{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--viz-1);transition:width .35s ease}
+.srow.top .track i{background:var(--pick)}
+.srow .val{font-family:var(--display);font-weight:700;font-size:1.15rem;text-align:right}
+.srow .val small{display:block;font-size:.7rem;color:var(--muted);font-weight:600}
+.sdet{grid-column:1/-1}
+.crit{display:grid;grid-template-columns:minmax(110px,150px) 40px minmax(60px,110px) minmax(0,1fr);gap:8px 10px;align-items:center;padding:5px 0;border-bottom:1px dashed var(--line);font-size:.88rem}
+.crit .cn{font-weight:700}
+.crit .cw{color:var(--muted);font-size:.8rem}
+.crit .track{height:8px}
+.crit .why{grid-column:1/-1;color:var(--muted);font-size:.85rem}
+/* 3. cards */
+.cards{display:flex;flex-direction:column;gap:14px}
+.card{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.card.top{border-color:var(--pick);box-shadow:0 0 0 3px var(--pick-soft)}
+.card .ph{width:100%;aspect-ratio:4/3;border-radius:8px;background:var(--chip);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card .ph svg{width:100%;height:100%}
+.card .body{display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .head{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+.card .rank{font-family:var(--display);font-weight:700;font-size:.85rem;color:var(--muted)}
+.card .verdict{font-size:1.02rem}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.fact{background:var(--bg);border-radius:8px;padding:8px 10px;font-size:.8rem;color:var(--muted);min-width:0}
+.fact b{display:block;color:var(--ink);font-family:var(--display);font-size:1.05rem;font-weight:700}
+.fact.ok b{color:var(--ok)}.fact.warn b{color:var(--warn)}.fact.bad b{color:var(--bad)}
+.lst{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.li{display:grid;grid-template-rows:auto 1fr auto;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;font-size:.88rem;min-width:0}
+.li .img{aspect-ratio:4/3;border-radius:6px;background:var(--chip);overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.78rem;text-align:center;padding:6px}
+.li .img img{width:100%;height:100%;object-fit:cover;display:block}
+.li .prov{position:absolute;top:6px;left:6px;font-family:var(--display);font-weight:700;font-size:.7rem;padding:1px 7px;border-radius:999px;color:#fff}
+.li .prov.SK{background:var(--viz-1)}.li .prov.NS{background:var(--viz-2)}
+.li .t{font-family:var(--display);font-weight:600}
+.li .p{font-family:var(--display);font-weight:700;font-size:1.1rem}
+.li .p s{color:var(--muted);font-size:.8rem;font-weight:400;margin-left:4px}
+.li .m{color:var(--muted);font-size:.82rem}
+.li .flag{color:var(--warn);font-size:.78rem}
+.li .btn{justify-content:center;padding:6px 10px;font-size:.85rem}
+.nolink{text-align:center;font-size:.8rem;color:var(--muted);padding:6px;border:1px dashed var(--line);border-radius:999px}
+/* 4 and 5. charts */
+.chartwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+svg.chart{display:block;width:100%;height:auto;font-family:var(--body)}
+svg.chart text{fill:var(--ink);font-size:12px}
+svg.chart text.ax{fill:var(--muted);font-size:11px}
+svg.chart text.lab{fill:var(--muted);font-size:11px}
+svg.chart .grid{stroke:var(--viz-grid);stroke-width:1}
+svg.chart .sk{fill:var(--viz-1)}
+svg.chart .ns{fill:var(--viz-2)}
+svg.chart .med{stroke:var(--panel);stroke-width:2}
+svg.chart .today{stroke:var(--ink);stroke-width:1}
+svg.chart .due{stroke:var(--viz-2);stroke-width:1.5}
+svg.chart .bar{fill:var(--viz-1)}
+svg.chart .bar.tbd{fill:var(--viz-1);fill-opacity:.28}
+svg.chart .bandfill{fill:var(--viz-band)}
+svg.chart .dot{fill:var(--viz-2);stroke:var(--panel);stroke-width:2}
+svg.chart .duedot{fill:var(--viz-2)}
+svg.chart g.r:hover rect.bar,svg.chart g.r:hover rect.sk,svg.chart g.r:hover rect.ns{fill-opacity:.8}
+svg.chart .hit{fill:transparent}
+.gantt{min-width:720px}
+.pricechart{min-width:640px}
+.scrollhint{display:none}
+@media (max-width:760px){.scrollhint{display:block}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;background:var(--viz-1)}
+.legend i.ns{background:var(--viz-2)}
+.legend i.band{background:var(--viz-band);width:18px}
+.legend i.dot{width:10px;height:10px;border-radius:50%;background:var(--viz-2)}
+.legend i.line{width:2px;height:14px;background:var(--ink);border-radius:0}
+.legend i.tbd{opacity:.35}
+.legend i.med{width:2px;height:12px;background:var(--ink);border-radius:0}
+.tip{position:absolute;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:.82rem;box-shadow:0 6px 20px rgba(0,0,0,.14);max-width:280px;display:none;z-index:5}
+figure{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+figcaption{font-size:.88rem;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:600;font-size:.78rem;color:var(--muted);letter-spacing:.03em}
+.tbl{overflow-x:auto;max-width:100%}
+/* 6. footer */
+footer.cav{padding-block:30px 10px;display:flex;flex-direction:column;gap:10px;font-size:.9rem}
+footer.cav ol{padding-left:1.3em;margin:0}
+@media (max-width:860px){
+  .board{grid-template-columns:1fr}
+  .card{grid-template-columns:1fr}
+  .card .ph{max-width:260px}
+  .srow{grid-template-columns:24px minmax(0,1fr) 46px auto}
+  .crit{grid-template-columns:minmax(90px,120px) 36px minmax(50px,1fr)}
+  .crit .track{grid-column:3}
+}
+@media (max-width:480px){
+  .srow{grid-template-columns:22px minmax(0,1fr) 44px}
+  .srow .btn{grid-column:2/-1;justify-self:start}
+  .act{grid-template-columns:36px minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="../">&larr; Home</a>
+  <span class="eyebrow">Family car &middot; options as of 3 Nov 2026</span>
+  <h1>Greenwood Family Car</h1>
+  <p class="lead">Pick a used compact AWD SUV, up to $50,000 before tax, so it arrives in Greenwood, Nova Scotia with the move around 1 Mar 2027. Baby due April 2027.</p>
+  <div class="row"><span class="chip accent">Nothing bought</span><span class="chip">Research: summary-read, unconfirmed</span><span class="chip">Prices: asks seen 3 Nov 2026</span><span class="chip">Julia makes the final pick</span></div>
+</header>
+<nav class="rail" aria-label="Sections"><div class="in">
+  <a href="#next"><span class="n">1</span>Next actions</a><a href="#score"><span class="n">2</span>Score board</a><a href="#cars"><span class="n">3</span>The cars</a><a href="#prices"><span class="n">4</span>SK vs NS prices</a><a href="#when"><span class="n">5</span>Timeline</a><a href="#caveats"><span class="n">6</span>Caveats</a>
+</div></nav>
+
+<section class="sec" id="next">
+  <div class="hd"><span class="eyebrow">1 &middot; Do these next</span><h2>Three actions, in order</h2></div>
+  <div class="acts" id="acts"></div>
+</section>
+
+<section class="sec" id="score">
+  <div class="hd"><span class="eyebrow">2 &middot; Score board</span><h2>Move a slider, the ranking moves</h2><p class="muted small">Six criteria, each scored 0 to 10. Weights start fit-first (seat fit 25, 6-yr cost 25, reliability 15, safety 15, Valley service 10, fuel 10). Scores marked <span class="chip est">estimate</span> are the page's judgement, not a measured fact.</p></div>
+  <div class="board">
+    <div class="panel ctrl">
+      <h3>Weights <span class="muted small">(total <span id="wsum" class="num"></span>)</span></h3>
+      <div id="sliders" class="ctrl"></div>
+      <button class="btn ghost" type="button" id="reset">&#8634; Reset weights</button>
+      <h3 style="margin-top:6px">Cost case</h3>
+      <div class="row"><span class="small">km a year</span><div class="seg" id="km" role="group" aria-label="Kilometres a year"><button type="button" data-km="10000">10k</button><button type="button" data-km="15000">15k</button><button type="button" data-km="25000">25k</button></div></div>
+      <div class="row"><span class="small">buy in</span><div class="seg" id="prov" role="group" aria-label="Province of purchase"><button type="button" data-prov="SK">SK, 11% tax</button><button type="button" data-prov="NS">NS, 14% tax</button></div></div>
+      <p class="muted small">Cost model: price + tax &minus; rebates + fuel at $1.55/L + $1,800 winter set &minus; resale after 6 years. Cash case; loan interest shows under each car's More.</p>
+    </div>
+    <div class="panel">
+      <p class="small" id="board-note"></p>
+      <div id="board"></div>
+      <p class="tap" style="margin-top:8px">Tap More on a row for the six scores and why</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="cars">
+  <div class="hd"><span class="eyebrow">3 &middot; The cars</span><h2>Seven options, ranked by your weights</h2><p class="muted small">One line each. See listings opens the real SK and NS asks with links. Mazda CX-5 is out (rear-facing grade C/C).</p></div>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section class="sec" id="prices">
+  <div class="hd"><span class="eyebrow">4 &middot; SK vs NS asking prices</span><h2>Where is the same car cheaper?</h2></div>
+  <div class="panel">
+    <figure>
+      <div class="row"><button class="btn ghost" type="button" id="taxbtn" aria-pressed="false"><span class="chev">&#8644;</span><span class="lbl">Showing: asking price. Tap to add tax</span></button></div>
+      <div class="legend"><span><i></i>Saskatchewan (Regina, Saskatoon, Moose Jaw)</span><span><i class="ns"></i>Nova Scotia (Valley first, then Halifax)</span><span><i class="med"></i>median</span></div>
+      <p class="scrollhint tap">&#8596; Swipe the chart sideways to see the whole range</p>
+      <div class="chartwrap" id="pricechart"></div>
+      <figcaption>Min to max asking price per model, page-1 samples seen 3 Nov 2026, trims and years mixed (not market rates). The tax gap is about 3 points: SK 11% vs NS 14%, so a $35,000 car carries $1,050 more tax in NS. In this sample NS asks sit at or below SK for several models, which outweighs the tax gap. Pick by lowest all-in cost after tax and moving.</figcaption>
+    </figure>
+    <div class="row" style="margin-top:10px"><button class="btn ghost" type="button" data-toggle="pricetable" data-open="Table view" data-close="Hide table" aria-expanded="false" aria-controls="pricetable"><span class="chev">&#9656;</span><span class="lbl">Table view</span></button><span class="tap">Tap for the numbers</span></div>
+    <div class="tbl" id="pricetable" hidden></div>
+  </div>
+</section>
+
+<section class="sec" id="when">
+  <div class="hd"><span class="eyebrow">5 &middot; Timeline</span><h2>Nov 2026 to April 2027, month by month</h2></div>
+  <div class="panel">
+    <figure>
+      <div class="legend"><span><i class="dot"></i>month milestone</span><span><i class="line"></i>today</span></div>
+      <p class="scrollhint tap">&#8596; Swipe the chart sideways to see the later months</p>
+      <div class="chartwrap" id="gantt"></div>
+      <figcaption>Hover or tap a row for its month. An SK buy needs to be owned 31+ days before entering NS to avoid NS tax at registration (confirm with CRA). An NS buy can wait at a family address in Greenwood.</figcaption>
+    </figure>
+    <div class="row" style="margin-top:10px"><button class="btn ghost" type="button" data-toggle="ganttlist" data-open="List view" data-close="Hide list" aria-expanded="false" aria-controls="ganttlist"><span class="chev">&#9656;</span><span class="lbl">List view</span></button><span class="tap">Tap for the dates as text</span></div>
+    <ul id="ganttlist" class="small" hidden></ul>
+  </div>
+</section>
+
+<footer class="cav" id="caveats">
+  <span class="eyebrow">6 &middot; Caveats</span>
+  <h2>Read before acting</h2>
+  <ol id="cavlist"></ol>
+  <p class="muted small" id="photonote"></p>
+  <p class="muted small">Sources: AutoTrader.ca, CarGurus.ca and carpages.ca page-1 searches seen 3 Nov 2026 (SK: Regina, Saskatoon, Moose Jaw; NS: Kentville area, then Halifax); Cars.com car-seat fit checks; Consumer Reports and IIHS summaries; Excise Tax Act Schedule X for the 31-day rule; Nova Scotia dealer pages for the Valley service list. Everything is summary-read and unconfirmed.</p>
+</footer>
+</div>
+<script>
+const D = {"generated":"2026-11-03","title":"Greenwood Family Car","cap":50000,"weights":{"fit":25,"cost":25,"reliability":15,"safety":15,"service":10,"fuel":10},"weightLabels":{"fit":"Seat fit","cost":"6-yr cost","reliability":"Reliability","safety":"Safety","service":"Valley service","fuel":"Fuel"},"costConstants":{"YEARS":6,"KMS":[10000,15000,25000],"GAS":1.55,"TAX":{"SK":0.11,"NS":0.14},"WINTER":1800,"LOAN_NEW":0.0649,"LOAN_USED":0.085,"TERM":60},"actions":[{"n":1,"what":"Send the CRA tax question","when":"this week; answer needed by 15 Jan 2027","why":"Settles whether a car bought in SK and owned 31+ days skips NS tax at registration. Without a written answer by 15 Jan, treat SK and NS as equal and pick by all-in cost.","minutes":"About 30 minutes"},{"n":2,"what":"Shortlist SK and NS listings","when":"early Jan 2027 (2 to 12 Jan)","why":"Re-open the links below, drop sold units, add new page-1 units in both provinces, and keep 2 to 3 models.","minutes":"About 2 hours over a week"},{"n":3,"what":"Test-fit the infant seat; Julia picks","when":"mid to late Jan 2027","why":"Rear-facing infant seat in the back seat of each shortlisted car, with the front seat where Pat and Julia sit. The SUV arrives with the move about 1 Mar.","minutes":"One afternoon per dealer"}],"models":[{"id":"forester","name":"Subaru Forester","make":"Subaru","years":"2023-2025 used","verdict":"Best seat fit of the list, but no Subaru dealer in the Valley (Halifax, ~150 km).","fit":{"grade":"A/A","score":9,"why":"Cars.com rear-facing infant A, convertible A.","estimate":false},"reliability":{"score":6,"why":"CR 2026: Forester gas about average; the hybrid is above average. Score is an estimate from that wording.","estimate":true},"safety":{"score":8,"why":"No model-level rating in the research. Estimate from brand record; confirm IIHS before buying.","estimate":true},"service":{"valley":false,"dealer":"Steele Subaru, Halifax","score":3,"why":"No Subaru franchise dealer in the Annapolis Valley.","estimate":false},"cost":{"l100":8.3,"l100Source":"cost trial (Forester 2024 used)","l100Estimate":false,"resale":0.55,"resaleSource":"the cost trial","rebate":0,"used":true,"price":36822,"priceN":10,"priceSource":"median of 10 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":5,"min":35995,"max":39995,"median":38995},"NS":{"n":6,"min":23990,"max":40888,"median":31882}},"listingCount":11},{"id":"crv","name":"Honda CR-V","make":"Honda","years":"2023-2025 used, gas and hybrid","verdict":"Fits well and Honda is in Kentville; used asks run higher than the others.","fit":{"grade":"A/A","score":9,"why":"CR-V Hybrid 2026: infant A, convertible A, 5'6\" passenger ample legroom.","estimate":false},"reliability":{"score":8,"why":"No model-level data in the research (R3 partly answered). Estimate from brand record.","estimate":true},"safety":{"score":7,"why":"IIHS 2027 CR-V moderate overlap rating P flagged in the research, column header not returned. Re-check the IIHS page.","estimate":true},"service":{"valley":true,"dealer":"Kings County Honda, Kentville (AutoTrader: Kings Honda, Coldbrook)","score":9,"why":"Valley Honda dealer.","estimate":false},"cost":{"l100":8.1,"l100Source":"cost trial (CR-V 2024 used)","l100Estimate":false,"resale":0.58,"resaleSource":"the cost trial","rebate":0,"used":true,"price":35990,"priceN":11,"priceSource":"median of 11 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":7,"min":32000,"max":43990,"median":38211},"NS":{"n":6,"min":28990,"max":41994,"median":34891}},"listingCount":13},{"id":"tucson","name":"Hyundai Tucson","make":"Hyundai","years":"2023-2025 used","verdict":"Fits well, among the cheapest to buy, Hyundai is in New Minas.","fit":{"grade":"A/A","score":9,"why":"Tucson Hybrid 2026: infant A, convertible A.","estimate":false},"reliability":{"score":6,"why":"No model-level data in the research. Estimate; Hyundai CPO adds a 6-yr/120,000 km powertrain warranty.","estimate":true},"safety":{"score":8,"why":"No model-level rating in the research. Estimate; confirm IIHS.","estimate":true},"service":{"valley":true,"dealer":"Bruce Hyundai, New Minas","score":9,"why":"Valley Hyundai dealer.","estimate":false},"cost":{"l100":9.0,"l100Source":"estimate for the 2.5 gas AWD (the trial only has the hybrid at 6.7)","l100Estimate":true,"resale":0.51,"resaleSource":"cost trial (new Tucson row)","rebate":0,"used":true,"price":30554,"priceN":12,"priceSource":"median of 12 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":6,"min":27995,"max":33987,"median":32225},"NS":{"n":6,"min":26704,"max":40487,"median":29337}},"listingCount":12},{"id":"sportage","name":"Kia Sportage","make":"Kia","years":"2023-2026 used","verdict":"Fits well, cheap asks, Kia is in New Minas; the thirstiest gas engine here.","fit":{"grade":"A/A","score":9,"why":"Sportage Hybrid rear-facing A/A.","estimate":false},"reliability":{"score":6,"why":"No model-level data in the research. Estimate.","estimate":true},"safety":{"score":8,"why":"No model-level rating in the research. Estimate; confirm IIHS.","estimate":true},"service":{"valley":true,"dealer":"Forbes Kia, New Minas","score":9,"why":"Valley Kia dealer.","estimate":false},"cost":{"l100":9.3,"l100Source":"estimate for the 2.5 gas AWD","l100Estimate":true,"resale":0.5,"resaleSource":"estimate","rebate":0,"used":true,"price":29640,"priceN":6,"priceSource":"median of 6 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":4,"min":29000,"max":36899,"median":30638},"NS":{"n":6,"min":19900,"max":32997,"median":27292}},"listingCount":11},{"id":"rogue","name":"Nissan Rogue","make":"Nissan","years":"2023-2025 used","verdict":"Fits well, the lowest asks, Nissan is in Kentville; long-run reliability is the open question.","fit":{"grade":"A/A","score":9,"why":"Rogue rear-facing A/A.","estimate":false},"reliability":{"score":5,"why":"No model-level data in the research. Estimate: 1.5 turbo and CVT have a mixed record; ask for the service history.","estimate":true},"safety":{"score":7,"why":"No model-level rating in the research. Estimate; confirm IIHS.","estimate":true},"service":{"valley":true,"dealer":"Bruce Nissan / Scott Slipp Nissan, Kentville (name mismatch unresolved)","score":9,"why":"Valley Nissan dealer.","estimate":false},"cost":{"l100":8.4,"l100Source":"cost trial (Rogue SV new row)","l100Estimate":false,"resale":0.5,"resaleSource":"cost trial (new Rogue row)","rebate":0,"used":true,"price":28995,"priceN":11,"priceSource":"median of 11 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":5,"min":27950,"max":35899,"median":31498},"NS":{"n":6,"min":24888,"max":35888,"median":27942}},"listingCount":11},{"id":"rav4","name":"Toyota RAV4","make":"Toyota","years":"2023-2025 used","verdict":"Holds value best and Toyota is in Kentville; seat fit is only B and asks are high.","fit":{"grade":"B/B","score":6,"why":"RAV4 2026: infant B, convertible B, 5'8\" passenger needed more legroom.","estimate":false},"reliability":{"score":9,"why":"No model-level data in the research. Estimate from brand record.","estimate":true},"safety":{"score":8,"why":"No model-level rating in the research. Estimate; confirm IIHS.","estimate":true},"service":{"valley":true,"dealer":"Kentville Toyota (Best Toyota), Kentville","score":9,"why":"Valley Toyota dealer.","estimate":false},"cost":{"l100":7.0,"l100Source":"cost trial (RAV4 2024 used)","l100Estimate":false,"resale":0.62,"resaleSource":"the cost trial","rebate":0,"used":true,"price":37900,"priceN":11,"priceSource":"median of 11 priced 2023-2025 asks seen 3 Nov 2026 (SK and NS, page-1 searches)"},"bands":{"SK":{"n":6,"min":36990,"max":42965,"median":38943},"NS":{"n":6,"min":29998,"max":39985,"median":35994}},"listingCount":13},{"id":"sportage-phev","name":"Kia Sportage PHEV (new)","make":"Kia","years":"new only, ~$48,500 EX","verdict":"New only at ~$48.5k before tax: best fuel, $3k in rebates, but above every used ask.","fit":{"grade":"A/A*","score":8,"why":"Grade borrowed from the Sportage Hybrid (A/A); the PHEV was not tested. Estimate.","estimate":true},"reliability":{"score":5,"why":"New plug-in powertrain, no track record in the research. Estimate.","estimate":true},"safety":{"score":8,"why":"No model-level rating in the research. Estimate; confirm IIHS.","estimate":true},"service":{"valley":true,"dealer":"Forbes Kia, New Minas","score":9,"why":"Valley Kia dealer.","estimate":false},"cost":{"l100":4.0,"l100Source":"cost trial (Sportage PHEV EX new, blended)","l100Estimate":true,"resale":0.48,"resaleSource":"the cost trial","rebate":3000,"used":false,"fixedPrice":48500,"fixedPriceSource":"PHEVs 48.5k-57.5k; $500 Kia rebate + $2,500 federal EVAP (new under $50k)","price":48500,"priceSource":"PHEVs 48.5k-57.5k; $500 Kia rebate + $2,500 federal EVAP (new under $50k)","priceN":0},"bands":{"SK":{"n":0,"min":null,"max":null,"median":null},"NS":{"n":0,"min":null,"max":null,"median":null}},"listingCount":0}],"listings":[{"id":"sk-01","prov":"SK","model":"rav4","variant":"RAV4","year":2023,"trim":"LE AWD one owner","km":47024,"price":36990,"reducedFrom":37990,"reduced":true,"priceText":"36,990 (reduced from 37,990)","seller":"Dealer, WOW Cars","town":"Regina","url":"https://www.autotrader.ca/offers/toyota-rav4-le-one-owner-gasoline-white-cat_ma70gr201439va3714tr11875-1d8d2ab9-dbe9-49ff-adb8-d6c97041939f","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-02","prov":"SK","model":"rav4","variant":"RAV4","year":2024,"trim":"LE AWD fresh trade","km":42409,"price":37900,"reducedFrom":null,"reduced":false,"priceText":"37,900","seller":"Dealer, Regina Honda","town":"Regina","url":"https://www.autotrader.ca/offers/toyota-rav4-le-awd-fresh-trade-gasoline-cat_ma70gr201439va3714tr11875-7dcb79c3-6676-4632-abcd-29ccd9e3fb2c","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-03","prov":"SK","model":"rav4","variant":"RAV4","year":2025,"trim":"LE AWD","km":35069,"price":42965,"reducedFrom":null,"reduced":false,"priceText":"42,965","seller":"Dealer, Titan Automotive","town":"Regina","url":"https://www.autotrader.ca/offers/toyota-rav4-le-awd-adaptive-cruise-htd-seats-park-assist-lane-keep-assist-carplay-blind-spot-detection-gasoline-white-cat_ma70gr201439va3714tr11875-ceec9373-5e8c-4c4e-bd6e-4ac2ab22dcf9","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-04","prov":"SK","model":"rav4","variant":"RAV4","year":2025,"trim":"XLE AWD","km":45100,"price":null,"reducedFrom":null,"reduced":true,"priceText":"price on request (not found)","seller":"Dealer, Moose Jaw Hyundai","town":"Moose Jaw","url":"https://www.autotrader.ca/offers/toyota-rav4-xle-awd-gasoline-black-cat_ma70gr201439va3714tr11876-515382f0-4157-46e6-9070-5cbcd806302f","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-05","prov":"SK","model":"rav4","variant":"RAV4","year":2025,"trim":"LE AWD","km":52880,"price":39849,"reducedFrom":null,"reduced":false,"priceText":"39,849","seller":"Dealer, Saskatoon Motor Products","town":"Saskatoon","url":"https://www.autotrader.ca/offers/toyota-rav4-le-awd-heated-bucket-seats-apple-carplay-android-auto-gasoline-silver-cat_ma70gr201439va3714tr11875-8e3053e6-ca33-4fff-ab9a-539c839d99f2","photo":"https://prod.pictures.autoscout24.net/listing-images/8e3053e6-ca33-4fff-ab9a-539c839d99f2_5a86c960-a430-4163-bf67-20d6908a3b13.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-06","prov":"SK","model":"rav4","variant":"RAV4","year":2022,"trim":"XLE AWD, Certified Pre-Owned","km":33306,"price":38888,"reducedFrom":null,"reduced":false,"priceText":"38,888","seller":"Dealer (name not shown)","town":"Yorkton","url":"https://www.cargurus.ca/details/458540112","photo":"https://static.cargurus.com/images/forsale/2026/09/29/19/06/2022_toyota_rav4-pic-3502038127877493024-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"sk-07","prov":"SK","model":"rav4","variant":"RAV4","year":2025,"trim":"LE AWD","km":58186,"price":38998,"reducedFrom":null,"reduced":false,"priceText":"38,998","seller":"Dealer (name not shown)","town":"Saskatoon","url":"https://www.cargurus.ca/details/462350417","photo":"https://static.cargurus.com/images/forsale/2026/10/29/21/02/2025_toyota_rav4-pic-3533591263061683003-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"sk-08","prov":"SK","model":"forester","variant":"Forester","year":2024,"trim":"2.5 Limited AWD","km":43621,"price":35995,"reducedFrom":null,"reduced":false,"priceText":"35,995","seller":"Dealer, Auto Gallery Subaru","town":"Regina","url":"https://www.autotrader.ca/offers/subaru-forester-limited-awd-driverfocus-harman-kardon-audio-gasoline-white-cat_ma67gr201384mt9958tr15021-1d09463e-ae43-4ab6-9568-4682bd19e01f","photo":"https://prod.pictures.autoscout24.net/listing-images/1d09463e-ae43-4ab6-9568-4682bd19e01f_41e64d56-7289-4f44-9628-979196b9e1a7.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-09","prov":"SK","model":"forester","variant":"Forester","year":2025,"trim":"2.5 Convenience AWD","km":25397,"price":37648,"reducedFrom":null,"reduced":false,"priceText":"37,648","seller":"Dealer, Titan Automotive","town":"Regina","url":"https://www.autotrader.ca/offers/subaru-forester-convenience-awd-htd-seats-adaptive-cruise-remote-start-lane-keeping-carplay-roof-rails-gasoline-black-cat_ma67gr201384mt9958tr15009-56c3bd0a-74e4-44a1-b622-8905d75e5913","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-10","prov":"SK","model":"forester","variant":"Forester","year":2025,"trim":"2.5 Limited AWD","km":37229,"price":38995,"reducedFrom":39995,"reduced":true,"priceText":"38,995 (reduced from 39,995)","seller":"Dealer, Auto Gallery Subaru","town":"Regina","url":"https://www.autotrader.ca/offers/subaru-forester-limited-awd-driverfocus-harman-kardon-audio-gasoline-white-cat_ma67gr201384mt9958tr15021-bf4724d1-1e23-4973-b722-57128eb2d1f2","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-11","prov":"SK","model":"forester","variant":"Forester","year":2025,"trim":"2.5 Premier AWD, CPO","km":44398,"price":39995,"reducedFrom":null,"reduced":false,"priceText":"39,995","seller":"Dealer, Auto Gallery Subaru","town":"Regina","url":"https://www.autotrader.ca/offers/subaru-forester-premier-awd-harman-kardon-audio-driverfocus-gasoline-white-cat_ma67gr201384mt9958tr15022-b46e5a26-8277-413d-bb0f-74800d62729c","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-12","prov":"SK","model":"forester","variant":"Forester","year":2025,"trim":"2.5 Premier AWD, CPO","km":39581,"price":39995,"reducedFrom":null,"reduced":false,"priceText":"39,995","seller":"Dealer, Olympic Super Center","town":"Regina","url":"https://www.autotrader.ca/offers/subaru-forester-premier-awd-fully-loaded-sunroof-gasoline-cat_ma67gr201384mt9958tr15022-793796da-14d6-442a-bb66-f3ce92766b7a","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-13","prov":"SK","model":"crv","variant":"CR-V","year":2024,"trim":"1.5 LX AWD fresh trade","km":53647,"price":34998,"reducedFrom":null,"reduced":false,"priceText":"34,998","seller":"Dealer, Regina Nissan","town":"Regina","url":"https://www.autotrader.ca/offers/honda-cr-v-lx-awd-fresh-trade-gasoline-cat_ma31gr200623va4493mt7056tr13118-23174c63-c97d-4576-9752-3ff4031621fa","photo":"https://prod.pictures.autoscout24.net/listing-images/23174c63-c97d-4576-9752-3ff4031621fa_63ce8446-5d95-4201-a791-964644fd2741.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-14","prov":"SK","model":"crv","variant":"CR-V","year":2023,"trim":"1.5 EX-L AWD","km":78939,"price":38211,"reducedFrom":null,"reduced":false,"priceText":"38,211","seller":"Dealer, Titan Automotive","town":"Regina","url":"https://www.autotrader.ca/offers/honda-cr-v-ex-l-awd-htd-leather-sunroof-htd-wheel-adaptive-cruise-remote-start-lane-keep-assist-gasoline-grey-cat_ma31gr200623va4493mt7056tr11828-ee275795-71b0-4bd9-8f5c-67b97ba0cf0a","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-15","prov":"SK","model":"crv","variant":"CR-V","year":2025,"trim":"1.5 Sport 4WD","km":30031,"price":41990,"reducedFrom":null,"reduced":false,"priceText":"41,990","seller":"Dealer, Moose Jaw Honda","town":"Moose Jaw","url":"https://www.autotrader.ca/offers/honda-cr-v-sport-4wd-gasoline-white-cat_ma31gr200623va4493mt7056tr13120-1a05df07-3831-4d59-9d2b-7df3bdb8024a","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-16","prov":"SK","model":"crv","variant":"CR-V","year":2022,"trim":"Touring (drivetrain not stated)","km":115000,"price":32000,"reducedFrom":null,"reduced":false,"priceText":"32,000","seller":"Private seller","town":"Regina","url":"https://www.autotrader.ca/offers/honda-cr-v-touring-gasoline-grey-cat_ma31gr200623-74db4685-1eb6-477a-ac54-518628bdee2f","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-17","prov":"SK","model":"crv","variant":"CR-V","year":2023,"trim":"1.5 LX AWD","km":63718,"price":33999,"reducedFrom":null,"reduced":false,"priceText":"33,999","seller":"Dealer, Meidl Honda","town":"Saskatoon","url":"https://www.autotrader.ca/offers/honda-cr-v-lx-awd-gasoline-white-cat_ma31gr200623va4493mt7056tr11739-d0e06c1c-c718-4fe6-ba45-abf340d0e27f","photo":"https://prod.pictures.autoscout24.net/listing-images/d0e06c1c-c718-4fe6-ba45-abf340d0e27f_f351a8da-84f6-474f-9351-508bf1231aa7.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-18","prov":"SK","model":"crv","variant":"CR-V Hybrid","year":2024,"trim":"2.0 Touring AWD","km":77323,"price":40207,"reducedFrom":null,"reduced":false,"priceText":"40,207","seller":"Dealer, Saskatoon Motor Products","town":"Saskatoon","url":"https://www.autotrader.ca/offers/honda-cr-v-touring-awd-leather-sunroof-navigation-gas-electric-hybrid-grey-cat_ma31gr200623va2625mt14620tr13122-5e18701e-5ac7-4159-b9c6-472348ab7482","photo":"https://prod.pictures.autoscout24.net/listing-images/5e18701e-5ac7-4159-b9c6-472348ab7482_c62d5a9c-7211-43a9-b3e8-4680ca0544d3.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-19","prov":"SK","model":"crv","variant":"CR-V Hybrid","year":2024,"trim":"2.0 EX-L (AWD not stated)","km":15819,"price":43990,"reducedFrom":null,"reduced":false,"priceText":"43,990","seller":"Dealer, Roadway Auto and Sport","town":"Regina","url":"https://www.autotrader.ca/offers/honda-cr-v-ex-l-leather-blind-spot-monitor-adaptive-cruise-control-lane-assist-heated-seats-dual-zone-climate-control-ba-gas-electric-hybrid-grey-cat_ma31gr200623va2625mt14620tr11828-bcacc14f-fbfd-4d0f-9bd6-219ffda5c8b3","photo":"https://prod.pictures.autoscout24.net/listing-images/bcacc14f-fbfd-4d0f-9bd6-219ffda5c8b3_da7a9945-59c0-4111-9ed2-17e8e7985839.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-20","prov":"SK","model":"tucson","variant":"Tucson","year":2025,"trim":"Preferred AWD, CPO","km":40814,"price":31110,"reducedFrom":null,"reduced":false,"priceText":"31,110","seller":"Dealer, Hyundai of Regina","town":"Regina","url":"https://www.autotrader.ca/offers/hyundai-tucson-preferred-awd-cpo-rear-camera-heated-seats-gasoline-grey-cat_ma33gr18493va4456mt14927tr11402-6b368b6f-3205-42d4-8f04-8fee9bfee2e0","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-21","prov":"SK","model":"tucson","variant":"Tucson","year":2024,"trim":"Trend AWD, CPO","km":40781,"price":33340,"reducedFrom":null,"reduced":false,"priceText":"33,340","seller":"Dealer, Hyundai of Regina","town":"Regina","url":"https://www.autotrader.ca/offers/hyundai-tucson-trend-awd-leather-cpo-moonroof-navigation-rear-camera-gasoline-red-cat_ma33gr18493va4456mt14927tr8066-85cd9770-e431-4cfd-a45c-da1adde8a31b","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-22","prov":"SK","model":"tucson","variant":"Tucson","year":2023,"trim":"N Line AWD","km":71051,"price":27995,"reducedFrom":null,"reduced":false,"priceText":"27,995","seller":"Dealer, Olympic Super Center","town":"Regina","url":"https://www.autotrader.ca/offers/hyundai-tucson-n-line-awd-93-week-heated-leather-seats-gasoline-red-cat_ma33gr18493va4456mt14927tr5576-d3b00b30-e778-4ff8-b9a6-e9bbc47f14c5","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-23","prov":"SK","model":"tucson","variant":"Tucson","year":2025,"trim":"Preferred AWD w/Trend, CPO","km":46048,"price":33987,"reducedFrom":null,"reduced":false,"priceText":"33,987","seller":"Dealer, Moose Jaw Hyundai","town":"Moose Jaw","url":"https://www.autotrader.ca/offers/hyundai-tucson-preferred-awd-w-trend-pkg-gasoline-white-cat_ma33gr18493va4456mt14927tr11402-c5b0fc41-3de0-483c-9665-11acb0e77606","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-24","prov":"SK","model":"tucson","variant":"Tucson","year":2024,"trim":"Preferred AWD","km":22694,"price":29995,"reducedFrom":31995,"reduced":true,"priceText":"29,995 (reduced from 31,995)","seller":"Dealer, Carget Supercentre","town":"Saskatoon","url":"https://www.autotrader.ca/offers/hyundai-tucson-preferred-clean-carfax-i-heated-steering-i-awd-gasoline-red-cat_ma33gr18493va4456mt14927tr11402-42111c11-f345-4e92-b94f-32d81cf37f00","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-25","prov":"SK","model":"tucson","variant":"Tucson","year":2025,"trim":"Preferred AWD, sunroof","km":50066,"price":33358,"reducedFrom":null,"reduced":false,"priceText":"33,358","seller":"Dealer, Saskatoon Motor Products","town":"Saskatoon","url":"https://www.autotrader.ca/offers/hyundai-tucson-preferred-awd-sunroof-heated-seats-+-steering-wheel-gasoline-silver-cat_ma33gr18493va4456mt14927tr11402-37712478-2df6-4521-91f9-17d1daf9e036","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-26","prov":"SK","model":"sportage","variant":"Sportage","year":2026,"trim":"LX AWD","km":33350,"price":36899,"reducedFrom":37899,"reduced":true,"priceText":"36,899 (reduced from 37,899)","seller":"Dealer, Taylor Volkswagen","town":"Regina","url":"https://www.autotrader.ca/offers/kia-sportage-lx-awd-gasoline-grey-cat_ma39gr200737va4278mt15028tr5306-7fdf9a9e-b163-46fc-94c0-8dc425bfad6a","photo":"https://prod.pictures.autoscout24.net/listing-images/7fdf9a9e-b163-46fc-94c0-8dc425bfad6a_864e0955-e5cd-411a-bac6-f40718f42adb.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-27","prov":"SK","model":"sportage","variant":"Sportage","year":2025,"trim":"LX AWD","km":62584,"price":30987,"reducedFrom":null,"reduced":false,"priceText":"30,987","seller":"Dealer, Moose Jaw Hyundai","town":"Moose Jaw","url":"https://www.autotrader.ca/offers/kia-sportage-lx-awd-gasoline-grey-cat_ma39gr200737va4278mt15028tr5306-65ebf689-f006-4c03-a657-746b4f478c2d","photo":null,"note":"cited (the tool said it matched URLs by position; verify)","seen":"2026-11-03"},{"id":"sk-28","prov":"SK","model":"sportage","variant":"Sportage","year":2022,"trim":"EX Premium S (AWD not stated)","km":46188,"price":29000,"reducedFrom":null,"reduced":false,"priceText":"29,000","seller":"Private seller","town":"Regina","url":"https://www.autotrader.ca/offers/kia-sportage-ex-premium-s-gasoline-blue-cat_ma39gr200737va4278mt15027tr13715-6fbe7ee2-75d8-4cc5-8929-f2b9054f701c","photo":null,"note":"cited (URL matched by position; verify)","seen":"2026-11-03"},{"id":"sk-29","prov":"SK","model":"sportage","variant":"Sportage","year":2025,"trim":"LX AWD","km":65103,"price":30290,"reducedFrom":null,"reduced":false,"priceText":"30,290","seller":"Dealer, Saskatoon Motor Products","town":"Saskatoon","url":"https://www.autotrader.ca/offers/kia-sportage-lx-awd-heated-seats-keyless-entry-gasoline-black-cat_ma39gr200737va4278mt15028tr5306-eeae4a34-d269-412d-99eb-cd1da7d1b494","photo":"https://prod.pictures.autoscout24.net/listing-images/eeae4a34-d269-412d-99eb-cd1da7d1b494_20eb0581-606a-4e6b-b8e3-ee7b1ed49da7.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-30","prov":"SK","model":"sportage","variant":"Sportage","year":2023,"trim":"X-Line Limited AWD","km":24728,"price":null,"reducedFrom":null,"reduced":true,"priceText":"price on request (not found)","seller":"Dealer, Auto Gallery Subaru","town":"Regina","url":"https://www.autotrader.ca/offers/kia-sportage-x-line-limited-awd-panoramic-roof-heat-cool-leather-gasoline-silver-cat_ma39gr200737va4278mt15028tr13736-f8bdc5e0-4d2f-4783-aee0-46b5dfa295e7","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-31","prov":"SK","model":"rogue","variant":"Rogue","year":2023,"trim":"SV AWD CVT fresh trade","km":53914,"price":27995,"reducedFrom":null,"reduced":false,"priceText":"27,995","seller":"Dealer, Regina Honda","town":"Regina","url":"https://www.autotrader.ca/offers/nissan-rogue-sv-awd-cvt-2-fresh-trade-gasoline-gold-cat_ma52gr201103va4492mt15013-96347770-7d1c-4e65-800b-69e333cfad39","photo":"https://prod.pictures.autoscout24.net/listing-images/96347770-7d1c-4e65-800b-69e333cfad39_9bffc1ec-59d8-46aa-8b5c-ab36ff78b49c.jpg/250x188.webp","note":null,"seen":"2026-11-03"},{"id":"sk-32","prov":"SK","model":"rogue","variant":"Rogue","year":2024,"trim":"SV Moonroof AWD","km":32559,"price":27950,"reducedFrom":null,"reduced":false,"priceText":"27,950","seller":"Dealer, Capital GMC","town":"Regina","url":"https://www.autotrader.ca/offers/nissan-rogue-sv-moonroof-awd-gasoline-black-cat_ma52gr201103va4492mt15013tr14642-fbfb3a28-954b-4e60-a8e4-7907bbe78c81","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-33","prov":"SK","model":"rogue","variant":"Rogue","year":2024,"trim":"SV Moonroof AWD","km":7309,"price":31498,"reducedFrom":null,"reduced":false,"priceText":"31,498","seller":"Dealer, Regina Nissan","town":"Regina","url":"https://www.autotrader.ca/offers/nissan-rogue-awd-sv-moonroof-only-7309kms-gasoline-white-cat_ma52gr201103va4492mt15013tr14642-1307ac79-300b-45fe-8b24-49dfb30338a0","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-34","prov":"SK","model":"rogue","variant":"Rogue","year":2024,"trim":"Platinum AWD","km":32114,"price":35899,"reducedFrom":null,"reduced":false,"priceText":"35,899","seller":"Dealer, Taylor Volkswagen","town":"Regina","url":"https://www.autotrader.ca/offers/nissan-rogue-awd-platinum-gasoline-grey-cat_ma52gr201103va4492mt15013tr14635-07c66143-b23a-4bec-ba83-068f1f60017f","photo":null,"note":null,"seen":"2026-11-03"},{"id":"sk-35","prov":"SK","model":"rogue","variant":"Rogue","year":2025,"trim":"SV Moonroof AWD","km":19056,"price":32995,"reducedFrom":null,"reduced":false,"priceText":"32,995","seller":"Dealer, Olympic Super Center","town":"Regina","url":"https://www.autotrader.ca/offers/nissan-rogue-sv-moonroof-awd-108-week-heated-seats-gasoline-cat_ma52gr201103va4492mt15013tr14642-aed7076d-df0c-4021-8a3b-a8d25546699b","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-01","prov":"NS","model":"crv","variant":"CR-V","year":2024,"trim":"LX-B (AWD?)","km":22470,"price":32994,"reducedFrom":null,"reduced":false,"priceText":"32,994","seller":"dealer, Kings Honda","town":"Coldbrook","url":"https://www.autotrader.ca/offers/honda-cr-v-lx-b-keyless-entry-remote-start-bluetooth-gasoline-black-cat_ma31gr200623va4493mt7056tr13118-3566f8fb-b4e5-444b-b921-7d53cd76a9fc","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-02","prov":"NS","model":"crv","variant":"CR-V","year":2024,"trim":"1.5 Sport (AWD?)","km":33548,"price":35894,"reducedFrom":null,"reduced":false,"priceText":"35,894","seller":"dealer, Kings Honda","town":"Coldbrook","url":"https://www.autotrader.ca/offers/honda-cr-v-sport-keyless-entry-cruise-control-bluetooth-gasoline-white-cat_ma31gr200623va4493mt7056tr13120-b1371725-b050-44a7-a5e6-c9c574f143ba","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-03","prov":"NS","model":"crv","variant":"CR-V","year":2024,"trim":"Hybrid 2.0 Touring (AWD?)","km":32826,"price":41994,"reducedFrom":null,"reduced":false,"priceText":"41,994","seller":"dealer, Kings Honda","town":"Coldbrook","url":"https://www.autotrader.ca/offers/honda-cr-v-touring-keyless-entry-backup-camera-bluetooth-gas-electric-hybrid-black-cat_ma31gr200623va2625mt14620tr13122-ffe01725-71d2-489b-b2e7-6825414d178c","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-04","prov":"NS","model":"crv","variant":"CR-V","year":2025,"trim":"1.5 Sport (AWD?)","km":61441,"price":33888,"reducedFrom":null,"reduced":false,"priceText":"33,888","seller":"dealer, Greenwood Auto Sales","town":"Greenwood","url":"https://www.autotrader.ca/offers/honda-cr-v-sport-sport-awesome-color-call-now-gasoline-blue-cat_ma31gr200623va4493mt7056tr13120-a6c54b50-1263-46b2-a542-6978ebb99515","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-05","prov":"NS","model":"crv","variant":"CR-V","year":2022,"trim":"Sport AWD","km":45293,"price":28990,"reducedFrom":null,"reduced":false,"priceText":"28,990","seller":"dealer (phone only; seller not named)","town":"location not named, 80 km from Kentville","url":null,"photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-06","prov":"NS","model":"crv","variant":"CR-V","year":2024,"trim":"EX-L (AWD?)","km":89700,"price":35990,"reducedFrom":null,"reduced":false,"priceText":"35,990","seller":"dealer, Steele Auto Group","town":"Halifax","url":"https://www.carpages.ca/used-cars/nova-scotia/halifax/2024-honda-cr-v-15065202/","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-07","prov":"NS","model":"tucson","variant":"Tucson","year":2024,"trim":"Preferred AWD","km":34693,"price":28677,"reducedFrom":null,"reduced":false,"priceText":"28,677","seller":"dealer, Bruce Hyundai","town":"New Minas","url":"https://www.autotrader.ca/offers/hyundai-tucson-awd-+-navigation-+-adaptive-cruise-gasoline-silver-cat_ma33gr18493va4456mt14927tr11402-d8e2d8b7-cd77-47d6-b8a3-73826b364b37","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-08","prov":"NS","model":"tucson","variant":"Tucson","year":2023,"trim":"Preferred AWD","km":61114,"price":26704,"reducedFrom":null,"reduced":false,"priceText":"26,704","seller":"dealer, Bruce Hyundai","town":"New Minas","url":"https://www.autotrader.ca/offers/hyundai-tucson-awd-+-heated-wheel-+-carplay-gasoline-red-cat_ma33gr18493va4456mt14927tr11402-cc9d6034-75f0-4d8e-ab2a-36b0bd93a67b","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-09","prov":"NS","model":"tucson","variant":"Tucson","year":2025,"trim":"Hybrid N Line (AWD per title)","km":16500,"price":40487,"reducedFrom":null,"reduced":false,"priceText":"40,487","seller":"dealer, Bruce Hyundai","town":"New Minas","url":"https://www.autotrader.ca/offers/hyundai-tucson-hybrid-+-awd-+-low-kms-gas-electric-hybrid-white-cat_ma33gr18493va2439tr5576-65e53cef-5c58-4be8-87f8-01730f72de52","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-10","prov":"NS","model":"tucson","variant":"Tucson","year":2025,"trim":"2.5 XRT (AWD?)","km":26629,"price":33999,"reducedFrom":null,"reduced":false,"priceText":"33,999","seller":"dealer, Bruce Ford Sales","town":"Middleton","url":"https://www.autotrader.ca/offers/hyundai-tucson-xrt-towing-backup-camera-wireless-charge-gasoline-grey-cat_ma33gr18493va4456mt14927tr481135-a3756856-d177-4251-b040-151040f8e725","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-11","prov":"NS","model":"tucson","variant":"Tucson","year":2025,"trim":"2.5 Preferred AWD","km":53997,"price":29997,"reducedFrom":null,"reduced":false,"priceText":"29,997","seller":"dealer, Recar Halifax","town":"Lower Sackville","url":"https://www.autotrader.ca/offers/hyundai-tucson-preferred-awd-trend-package-leather-sunroof-gasoline-black-cat_ma33gr18493va4456mt14927tr11402-6d794626-8edc-4699-878f-3d802a8b3c95","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-12","prov":"NS","model":"tucson","variant":"Tucson","year":2024,"trim":"Trend AWD","km":77002,"price":28410,"reducedFrom":null,"reduced":false,"priceText":"28,410","seller":"dealer (phone only)","town":"Halifax","url":"https://www.cargurus.ca/details/458342695","photo":"https://static.cargurus.com/images/forsale/2026/09/22/20/56/2024_hyundai_tucson-pic-8350048972852368116-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"ns-13","prov":"NS","model":"rav4","variant":"RAV4","year":2024,"trim":"XLE AWD","km":31421,"price":39551,"reducedFrom":null,"reduced":false,"priceText":"39,551","seller":"dealer (town not shown)","town":"not shown","url":"https://www.autotrader.ca/offers/toyota-rav4-xle-awd-gasoline-cat_ma70gr201439va3714tr11876-7a5be493-b173-41b9-afe9-8a7a8f99e280","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-14","prov":"NS","model":"rav4","variant":"RAV4","year":2024,"trim":"Hybrid XLE AWD (reduced from 42,985)","km":41502,"price":39985,"reducedFrom":null,"reduced":false,"priceText":"39,985","seller":"dealer (town not shown)","town":"not shown","url":"https://www.autotrader.ca/offers/toyota-rav4-rav4-hybrid-xle-awd-heated-steering-wheel-remote-start-power-lift-gate-gas-electric-hybrid-silver-cat_ma70gr201439va2399mt12777tr11876-20d8bc78-98fc-4f8d-88f4-5d4757ef3b70","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-15","prov":"NS","model":"rav4","variant":"RAV4","year":2025,"trim":"LE AWD","km":47615,"price":35998,"reducedFrom":null,"reduced":false,"priceText":"35,998","seller":"dealer (town not shown)","town":"not shown","url":"https://www.autotrader.ca/offers/toyota-rav4-le-awd-low-kms-heated-seats-gasoline-grey-cat_ma70gr201439va3714tr11875-8426d745-7619-470b-8ea0-74fc2d2f42b1","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-16","prov":"NS","model":"rav4","variant":"RAV4","year":2025,"trim":"LE AWD","km":67831,"price":34898,"reducedFrom":null,"reduced":false,"priceText":"34,898","seller":"dealer (town not shown)","town":"not shown","url":"https://www.autotrader.ca/offers/toyota-rav4-le-heated-seats-awd-great-price-call-now-gasoline-white-cat_ma70gr201439va3714tr11875-ba71ff17-2bbe-4816-b85f-965319c9c282","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-17","prov":"NS","model":"rav4","variant":"RAV4","year":2023,"trim":"LE AWD","km":97072,"price":29998,"reducedFrom":null,"reduced":false,"priceText":"29,998","seller":"dealer (phone (902) 518-2057, which matches the Greenwood Auto Sales Sportage row; inferred same seller)","town":"Greenwood","url":null,"photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-18","prov":"NS","model":"rav4","variant":"RAV4","year":2023,"trim":"Hybrid LE (AWD?)","km":31598,"price":35990,"reducedFrom":null,"reduced":false,"priceText":"35,990","seller":"dealer, Clutch","town":"Bedford","url":"https://www.carpages.ca/used-cars/nova-scotia/bedford/2023-toyota-rav4-15071697/","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-19","prov":"NS","model":"forester","variant":"Forester","year":2025,"trim":"2.5 Limited AWD","km":8497,"price":40888,"reducedFrom":null,"reduced":false,"priceText":"40,888","seller":"dealer, Bruce Nissan","town":"Kentville","url":"https://www.autotrader.ca/offers/subaru-forester-limited-awd-leather-gasoline-blue-cat_ma67gr201384mt9958tr15021-dd179471-5771-45d1-acfb-db0174c2d53b","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-20","prov":"NS","model":"forester","variant":"Forester","year":2023,"trim":"2.5 Touring (AWD?)","km":25981,"price":31768,"reducedFrom":null,"reduced":false,"priceText":"31,768","seller":"dealer, Bridgewater Honda","town":"Bridgewater","url":"https://www.autotrader.ca/offers/subaru-forester-touring-gasoline-grey-cat_ma67gr201384mt9958tr15027-cc8bb761-7d6e-4254-b8d9-11e77dd702fa","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-21","prov":"NS","model":"forester","variant":"Forester","year":2024,"trim":"2.5 Touring AWD","km":30085,"price":32995,"reducedFrom":null,"reduced":false,"priceText":"32,995","seller":"dealer, Cars R Us","town":"Lower Sackville","url":"https://www.autotrader.ca/offers/subaru-forester-touring-awd-gasoline-green-cat_ma67gr201384mt9958tr15027-ce2135ac-b87d-4164-ac29-044bf09741fe","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-22","prov":"NS","model":"forester","variant":"Forester","year":2024,"trim":"Limited Wagon AWD","km":93766,"price":31995,"reducedFrom":null,"reduced":false,"priceText":"31,995","seller":"dealer (phone (902) 201-9457; Cars R Us per AutoTrader row, inferred)","town":"Lower Sackville","url":"https://www.cargurus.ca/details/459705216","photo":"https://static.cargurus.com/images/forsale/2026/09/26/14/36/2024_subaru_forester-pic-4025862906470374989-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"ns-23","prov":"NS","model":"forester","variant":"Forester","year":2023,"trim":"Sport (AWD?)","km":13896,"price":30995,"reducedFrom":null,"reduced":false,"priceText":"30,995","seller":"dealer, Steele Auto Group","town":"Halifax","url":"https://www.carpages.ca/used-cars/nova-scotia/halifax/2023-subaru-forester-15065469/","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-24","prov":"NS","model":"forester","variant":"Forester","year":2022,"trim":"2.5 AWD (reduced from 24,990)","km":104393,"price":23990,"reducedFrom":null,"reduced":false,"priceText":"23,990","seller":"dealer, O'Regan's Toyota","town":"Halifax","url":"https://www.autotrader.ca/offers/subaru-forester-awd-symmetrical-awd-heated-seats-carplay-gasoline-blue-cat_ma67gr201384mt9958-f4054f51-6568-4a57-bff4-634161d1644c","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-25","prov":"NS","model":"sportage","variant":"Sportage","year":2022,"trim":"LX AWD","km":53474,"price":19998,"reducedFrom":null,"reduced":false,"priceText":"19,998","seller":"dealer, Greenwood Auto Sales","town":"Greenwood","url":"https://www.cargurus.ca/details/463213797","photo":"https://static.cargurus.com/images/forsale/2026/11/02/12/02/2022_kia_sportage-pic-2121474148956641997-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"ns-26","prov":"NS","model":"sportage","variant":"Sportage","year":2025,"trim":"2.5 EX (AWD?)","km":50790,"price":32997,"reducedFrom":null,"reduced":false,"priceText":"32,997","seller":"dealer, Forbes Kia","town":"New Minas","url":"https://www.autotrader.ca/offers/kia-sportage-ex-gasoline-blue-cat_ma39gr200737va4278mt15028tr3295-cea7ad4f-eedb-4664-8adc-bf11feaa5873","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-27","prov":"NS","model":"sportage","variant":"Sportage","year":2026,"trim":"2.5 LX (AWD?)","km":41008,"price":29997,"reducedFrom":null,"reduced":false,"priceText":"29,997","seller":"dealer, Forbes Kia","town":"New Minas","url":"https://www.autotrader.ca/offers/kia-sportage-lx-gasoline-white-cat_ma39gr200737va4278mt15028tr5306-3742556e-5664-4a09-b78e-ae1fc8fba66d","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-28","prov":"NS","model":"sportage","variant":"Sportage","year":2024,"trim":"2.5 LX AWD","km":63615,"price":25594,"reducedFrom":null,"reduced":false,"priceText":"25,594","seller":"dealer, Recar Halifax","town":"Lower Sackville","url":"https://www.autotrader.ca/offers/kia-sportage-lx-awd-heated-seats-driver-assist-gasoline-white-cat_ma39gr200737va4278mt15028tr5306-210a9353-1256-4c1e-b894-5023d90ca075","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-29","prov":"NS","model":"sportage","variant":"Sportage","year":2023,"trim":"LX AWD (reduced from 21,500)","km":99828,"price":19900,"reducedFrom":null,"reduced":false,"priceText":"19,900","seller":"dealer (phone only)","town":"Lower Sackville","url":"https://www.cargurus.ca/details/455512395","photo":"https://static.cargurus.com/images/forsale/2026/10/01/11/44/2023_kia_sportage-pic-788757029693719811-1024x768.jpeg","note":null,"seen":"2026-11-03"},{"id":"ns-30","prov":"NS","model":"sportage","variant":"Sportage","year":2023,"trim":"X-Line Limited (AWD?)","km":49272,"price":28990,"reducedFrom":null,"reduced":false,"priceText":"28,990","seller":"dealer, O'Regan's Kia","town":"Dartmouth","url":"https://www.autotrader.ca/offers/kia-sportage-xline-limited-call-9024669550-apple-car-play-android-auto-remote-start-leather-interior-gasoline-green-cat_ma39gr200737va4278mt15028tr13736-2ebf1ac7-0706-4f2e-93d4-bbb4cb3e970e","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-31","prov":"NS","model":"rogue","variant":"Rogue","year":2023,"trim":"1.5 Platinum AWD","km":44281,"price":26888,"reducedFrom":null,"reduced":false,"priceText":"26,888","seller":"dealer, Bruce Nissan","town":"Kentville","url":"https://www.autotrader.ca/offers/nissan-rogue-platinum-awd-leather-pano-roof-propilot-gasoline-red-cat_ma52gr201103va4492mt15013tr14635-235dc075-425a-4094-b60d-f83cdf38c926","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-32","prov":"NS","model":"rogue","variant":"Rogue","year":2024,"trim":"1.5 S AWD","km":33606,"price":24888,"reducedFrom":null,"reduced":false,"priceText":"24,888","seller":"dealer, Bruce Nissan","town":"Kentville","url":"https://www.autotrader.ca/offers/nissan-rogue-s-awd-117-km-heated-seats-safety-shield-360-gasoline-black-cat_ma52gr201103va4492mt15011tr11772-4e46a3a1-5f5d-4de6-938e-165e40aaabe0","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-33","prov":"NS","model":"rogue","variant":"Rogue","year":2025,"trim":"1.5 Platinum AWD","km":45878,"price":35888,"reducedFrom":null,"reduced":false,"priceText":"35,888","seller":"dealer, Bruce Nissan","town":"Kentville","url":"https://www.autotrader.ca/offers/nissan-rogue-platinum-awd-two-tone-leather-pano-roof-gasoline-white-cat_ma52gr201103va4492mt15013tr14635-e3fb111f-fbc3-441c-ad86-5e36332c56ca","photo":null,"note":null,"seen":"2026-11-03"},{"id":"ns-34","prov":"NS","model":"rogue","variant":"Rogue","year":2023,"trim":"1.5 SV Midnight Edition (AWD?) (reduced from 33,999)","km":53000,"price":31999,"reducedFrom":null,"reduced":false,"priceText":"31,999","seller":"dealer, Kentville Chrysler","town":"Kentville","url":"https://www.autotrader.ca/offers/nissan-rogue-sv-midnight-edition-sv-midnight-edition-gasoline-cat_ma52gr201103va4492mt15013tr14641-6d1cc279-bfd8-4ce4-a006-bee4d93d59c8","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-35","prov":"NS","model":"rogue","variant":"Rogue","year":2024,"trim":"1.5 S (AWD?)","km":50146,"price":24994,"reducedFrom":null,"reduced":true,"priceText":"24,994 (reduced)","seller":"dealer, Kings Honda","town":"Coldbrook","url":"https://www.autotrader.ca/offers/nissan-rogue-s-keyless-entry-backup-camera-bluetooth-gasoline-red-cat_ma52gr201103va4492mt15011tr11772-0509b447-cbd1-4408-bb80-86ba588d610c","photo":null,"note":"drivetrain unconfirmed (AWD?)","seen":"2026-11-03"},{"id":"ns-36","prov":"NS","model":"rogue","variant":"Rogue","year":2025,"trim":"S AWD","km":19329,"price":28995,"reducedFrom":null,"reduced":false,"priceText":"28,995","seller":"dealer, Yarmouth Nissan","town":"Yarmouth","url":"https://www.carpages.ca/used-cars/nova-scotia/yarmouth/2025-nissan-rogue-15044166/","photo":null,"note":null,"seen":"2026-11-03"}],"timeline":{"start":"2026-11-01","end":"2027-04-30","today":"2026-11-03","aria":"Timeline by month, Nov 2026 to April 2027: tax question, financing, shortlist and test-fit, buy, move and register, baby due","rows":[{"label":"Tax question sent","start":"2026-11-15","end":"2026-11-15","kind":"milestone","monthOnly":"Nov 2026","note":"Written answer wanted by mid-Jan"},{"label":"Financing sorted","start":"2026-12-15","end":"2026-12-15","kind":"milestone","monthOnly":"Dec 2026","note":"No car loan before the bigger financing is settled"},{"label":"Shortlist, test-fit, pick","start":"2027-01-15","end":"2027-01-15","kind":"milestone","monthOnly":"Jan 2027","note":"SK and NS listings compared equally; Julia picks after the seat test-fit"},{"label":"Buy","start":"2027-02-01","end":"2027-02-01","kind":"milestone","monthOnly":"late Jan to Feb 2027","note":"SK route: buy by late Jan and own 31+ days. NS route: buy in the Valley and hold at a family address"},{"label":"Move, NS inspection, registration","start":"2027-03-15","end":"2027-03-15","kind":"milestone","monthOnly":"Mar 2027","note":"Arrive about 1 Mar; NS inspection and registration within 30 days"},{"label":"Baby due","start":"2027-04-15","end":"2027-04-15","kind":"milestone","monthOnly":"April 2027","note":"April 2027"}]},"caveats":["Research is summary-read and Pending: every grade, rating and rule came through a summarising fetch tool, not a raw page. Nothing here is confirmed.","Prices are asking prices seen on 3 Nov 2026 on page 1 of AutoTrader, CarGurus and carpages searches. They are samples, not market rates, and trims are mixed.","Re-open every listing before acting. Several rows are flagged: AWD not stated, URL matched by position, seller inferred from a phone number.","The 6-year cost is a model with research inputs (fuel $1.55/L flat, 6-year resale share, 11% vs 14% tax, $1,800 winter set). It is for ranking, not budgeting. Insurance and maintenance are treated as equal.","Mazda CX-5 is out (rear-facing grade C/C). Reliability and safety scores are the page's estimates, marked as such; seat fit and Valley service come from the research summaries."],"photoNote":"Listing photos are hotlinked from the intake URLs and may not load inside an artifact frame; a grey placeholder shows instead. Model photos: not fetched (image hosts were refused by the build container's network policy), so each card shows a neutral placeholder. No picture of a different model is used."};
+const $ = (s, el=document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = v => "$" + Math.round(v).toLocaleString("en-CA");
+const moneyK = v => "$" + Math.round(v/1000) + "k";
+const CRIT = ["fit","cost","reliability","safety","service","fuel"];
+
+/* ---------- state (per-viewer convenience only) ---------- */
+let state = {weights:{...D.weights}, km:15000, prov:"SK", afterTax:false};
+try { const s = JSON.parse(localStorage.getItem("fc1-car-options")||"null"); if (s && s.weights) state = {...state, ...s, weights:{...D.weights, ...s.weights}}; } catch(e){}
+function save(){ try{ localStorage.setItem("fc1-car-options", JSON.stringify(state)); }catch(e){} }
+
+/* ---------- cost model: port of the 6-year cost trial row() ---------- */
+const C = D.costConstants;
+function interest(p, apr, n=C.TERM){ const r = apr/12; const pay = p*r/(1-Math.pow(1+r,-n)); return {i: pay*n-p, pay}; }
+function costRow(m, prov, km, loan){
+  const c = m.cost;
+  const paid = c.price*(1+C.TAX[prov]) - c.rebate;
+  const fuel = c.l100/100*km*C.YEARS*C.GAS;
+  const resale = c.price*c.resale;
+  const L = loan ? interest(paid, c.used ? C.LOAN_USED : C.LOAN_NEW) : {i:0, pay:0};
+  return {paid, fuel, resale, interest:L.i, pay:L.pay, total: paid + fuel + C.WINTER + L.i - resale};
+}
+window.costRow = costRow; // for the build check
+
+/* ---------- scoring ---------- */
+function scores(){
+  const costs = D.models.map(m => costRow(m, state.prov, state.km, false).total);
+  const lo = Math.min(...costs), hi = Math.max(...costs);
+  return D.models.map((m, i) => {
+    const cost = costs[i];
+    const s = {
+      fit: m.fit.score,
+      cost: hi===lo ? 10 : 4 + 6*(hi-cost)/(hi-lo),
+      reliability: m.reliability.score,
+      safety: m.safety.score,
+      service: m.service.score,
+      fuel: Math.max(0, Math.min(10, 10 - (m.cost.l100-4)*7/6)),
+    };
+    const W = state.weights; const wsum = CRIT.reduce((a,k)=>a+W[k],0) || 1;
+    const total = CRIT.reduce((a,k)=>a+W[k]*s[k],0)/wsum*10;
+    return {m, s, cost, total, row: costRow(m, state.prov, state.km, false), loan: costRow(m, state.prov, state.km, true)};
+  }).sort((a,b)=>b.total-a.total);
+}
+function critWhy(r, k){
+  const m = r.m;
+  switch(k){
+    case "fit": return {why: m.fit.why, est: m.fit.estimate, label: "Grade " + m.fit.grade};
+    case "cost": return {why: `6-yr cost ${money(r.cost)} at ${state.km.toLocaleString("en-CA")} km/yr, bought in ${state.prov} (${Math.round(C.TAX[state.prov]*100)}% tax). Lowest of the seven scores 10, highest 4. Price used: ${money(m.cost.price)} (${m.cost.priceSource}). Resale share ${m.cost.resale} (${m.cost.resaleSource}).`, est: false, label: money(r.cost)};
+    case "reliability": return {why: m.reliability.why, est: m.reliability.estimate, label: ""};
+    case "safety": return {why: m.safety.why, est: m.safety.estimate, label: ""};
+    case "service": return {why: m.service.why + " " + m.service.dealer + ".", est: m.service.estimate, label: m.service.valley ? "Valley dealer" : "No Valley dealer"};
+    case "fuel": return {why: `${m.cost.l100} L/100 km (${m.cost.l100Source}). Score: 10 at 4.0 L, falling 7/6 of a point per litre. Fuel over 6 years at this mileage: ${money(r.row.fuel)}.`, est: m.cost.l100Estimate, label: m.cost.l100 + " L/100"};
+  }
+}
+
+/* ---------- toggles ---------- */
+function wireToggles(root=document){
+  root.querySelectorAll("[data-toggle]").forEach(b => {
+    if (b._wired) return; b._wired = true;
+    b.addEventListener("click", () => {
+      const t = document.getElementById(b.dataset.toggle);
+      const open = t.hidden; t.hidden = !open; b.setAttribute("aria-expanded", String(open));
+      const lbl = b.querySelector(".lbl"); if (lbl) lbl.textContent = open ? (b.dataset.close || "Less") : (b.dataset.open || "More");
+      if (open && b.dataset.lazy) { renderListings(b.dataset.lazy); b.dataset.lazy = ""; }
+    });
+  });
+}
+function moreBtn(id, open="More", close="Less", extra=""){
+  return `<button class="btn ghost" type="button" data-toggle="${id}" data-open="${esc(open)}" data-close="${esc(close)}" aria-expanded="false" aria-controls="${id}" ${extra}><span class="chev">&#9656;</span><span class="lbl">${esc(open)}</span></button>`;
+}
+
+/* ---------- 1. actions ---------- */
+function renderActions(){
+  $("#acts").innerHTML = D.actions.map(a => `
+    <article class="act">
+      <div class="n">${a.n}</div>
+      <div class="stack" style="gap:6px">
+        <h3>${esc(a.what)}</h3>
+        <p><span class="when">${esc(a.when)}</span> <span class="muted small">&middot; ${esc(a.minutes)}</span></p>
+        <div class="row">${moreBtn("act-"+a.n, "Why", "Hide why")}<span class="tap">Tap for details</span></div>
+        <div class="det" id="act-${a.n}" hidden><p>${esc(a.why)}</p>${a.ref ? `<p class="muted small">Ref: ${esc(a.ref)}</p>` : ""}</div>
+      </div>
+    </article>`).join("");
+}
+
+/* ---------- 2. score board ---------- */
+function renderControls(){
+  $("#sliders").innerHTML = CRIT.map(k => `
+    <div class="slider">
+      <label for="w-${k}"><span>${esc(D.weightLabels[k])}</span></label>
+      <output for="w-${k}" id="o-${k}" class="num">${state.weights[k]}</output>
+      <input type="range" id="w-${k}" min="0" max="40" step="5" value="${state.weights[k]}" aria-label="${esc(D.weightLabels[k])} weight">
+    </div>`).join("");
+  CRIT.forEach(k => $("#w-"+k).addEventListener("input", e => { state.weights[k] = +e.target.value; $("#o-"+k).textContent = e.target.value; save(); syncSeg(); renderBoard(); renderCards(false); }));
+  $("#reset").addEventListener("click", () => { state.weights = {...D.weights}; CRIT.forEach(k => { $("#w-"+k).value = state.weights[k]; $("#o-"+k).textContent = state.weights[k]; }); save(); syncSeg(); renderBoard(); renderCards(false); });
+  document.querySelectorAll("#km button").forEach(b => b.addEventListener("click", () => { state.km = +b.dataset.km; save(); syncSeg(); renderBoard(); renderCards(false); }));
+  document.querySelectorAll("#prov button").forEach(b => b.addEventListener("click", () => { state.prov = b.dataset.prov; save(); syncSeg(); renderBoard(); renderCards(false); }));
+  syncSeg();
+}
+function syncSeg(){
+  document.querySelectorAll("#km button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.km === state.km)));
+  document.querySelectorAll("#prov button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.prov === state.prov)));
+  const w = CRIT.reduce((a,k)=>a+state.weights[k],0); $("#wsum").textContent = w;
+}
+let ranked = [];
+function renderBoard(){
+  ranked = scores();
+  const openIds = new Set([...document.querySelectorAll("#board .sdet:not([hidden])")].map(e => e.id));
+  $("#board").innerHTML = ranked.map((r, i) => `
+    <div class="srow ${i===0?"top":""}" data-id="${r.m.id}">
+      <span class="rk">${i+1}</span>
+      <div class="nm"><span>${esc(r.m.name)}</span><div class="track" role="img" aria-label="${esc(r.m.name)} score ${Math.round(r.total)} of 100"><i style="width:${r.total}%"></i></div></div>
+      <b class="val num">${Math.round(r.total)}<small>/100</small></b>
+      ${moreBtn("sd-"+r.m.id, "More", "Less")}
+      <div class="sdet" id="sd-${r.m.id}" ${openIds.has("sd-"+r.m.id) ? "" : "hidden"}>
+        ${CRIT.map(k => { const w = critWhy(r,k); return `
+        <div class="crit">
+          <span class="cn">${esc(D.weightLabels[k])} <span class="cw">w ${state.weights[k]}</span></span>
+          <b class="num">${r.s[k].toFixed(1)}</b>
+          <div class="track" aria-hidden="true"><i style="width:${r.s[k]*10}%"></i></div>
+          <span class="row" style="gap:6px">${w.label ? `<span class="chip">${esc(w.label)}</span>` : ""}${w.est ? `<span class="chip est">estimate</span>` : `<span class="chip accent">from research</span>`}</span>
+          <span class="why">${esc(w.why)}</span>
+        </div>`; }).join("")}
+        <p class="small muted">Weighted average of the six scores (0 to 10), times 10. Change a slider and this row moves.</p>
+      </div>
+    </div>`).join("");
+  document.querySelectorAll("#board .sdet:not([hidden])").forEach(d => { const b = document.querySelector(`[data-toggle="${d.id}"]`); if (b){ b.setAttribute("aria-expanded","true"); b.querySelector(".lbl").textContent = "Less"; } });
+  wireToggles($("#board"));
+  $("#board-note").textContent = `Ranked for ${state.km.toLocaleString("en-CA")} km/yr, bought in ${state.prov} at ${Math.round(C.TAX[state.prov]*100)}% tax. Top pick: ${ranked[0].m.name}.`;
+}
+
+/* ---------- 3. cards ---------- */
+function carSvg(name){
+  return `<svg viewBox="0 0 200 150" role="img" aria-label="No photo of the ${esc(name)}: neutral placeholder"><rect width="200" height="150" fill="none"/>
+   <path d="M30 95 L45 70 Q50 60 62 60 L120 60 Q134 60 142 70 L160 88 L178 92 Q186 94 186 102 L186 112 L14 112 L14 102 Q14 96 22 95 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" opacity=".55"/>
+   <path d="M62 66 L118 66 L132 86 L54 86 Z" fill="none" stroke="currentColor" stroke-width="2" opacity=".35"/>
+   <circle cx="52" cy="112" r="12" fill="none" stroke="currentColor" stroke-width="3" opacity=".55"/><circle cx="150" cy="112" r="12" fill="none" stroke="currentColor" stroke-width="3" opacity=".55"/>
+   <text x="100" y="138" text-anchor="middle" font-size="11" fill="currentColor" opacity=".7" font-family="inherit">no photo in the research</text></svg>`;
+}
+function renderCards(first){
+  const openLists = new Set([...document.querySelectorAll("#cards .lst-wrap:not([hidden])")].map(e => e.id));
+  const openMore = new Set([...document.querySelectorAll("#cards .det:not([hidden])")].map(e => e.id));
+  $("#cards").innerHTML = ranked.map((r, i) => {
+    const m = r.m; const fit = m.fit.grade.startsWith("A") ? "ok" : (m.fit.grade.startsWith("B") ? "warn" : "bad");
+    const lid = "ls-"+m.id, mid = "md-"+m.id;
+    const nSK = D.listings.filter(l => l.model===m.id && l.prov==="SK").length, nNS = D.listings.filter(l => l.model===m.id && l.prov==="NS").length;
+    return `
+    <article class="card ${i===0?"top":""}" id="card-${m.id}">
+      <div class="ph" aria-hidden="false">${carSvg(m.name)}</div>
+      <div class="body">
+        <div class="head"><h3>${esc(m.name)} <span class="muted small">${esc(m.years)}</span></h3><span class="rank">#${i+1} &middot; ${Math.round(r.total)}/100</span></div>
+        <p class="verdict">${esc(m.verdict)}</p>
+        <div class="facts">
+          <div class="fact ${fit}">Seat fit<b>${esc(m.fit.grade)}</b>${m.fit.estimate ? "borrowed grade" : "rear-facing infant / convertible"}</div>
+          <div class="fact">6-yr cost, ${esc(state.prov)}, ${state.km/1000}k km<b class="num">${money(r.cost)}</b>${m.cost.used ? "used, cash" : "new, cash, after rebates"}</div>
+          <div class="fact ${m.service.valley ? "ok" : "bad"}">Valley dealer<b>${m.service.valley ? "Yes" : "No"}</b>${esc(m.service.valley ? m.service.dealer.split(",")[0] : "Halifax only")}</div>
+          <div class="fact">Listings seen<b class="num">${m.listingCount}</b>${nSK} SK &middot; ${nNS} NS</div>
+        </div>
+        <div class="row">
+          ${m.listingCount ? moreBtn(lid, `See listings (${m.listingCount})`, "Hide listings", `data-lazy="${m.id}"`) : `<span class="chip">New only: no used listings in the intake</span>`}
+          ${moreBtn(mid, "More", "Less")}
+          <span class="tap">Tap for details</span>
+        </div>
+        <div class="det" id="${mid}" ${openMore.has(mid) ? "" : "hidden"}>
+          <p><b>Cost model, ${esc(state.prov)}, ${state.km.toLocaleString("en-CA")} km/yr.</b> Paid ${money(r.row.paid)} (price ${money(m.cost.price)} + ${Math.round(C.TAX[state.prov]*100)}% tax${m.cost.rebate ? " minus " + money(m.cost.rebate) + " rebates" : ""}) + fuel ${money(r.row.fuel)} + winter tires ${money(C.WINTER)} &minus; resale ${money(r.row.resale)} = <b>${money(r.cost)}</b>. On a 60-month loan add ${money(r.loan.interest)} interest (${money(r.loan.pay)}/month).</p>
+          <p class="muted small">Price used: ${esc(m.cost.priceSource)}. Fuel: ${m.cost.l100} L/100 km (${esc(m.cost.l100Source)}). Resale share after 6 years: ${m.cost.resale} (${esc(m.cost.resaleSource)}).</p>
+          <p><b>Asking prices seen 3 Nov 2026 (page-1 samples).</b> SK: ${m.bands.SK.n ? `${money(m.bands.SK.min)} to ${money(m.bands.SK.max)}, median ${money(m.bands.SK.median)} (n=${m.bands.SK.n})` : "none"}. NS: ${m.bands.NS.n ? `${money(m.bands.NS.min)} to ${money(m.bands.NS.max)}, median ${money(m.bands.NS.median)} (n=${m.bands.NS.n})` : "none"}.</p>
+          <p><b>Scores.</b> ${CRIT.map(k => `${D.weightLabels[k]} ${r.s[k].toFixed(1)}${critWhy(r,k).est ? "*" : ""}`).join(" &middot; ")}. <span class="muted">* estimate. Full reasons in the score board above.</span></p>
+        </div>
+        <div class="lst-wrap" id="${lid}" ${openLists.has(lid) ? "" : "hidden"}><div class="lst" id="lst-${m.id}"></div><p class="muted small" style="margin-top:8px">Asks before tax and licence, seen 3 Nov 2026. Re-open each link before acting; photos are the sellers' and may not load here.</p></div>
+      </div>
+    </article>`; }).join("");
+  wireToggles($("#cards"));
+  openLists.forEach(id => renderListings(id.slice(3)));
+  document.querySelectorAll("#cards .lst-wrap:not([hidden]), #cards .det:not([hidden])").forEach(d => { const b = document.querySelector(`[data-toggle="${d.id}"]`); if (b){ b.setAttribute("aria-expanded","true"); b.querySelector(".lbl").textContent = b.dataset.close; b.dataset.lazy = ""; } });
+}
+function renderListings(modelId){
+  const host = $("#lst-"+modelId); if (!host || host.childElementCount) return;
+  const rows = D.listings.filter(l => l.model === modelId).sort((a,b) => (a.price||1e9)-(b.price||1e9));
+  host.innerHTML = rows.map(l => `
+    <div class="li">
+      <div class="img"><span class="prov ${l.prov}">${l.prov}</span>${l.photo ? `<img src="${esc(l.photo)}" alt="${esc(l.year+" "+l.variant+" "+l.trim)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.hidden=true;this.insertAdjacentHTML('afterend','<span>photo did not load here; open the listing</span>');">` : `<span>no photo shown in the search page</span>`}</div>
+      <div>
+        <div class="t">${l.year} ${esc(l.variant)} ${esc(l.trim)}</div>
+        <div class="p num">${l.price ? money(l.price) + (l.reducedFrom ? `<s>${money(l.reducedFrom)}</s>` : "") : "price on request"}</div>
+        <div class="m num">${l.km ? l.km.toLocaleString("en-CA") + " km &middot; " : ""}${/not shown|not named/.test(l.town) ? "town not shown, " : esc(l.town) + ", "}${l.prov}</div>
+        <div class="m">${esc(l.seller)}</div>
+        ${l.note ? `<div class="flag">&#9888; ${esc(l.note)}</div>` : ""}
+      </div>
+      ${l.url ? `<a class="btn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer">Open listing &#8599;</a>` : `<span class="nolink">No link on the search page</span>`}
+    </div>`).join("");
+}
+
+/* ---------- 4. SK vs NS price chart ---------- */
+function renderPrice(){
+  const models = D.models.filter(m => m.bands.SK.n || m.bands.NS.n);
+  const f = p => state.afterTax ? (1 + C.TAX[p]) : 1;
+  const W = 760, L = 150, R = 60, rowH = 54, top = 30, H = top + models.length*rowH + 30;
+  const vals = models.flatMap(m => ["SK","NS"].flatMap(p => m.bands[p].n ? [m.bands[p].min*f(p), m.bands[p].max*f(p)] : []));
+  const lo = Math.floor(Math.min(...vals)/5000)*5000, hi = Math.ceil(Math.max(...vals)/5000)*5000;
+  const x = v => L + (v-lo)/(hi-lo)*(W-L-R);
+  let g = "";
+  for (let v = lo; v <= hi; v += 5000) g += `<line class="grid" x1="${x(v)}" x2="${x(v)}" y1="${top-6}" y2="${H-22}"/><text class="ax" x="${x(v)}" y="${H-6}" text-anchor="middle">${moneyK(v)}</text>`;
+  if (D.cap >= lo && D.cap <= hi) g += `<line class="due" x1="${x(D.cap)}" x2="${x(D.cap)}" y1="${top-6}" y2="${H-22}" stroke-dasharray="4 3"/><text class="lab" x="${x(D.cap)}" y="${top-10}" text-anchor="middle">$50k cap (before tax)</text>`;
+  models.forEach((m, i) => {
+    const y0 = top + i*rowH;
+    g += `<text x="${L-10}" y="${y0+rowH/2+4}" text-anchor="end" font-weight="600">${esc(m.name.replace(/^\w+ /,""))}</text>`;
+    ["SK","NS"].forEach((p, j) => {
+      const b = m.bands[p]; const y = y0 + 8 + j*22;
+      if (!b.n) { g += `<text class="lab" x="${L+4}" y="${y+10}">${p}: none seen</text>`; return; }
+      const x1 = x(b.min*f(p)), x2 = Math.max(x(b.max*f(p)), x1+3), xm = x(b.median*f(p));
+      const tip = `${p}: ${money(b.min*f(p))} to ${money(b.max*f(p))}, median ${money(b.median*f(p))}, n=${b.n}${state.afterTax ? ` (incl. ${Math.round(C.TAX[p]*100)}% tax)` : ""}`;
+      g += `<g class="r"><title>${esc(m.name)} ${esc(tip)}</title><rect class="${p.toLowerCase()}" x="${x1}" y="${y}" width="${x2-x1}" height="14" rx="4"/><line class="med" x1="${xm}" x2="${xm}" y1="${y}" y2="${y+14}"/><text class="lab" x="${x2+6}" y="${y+11}">${p} n=${b.n}</text></g>`;
+    });
+  });
+  $("#pricechart").innerHTML = `<svg class="chart pricechart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Asking price ranges per model, Saskatchewan and Nova Scotia, page-1 samples seen 3 Nov 2026${state.afterTax ? ", including tax" : ""}">${g}</svg>`;
+  $("#taxbtn").setAttribute("aria-pressed", String(state.afterTax));
+  $("#taxbtn .lbl").textContent = state.afterTax ? "Showing: with tax (SK 11%, NS 14%)" : "Showing: asking price. Tap to add tax";
+  $("#pricetable").innerHTML = `<table><thead><tr><th>Model</th><th>SK asks</th><th>SK median + 11%</th><th>NS asks</th><th>NS median + 14%</th></tr></thead><tbody>${models.map(m => `<tr><td>${esc(m.name)}</td><td class="num">${m.bands.SK.n ? `${money(m.bands.SK.min)} to ${money(m.bands.SK.max)} (n=${m.bands.SK.n})` : "none"}</td><td class="num">${m.bands.SK.n ? money(m.bands.SK.median*1.11) : ""}</td><td class="num">${m.bands.NS.n ? `${money(m.bands.NS.min)} to ${money(m.bands.NS.max)} (n=${m.bands.NS.n})` : "none"}</td><td class="num">${m.bands.NS.n ? money(m.bands.NS.median*1.14) : ""}</td></tr>`).join("")}</tbody></table>`;
+}
+
+/* ---------- 5. Gantt ---------- */
+function renderGantt(){
+  const T = D.timeline; const d = s => new Date(s + "T00:00:00");
+  const t0 = d(T.start), t1 = d(T.end);
+  const W = 860, L = 230, R = 20, rowH = 34, top = 40, H = top + T.rows.length*rowH + 16;
+  const x = dt => L + (dt - t0)/(t1 - t0)*(W-L-R);
+  let g = "";
+  for (let m = new Date(t0); m <= t1; m.setMonth(m.getMonth()+1)) {
+    const mx = x(m); g += `<line class="grid" x1="${mx}" x2="${mx}" y1="${top-16}" y2="${H-10}"/><text class="ax" x="${mx+4}" y="${top-20}">${m.toLocaleString("en-CA",{month:"short", year: m.getMonth()===0 ? "numeric" : undefined})}</text>`;
+  }
+  T.rows.forEach((r, i) => {
+    const y = top + i*rowH; const yc = y + rowH/2;
+    g += `<line class="grid" x1="${L}" x2="${W-R}" y1="${y+rowH}" y2="${y+rowH}"/>`;
+    g += `<text x="${L-8}" y="${yc+4}" text-anchor="end" class="${r.kind==="tbd"?"lab":""}">${esc(r.label)}</text>`;
+    const tip = `${r.label}: ${fmtDate(r.start)}${r.end !== r.start ? " to " + fmtDate(r.end) : ""}. ${r.note}`;
+    let inner = `<title>${esc(tip)}</title>`;
+    if (r.band) inner += `<rect class="bandfill" x="${x(d(r.band[0]))}" y="${y+5}" width="${x(d(r.band[1]))-x(d(r.band[0]))}" height="${rowH-10}" rx="4"/><text class="lab" x="${(x(d(r.band[0]))+x(d(r.band[1])))/2}" y="${yc+4}" text-anchor="middle">${esc(r.bandLabel)}</text>`;
+    if (r.kind === "bar" || r.kind === "tbd") inner += `<rect class="bar ${r.kind==="tbd"?"tbd":""}" x="${x(d(r.start))}" y="${yc-7}" width="${Math.max(4, x(d(r.end))-x(d(r.start)))}" height="14" rx="4"/>`;
+    if (r.kind === "milestone") inner += `<circle class="dot" cx="${x(d(r.start))}" cy="${yc}" r="7"/>${r.mlabel ? `<text class="lab" x="${x(d(r.start))+12}" y="${yc+4}">${esc(r.mlabel)}</text>` : ""}`;
+    if (r.kind === "due") inner += `<line class="due" x1="${x(d(r.start))}" x2="${x(d(r.start))}" y1="${top-16}" y2="${H-10}"/><circle class="duedot" cx="${x(d(r.start))}" cy="${yc}" r="7"/><text class="lab" x="${x(d(r.start))-10}" y="${yc+4}" text-anchor="end">${esc(r.mlabel || "")}</text>`;
+    if (r.milestone) inner += `<circle class="dot" cx="${x(d(r.milestone))}" cy="${yc}" r="6"/><text class="lab" x="${Math.max(x(d(r.milestone)), x(d(r.end)))+10}" y="${yc+4}">${esc(r.mlabel)} ${fmtDate(r.milestone)}</text>`;
+    g += `<g class="r">${inner}<rect class="hit" x="${L}" y="${y}" width="${W-L-R}" height="${rowH}"/></g>`;
+  });
+  const tx = x(d(T.today)); g += `<line class="today" x1="${tx}" x2="${tx}" y1="${top-16}" y2="${H-10}" stroke-dasharray="3 3"/><text class="lab" x="${tx+4}" y="${H-2}">today 3 Nov</text>`;
+  $("#gantt").innerHTML = `<svg class="chart gantt" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(T.aria)}">${g}</svg>`;
+  $("#ganttlist").innerHTML = T.rows.map(r => `<li><b>${esc(r.kind === "milestone" && r.monthOnly ? r.monthOnly : fmtDate(r.start) + (r.end !== r.start ? " to " + fmtDate(r.end) : ""))}</b>: ${esc(r.label)}. <span class="muted">${esc(r.note)}</span></li>`).join("");
+}
+function fmtDate(s){ return new Date(s+"T00:00:00").toLocaleDateString("en-CA",{day:"numeric",month:"short"}); }
+
+/* ---------- 6. footer ---------- */
+function renderFooter(){
+  $("#cavlist").innerHTML = D.caveats.map(c => `<li>${esc(c)}</li>`).join("");
+  $("#photonote").textContent = D.photoNote;
+}
+
+/* ---------- boot ---------- */
+renderActions(); renderControls(); renderBoard(); renderCards(true); renderPrice(); renderGantt(); renderFooter();
+wireToggles(document);
+$("#taxbtn").addEventListener("click", () => { state.afterTax = !state.afterTax; save(); renderPrice(); });
+</script>
+
+</body>
+</html>

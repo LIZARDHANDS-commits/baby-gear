@@ -57,6 +57,16 @@ nav.index{min-width:0;position:sticky;top:env(safe-area-inset-top,0px);height:ca
 nav.index a.home{display:inline-block;font-size:.8rem;color:var(--muted);text-decoration:none;margin-bottom:6px;border:1px solid var(--line);border-radius:999px;padding:2px 10px}
 nav.index a.home:hover{color:var(--accent);border-color:var(--accent)}
 nav.index .brand{font-family:var(--display);font-weight:700;font-size:1.1rem;margin-bottom:14px;display:block;color:var(--ink);text-decoration:none}
+.wbtn{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 10px;font:inherit;font-family:var(--display);font-weight:600;font-size:.9rem;background:var(--accent-soft);color:var(--accent);border:1.5px solid var(--accent);border-radius:999px;padding:6px 12px;cursor:pointer;text-align:left}
+.wbtn:hover{background:var(--accent);color:var(--accent-ink)}
+.wbtn .st{margin-left:auto;font-size:.75rem;font-weight:400;opacity:.85}
+#wpop{position:fixed;top:max(8px,env(safe-area-inset-top,0px));right:8px;z-index:50;width:min(440px,calc(100vw - 16px));background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 32px rgba(0,0,0,.22);padding:14px 16px}
+#wpop[hidden]{display:none}
+#wpop h3{margin:0}
+#wpop .slider{grid-template-columns:110px minmax(0,1fr) 40px;gap:10px;margin-top:8px}
+#wpop .foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+#wpop .foot a{font-size:.85rem}
+#leader{margin:0 0 4px}
 nav.index .group{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
 nav.index a.item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:.93rem}
 nav.index a.item:hover{background:var(--chip)}
@@ -166,6 +176,7 @@ details.more[open]{flex-basis:100%}
 .phasecard img,.phasecard .nophoto{width:72px;height:72px;aspect-ratio:1;border-radius:6px;object-fit:contain;background:#fff;border:1px solid var(--line);font-size:.65rem;padding:4px}
 .phasecard b{font-family:var(--display)}
 @media (max-width:860px){
+  #wpop{top:auto;bottom:0;left:0;right:0;width:100%;border-radius:12px 12px 0 0;max-height:62vh;overflow:auto;box-shadow:0 -8px 28px rgba(0,0,0,.25)}
   .app{grid-template-columns:1fr}
   nav.index{position:sticky;top:env(safe-area-inset-top,0px);height:auto;max-height:46vh;border-right:0;border-bottom:1px solid var(--line);padding-block:10px;padding-right:max(16px,env(safe-area-inset-right,0px));z-index:5}
   nav.index .groups{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
@@ -202,10 +213,11 @@ function buyBtn(c){ const u=buyUrl(c); return u?`<a class="buy" href="${esc(u[0]
 function first(t){ t=String(t||''); const m=t.match(/^.*?[.!?](\s|$)/); return m?m[0].trim():t; }
 function rest(t){ t=String(t||''); const f=first(t); return t.slice(f.length).trim(); }
 function dots(n){ n=Math.max(0,Math.min(5,Math.round(n||0))); return '●'.repeat(n)+'○'.repeat(5-n); }
-function scoreTable(c, w){ w=w||W0; if(!c||!c.score) return ''; const sum=CRIT.reduce((a,[k])=>a+(w[k]||0),0)||1; const tot=c.score.total??total(c,w); const R=c.score.reasons||{};
-  return `<div class="scorebox"><h4>Score <span class="num">${tot}</span> of 100: how it was scored</h4>
+function liveTotal(c, w){ w=w||W; if(!c||!c.score) return null; const same=CRIT.every(([k])=>w[k]===W0[k]); return (same&&c.score.total!=null)?c.score.total:total(c,w); }
+function scoreTable(c, w, ci){ w=w||W; if(!c||!c.score) return ''; const tot=liveTotal(c,w); const R=c.score.reasons||{}; const custom=!CRIT.every(([k])=>w[k]===W0[k]);
+  return `<div class="scorebox"${ci!=null?` data-sb="${ci}"`:''}><h4>Score <span class="num">${tot}</span> of 100${custom?' with your weights':''}: how it was scored</h4>
   <table class="st"><thead><tr><th>Criterion</th><th>Weight</th><th>1 to 5</th><th>Why this number</th></tr></thead><tbody>${CRIT.map(([k,l])=>`<tr><td class="c">${l}</td><td class="w num">${w[k]}</td><td class="d" aria-label="${c.score[k]??'not scored'} of 5">${dots(c.score[k])}<small class="num">${c.score[k]??'–'}/5</small></td><td class="r">${R[k]?md1(R[k]):'<span class="muted">reason not written by the researcher</span>'}</td></tr>`).join('')}</tbody></table>
-  <p class="small muted" style="margin-top:8px">Each 1 to 5 is the researcher's judgement, and the one-line reason beside it is its only basis; there is no fixed rubric. Total = sum of score ÷ 5 × weight (${CRIT.map(([k])=>`${c.score[k]??'?'}/5×${w[k]}`).join(' + ')} = ${tot}). Safety is pass or fail and is never scored. <a href="#weights">Change the weights.</a></p></div>`; }
+  <p class="small muted" style="margin-top:8px">Each 1 to 5 is the researcher's judgement, and the one-line reason beside it is its only basis; there is no fixed rubric. Total = sum of score ÷ 5 × weight (${CRIT.map(([k])=>`${c.score[k]??'?'}/5×${w[k]}`).join(' + ')} = ${tot}${custom?`, as shares of ${CRIT.reduce((a,[k])=>a+(w[k]||0),0)}`:''}). Safety is pass or fail and is never scored. ${custom?`The report's weights give ${c.score.total??total(c,W0)}.`:''} <a href="#" class="wopen">Change the weights.</a></p></div>`; }
 function gateChip(v,label){ const m={pass:'ok',partly:'warn',fail:'bad'}; return `<span class="chip ${m[v]||''}">${esc(label)}: ${esc(v||'unknown')}</span>`; }
 
 /* markdown, enough for the block records: headings, tables, lists, bold, code, links */
@@ -290,15 +302,15 @@ function candCard(c, p){
   const isPick = c.role==="lead's pick";
   const pr=c.price||{}; const sp=c.storePrice;
   const flags=(c.flags||[]).filter(f=>/recall|fail|final sale|not sold|out of stock|disputed/i.test(f)).slice(0,1).map(f=>`<span class="chip warn">${esc(f)}</span>`).join(' ');
-  const tot=c.score?(c.score.total??total(c,W0)):null;
-  return `<article class="cand ${isPick?'pick':''} ${c.role==='out'?'out':''}" id="c-${p.id}-${esc((c.imageKey||c.name).replace(/\W+/g,'-'))}">
+  const tot=liveTotal(c,W); const ci=(p.candidates||[]).indexOf(c);
+  return `<article class="cand ${isPick?'pick':''} ${c.role==='out'?'out':''}" id="c-${p.id}-${esc((c.imageKey||c.name).replace(/\W+/g,'-'))}" data-ci="${ci}">
   <div title="Photo from the retailer or maker page, read 3 Nov 2026, matched by eye: check colour and bundle">${photoEl(c)}</div>
   <div>
     <div class="head"><div><h3>${esc(c.name)}</h3><div class="small muted">${esc(c.maker||'')}${c.role?' · '+esc(c.role):''}${c.group?' · '+esc(c.group):''}</div></div>
       <div style="text-align:right"><div class="price num">${pr.amount!=null?money(pr.amount):'<span class="muted small">no price read</span>'}</div><div class="small muted">${pr.amount!=null?esc((pr.seller||'').split(/[,(]/)[0])+(pr.readDate?', read '+esc(pr.readDate):''):''}</div></div></div>
-    <div class="row" style="margin-top:8px;align-items:center">${buyBtn(c)} ${isPick?'<span class="chip pick">pick</span>':''} ${tot!=null?`<span class="chip accent num">score ${tot}/100</span>`:'<span class="chip">not scored</span>'} ${gateChip(c.gate1,'safety')} ${c.availability&&/sold out|out of stock|discontinued/i.test(c.availability)?`<span class="chip warn">${esc(c.availability.split(/[;(]/)[0])}</span>`:''} ${flags}</div>
+    <div class="row" style="margin-top:8px;align-items:center">${buyBtn(c)} ${isPick?'<span class="chip pick">pick</span>':''} ${tot!=null?`<span class="chip accent num" data-tot="${ci}">score ${tot}/100</span>`:'<span class="chip">not scored</span>'} ${gateChip(c.gate1,'safety')} ${c.availability&&/sold out|out of stock|discontinued/i.test(c.availability)?`<span class="chip warn">${esc(c.availability.split(/[;(]/)[0])}</span>`:''} ${flags}</div>
     <details class="more" style="margin-top:10px"><summary>More: why these scores, gates, warranty, returns, reviews</summary>
-      ${scoreTable(c)}
+      ${scoreTable(c,W,ci)}
       <div class="small stack" style="gap:8px;margin-top:8px">
         ${sp?`<div><b>Store check (Pat's PC, 3 Nov):</b> ${sp.amount!=null?money(sp.amount)+' at '+esc(sp.seller||''):''}${sp.rating?' · '+esc(sp.rating):''}${sp.score5!=null?' · score <span class="num">'+sp.score5+'</span> of 5':''}${sp.note?' · '+md1(sp.note):''}</div>`:''}
         ${pr.note?`<div><b>Price note:</b> ${md1(pr.note)}</div>`:''}${pr.perYear?`<div><b>Per year of use:</b> about ${money(pr.perYear)}</div>`:''}
@@ -318,7 +330,7 @@ function viewPart(p){
   const price=pickPrice(p); const tot=pk&&pk.score?(pk.score.total??total(pk,W0)):null;
   const statusShort=pick.status?pick.status.split(/[:(]/)[0].trim():'';
   const fj=p.forJulia;
-  const others=(p.candidates||[]).filter(c=>c!==pk);
+  const others=sortByLive((p.candidates||[]).filter(c=>c!==pk));
   return `<div class="eyebrow">${esc(ph.name||'')} · ${esc(p.waypoint||'')}</div><h1>${esc(p.name)}</h1>
   <div class="row small muted" style="margin:8px 0 16px">${p.decision?`<span class="chip ${p.decision.state==='for-julia'?'pick':'accent'}" style="font-weight:600">${esc(p.decision.label)}</span>`:''}${cal&&cal.latestOrder?`<span class="chip">order by ${esc(cal.latestOrder)}</span>`:''}${p.readyBy?`<span class="chip">ready by ${esc(p.readyBy.split('(')[0].trim())}</span>`:''}</div>
   <div class="stack">
@@ -331,7 +343,7 @@ function viewPart(p){
     <div class="row" style="margin-top:8px;align-items:center">${price?`<span class="price num">${money(price)}</span>`:''}${pk?buyBtn(pk):''}${statusShort?`<span class="chip warn">${esc(statusShort)}</span>`:''}</div>
     <p class="tldr">${md1(first(pick.why))}</p>
     ${(p.sub||[]).length?`<div class="small" style="margin-top:6px">${p.sub.map(s=>`<div><b>${esc(s.group)}:</b> ${md1(s.pick)}</div>`).join('')}</div>`:''}
-    ${pk?scoreTable(pk):''}
+    ${pk?scoreTable(pk,W,(p.candidates||[]).indexOf(pk)):''}
     <details class="more" style="margin-top:10px"><summary>More: reasoning, checks before buying, questions</summary><div class="small stack" style="gap:8px;margin-top:8px">
       ${rest(pick.why)?`<p>${md1(rest(pick.why))}</p>`:''}
       ${pick.status?`<p><b>Status:</b> ${md1(pick.status)}</p>`:''}
@@ -346,7 +358,8 @@ function viewPart(p){
     </div></details>
   </div></div>
   <details class="more" open style="border-top:0;padding-top:0"><summary>Other candidates (${others.length}): price, score, why</summary>
-  <div class="stack" style="margin-top:10px">${others.map(c=>candCard(c,p)).join('')}</div></details>
+  <p class="small" id="leader" data-p="${p.id}" style="margin-top:8px">${leaderLine(p)}</p>
+  <div class="stack" id="cands" data-p="${p.id}" style="margin-top:10px">${others.map(c=>candCard(c,p)).join('')}</div></details>
   </div>`;
 }
 
@@ -441,7 +454,46 @@ const views = [
 ];
 function buildNav(){
   const groups=[...new Set(views.map(v=>v.group))];
-  document.getElementById('nav').innerHTML = `${P.public?'<a class="home" href="../">‹ Home</a>':''}<a class="brand" href="#overview">Greenwood Baby Gear</a><div class="groups">${groups.map(g=>`<div class="grp"><div class="group">${esc(g)}</div>${views.filter(v=>v.group===g).map(v=>`<a class="item" href="#${v.id}" data-v="${v.id}">${v.n?`<span class="n">${esc(v.n)}</span>`:''}<span>${esc(v.label)}</span></a>`).join('')}</div>`).join('')}</div>`;
+  document.getElementById('nav').innerHTML = `${P.public?'<a class="home" href="../">‹ Home</a>':''}<a class="brand" href="#overview">Greenwood Baby Gear</a><button class="wbtn" id="wbtn" type="button" aria-controls="wpop" aria-expanded="false">⚖ Weights <span class="st" id="wstate"></span></button><div class="groups">${groups.map(g=>`<div class="grp"><div class="group">${esc(g)}</div>${views.filter(v=>v.group===g).map(v=>`<a class="item" href="#${v.id}" data-v="${v.id}">${v.n?`<span class="n">${esc(v.n)}</span>`:''}<span>${esc(v.label)}</span></a>`).join('')}</div>`).join('')}</div>`;
+}
+function sortByLive(cs){ return cs.slice().sort((a,b)=>{const ta=a.gate1==='fail'?-1:(liveTotal(a,W)??-2), tb=b.gate1==='fail'?-1:(liveTotal(b,W)??-2); return tb-ta;}); }
+function leaderLine(p){ const pk=pickOf(p); const cs=sortByLive((p.candidates||[]).filter(c=>c.score&&c.gate1!=='fail')); if(!cs.length) return ''; const lead=cs[0]; const custom=!CRIT.every(([k])=>W[k]===W0[k]);
+  if(!custom) return `Sorted by the report's score. <a href="#" class="wopen">Move the weights</a> and the list re-sorts.`;
+  if(lead===pk) return `<b>With your weights the pick still leads</b> (${liveTotal(pk,W)} of 100). Sorted by your weights.`;
+  return `<b>With your weights ${esc(lead.name)} leads</b> at ${liveTotal(lead,W)}; the report's pick${pk?' '+esc(pk.name):''} scores ${pk?liveTotal(pk,W):'–'}. Sorted by your weights.`; }
+function saveW(){ try{ localStorage.setItem('bg-weights', JSON.stringify(W)); }catch(e){} }
+function loadW(){ try{ const j=JSON.parse(localStorage.getItem('bg-weights')||'null'); if(j&&CRIT.every(([k])=>typeof j[k]==='number')) W=Object.assign({},W0,j); }catch(e){} }
+function wCustom(){ return !CRIT.every(([k])=>W[k]===W0[k]); }
+function applyWeights(){
+  const st=document.getElementById('wstate'); if(st) st.textContent=wCustom()?'custom':'report';
+  document.querySelectorAll('#wpop input[type=range]').forEach(r=>{ r.value=W[r.dataset.k]; const v=document.getElementById('wp-'+r.dataset.k); if(v) v.textContent=W[r.dataset.k]; });
+  const sumEl=document.getElementById('wp-sum'); if(sumEl) sumEl.textContent=CRIT.reduce((a,[k])=>a+W[k],0);
+  const cands=document.getElementById('cands');
+  if(cands){ const p=partById[cands.dataset.p]; if(p){
+    document.querySelectorAll('#main [data-tot]').forEach(el=>{ const c=p.candidates[+el.dataset.tot]; el.textContent=`score ${liveTotal(c,W)}/100`; });
+    document.querySelectorAll('#main [data-sb]').forEach(el=>{ const c=p.candidates[+el.dataset.sb]; el.outerHTML=scoreTable(c,W,+el.dataset.sb); });
+    const arts=[...cands.querySelectorAll(':scope > article.cand')]; const order=sortByLive(arts.map(a=>p.candidates[+a.dataset.ci]));
+    order.forEach(c=>{ const a=arts.find(x=>+x.dataset.ci===p.candidates.indexOf(c)); if(a) cands.appendChild(a); });
+    const l=document.getElementById('leader'); if(l) l.innerHTML=leaderLine(p);
+  } }
+  if(document.getElementById('w-results')){ renderWeightResults(); document.querySelectorAll('#main input[type=range]').forEach(r=>{ r.value=W[r.dataset.k]; const v=document.getElementById('wv-'+r.dataset.k); if(v) v.textContent=W[r.dataset.k]; }); }
+}
+function buildWeightsPop(){
+  const d=document.createElement('div'); d.id='wpop'; d.hidden=true; d.setAttribute('role','dialog'); d.setAttribute('aria-label','Weights');
+  d.innerHTML=`<div class="row" style="justify-content:space-between;align-items:center"><h3>Weights</h3><button class="ghost" id="wp-close" type="button" aria-label="Close">✕</button></div>
+  <p class="small muted" style="margin-top:4px">Move a slider: scores and the candidate order update as you drag, on every page. Shares of the sum (<span class="num" id="wp-sum"></span>).</p>
+  ${CRIT.map(([k,l])=>`<div class="slider"><label for="wp-${k}-r">${l}</label><input type="range" id="wp-${k}-r" min="0" max="60" value="${W[k]}" data-k="${k}"><b class="num" id="wp-${k}">${W[k]}</b></div>`).join('')}
+  <div class="foot"><button class="ghost" id="wp-reset" type="button">Reset to the report's weights</button><a href="#weights" id="wp-lab">Full lab: every part at once</a></div>`;
+  document.body.appendChild(d);
+  const btn=document.getElementById('wbtn');
+  const toggle=(show)=>{ d.hidden=show==null?!d.hidden:!show; btn.setAttribute('aria-expanded',String(!d.hidden)); };
+  btn.addEventListener('click',()=>toggle());
+  document.getElementById('wp-close').addEventListener('click',()=>toggle(false));
+  document.getElementById('wp-lab').addEventListener('click',()=>toggle(false));
+  document.addEventListener('click',e=>{ const t=e.target.closest('a.wopen'); if(t){ e.preventDefault(); toggle(true); } });
+  document.addEventListener('keydown',e=>{ if(e.code==='Escape') toggle(false); });
+  d.querySelectorAll('input[type=range]').forEach(r=>r.addEventListener('input',e=>{ W[e.target.dataset.k]=+e.target.value; saveW(); applyWeights(); }));
+  document.getElementById('wp-reset').addEventListener('click',()=>{ W=Object.assign({},W0); saveW(); applyWeights(); });
 }
 function route(){
   let h=(location.hash||'#overview').slice(1); if(h.startsWith('docs-')) h='docs';
@@ -449,8 +501,9 @@ function route(){
   const main=document.getElementById('main'); main.innerHTML=`<section class="view on">${v.fn()}</section>`;
   document.querySelectorAll('nav a.item').forEach(a=>a.classList.toggle('active',a.dataset.v===v.id));
   if(v.id==='calendar') ganttHover();
-  if(v.id==='weights'){ renderWeightResults(); document.querySelectorAll('#main input[type=range]').forEach(r=>r.addEventListener('input',e=>{W[e.target.dataset.k]=+e.target.value;document.getElementById('wv-'+e.target.dataset.k).textContent=e.target.value;renderWeightResults();})); document.getElementById('w-reset').addEventListener('click',()=>{W=Object.assign({},W0);route();}); }
+  if(v.id==='weights'){ renderWeightResults(); document.querySelectorAll('#main input[type=range]').forEach(r=>r.addEventListener('input',e=>{W[e.target.dataset.k]=+e.target.value;document.getElementById('wv-'+e.target.dataset.k).textContent=e.target.value;saveW();applyWeights();})); document.getElementById('w-reset').addEventListener('click',()=>{W=Object.assign({},W0);saveW();route();}); }
+  applyWeights();
   const target=(location.hash||'').slice(1); const el=target&&document.getElementById(target); if(el&&el!==main) el.scrollIntoView(); else window.scrollTo(0,0);
 }
-buildNav(); route(); window.addEventListener('hashchange',route);
+loadW(); buildNav(); buildWeightsPop(); route(); window.addEventListener('hashchange',route);
 </script>

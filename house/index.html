@@ -47,21 +47,24 @@ a{color:var(--accent)}
 section{display:grid;gap:16px}
 section>h2{padding-bottom:8px;border-bottom:1px solid var(--line)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
-.lede{font-size:18px;max-width:62ch}
+.verdict{font-size:20px;font-family:var(--display);font-weight:600;line-height:1.35;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.verdict .pill{font-size:15px;padding:4px 12px}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
 .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.none{background:var(--none-soft);color:var(--none)} .pill.base{background:var(--accent-soft);color:var(--accent)} .pill.pick{background:var(--pick-soft);color:var(--pick)}
 .pill svg{width:12px;height:12px}
 
 /* market */
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
-.tile{display:grid;gap:6px;align-content:start;background:var(--chip);border-radius:10px;padding:14px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.tiles{grid-template-columns:1fr}}
+.tile{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;background:var(--chip);border-radius:10px;padding:12px 14px}
+.tile .eyebrow{grid-column:1}.tile .pill{grid-column:2;justify-self:start}.tile .rule{grid-column:1 / -1;font-size:14px;color:var(--muted);line-height:1.45}
 .tile .big{font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
 .sub{display:grid;gap:14px}
 .sub h3.title{font-size:20px;margin-top:8px}
 .duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (max-width:640px){.duo{grid-template-columns:1fr}}
 figure{margin:0;display:grid;gap:8px;min-width:0;align-content:start}
-figure.panel{box-shadow:var(--shadow)}
+figure.panel{box-shadow:none}
 figure h3{font-size:16px}
 figcaption{font-size:14px;color:var(--muted)}
 .take{font-size:15px;color:var(--ink);padding-left:10px;border-left:3px solid var(--s1)}
@@ -89,7 +92,8 @@ details.dec summary .chev{grid-column:2;grid-row:1 / span 2;width:28px;height:28
 details.dec summary:hover .chev{background:var(--accent);color:var(--panel)}
 details.dec[open] summary .chev{transform:rotate(180deg)}
 details.dec summary .chev svg{width:12px;height:12px}
-details.dec summary .meta{grid-column:1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:14px;color:var(--muted)}
+details.dec summary .meta{grid-column:1;display:grid;gap:4px;font-size:14px;color:var(--muted)}
+details.dec summary .because{color:var(--muted);font-weight:400}
 details.dec summary .meta b{color:var(--ink)}
 details.dec summary .meta b.lean::before{content:"★ ";color:var(--pick)}
 details.dec .detail{padding:0 16px 18px 16px;gap:12px}
@@ -152,110 +156,106 @@ footer a{color:var(--accent)}
 
 
 <div class="wrap">
-  <header style="display:grid;gap:10px">
+  <header style="display:grid;gap:8px">
     <a class="back" href="../">← Home</a>
-    <p class="eyebrow">Pat &amp; Julia · updated <span id="built"></span></p>
     <h1>Our Greenwood home plan</h1>
-    <p class="lede"><b>Where we are:</b> the market reads <span class="pill ok" style="vertical-align:middle">calm</span> (no test yellow or red, 2 of 4 with data). The house hunt runs <b>January to February 2027</b>; if no great deal by <b>15 February</b>, we rent first and keep looking.</p>
+    <p class="verdict"><span class="pill ok">Market: calm</span> Offer at a fair price; no bidding war needed.</p>
+    <p class="muted small">Detached homes, Middleton to Kentville, recorded sales. Updated <span id="built"></span>; re-checked on the 3rd of each month.</p>
   </header>
 
   <section aria-labelledby="t-mkt">
     <h2 id="t-mkt">The market</h2>
-    <p class="muted" style="max-width:65ch">Detached homes, Middleton to Kentville, from recorded sales (Nova Scotia assessment data) and listing counts. Re-checked on the 3rd of every month.</p>
+    <div class="tiles" id="tiles"></div>
+    <details>
+      <summary>How we score <span class="more">Show more</span></summary>
+      <div class="detail">
+        <p>Four tests, adapted from the ones Canada's housing agency (CMHC) uses in its Housing Market Assessment. A test with no data reads "no data", never green. Lines marked "ours" are our judgement, not tested values.</p>
+        <ol>
+          <li><b>Overheating:</b> Valley sales ÷ new listings, rolling 6 months. Green under 60%, yellow 60 to 70%, red over 70% for 2 windows in a row. The 70% line is CMHC's national line read off a chart; 60% is brokerage commentary. We have no new-listing counts yet, so months of supply and days on market stand in with no agreed line.</li>
+          <li><b>Price acceleration (ours):</b> the yearly change in price per square foot, quarter by quarter. Green if not speeding up, or for 1 to 2 quarters. Yellow if speeding up 3 or more quarters in a row. Red if 4 or more in a row and the yearly rise is over 10%. Back-tested: it would have shown red through the 2021 to 2022 run-up.</li>
+          <li><b>Overvaluation (ours):</b> (a) the monthly cost to own the target home against rent for a similar one: green within 15%, yellow 15 to 30% over, red over 30% over; (b) median price ÷ median household income against its 2015 to 2019 level: yellow 10 to 20% over, red over 20%; (c) the sale price ÷ assessed value trend as a cross-check. Only (c) has data so far.</li>
+          <li><b>Overbuilding:</b> rental vacancy under 3% green, 3 to 4.4% yellow, over 4.4% red (CMHC's national line); unsold new builds rising 2 quarters yellow, 3 or more red. First count taken; the trend needs the next runs.</li>
+        </ol>
+        <p><b>Overall:</b> green if 0 or 1 tests are red; yellow if 2 are red or any test is newly red; red if 3 or 4 are red, or overheating, acceleration and overvaluation are red together. Green means buy at a fair price from recorded sales; yellow means offer at or below the comparable median with every condition kept; red means no offer unless the home clears our fair price at a discount.</p>
+        <p class="sources">Source: our market-check method note (3 Nov 2026), drawing on CMHC, Housing Market Assessment, Canada, 2018 Q4, Table 1 and Figures 3 to 5; brokerage commentary on sales-to-listings bands; Himmelberg, Mayer and Sinai (2005) for the own-cost comparison.</p>
+      </div>
+    </details>
 
-    <div class="sub">
-      <h3 class="title">The four warning tests</h3>
-      <div class="tiles" id="tiles"></div>
-      <p class="muted small">The four tests Canada's housing agency (CMHC) uses, adapted to the Valley. Green means no warning, yellow means be careful, red means don't overpay. Only 2 of the 4 have full data; rents and incomes come with the agent in December.</p>
+    <h3 class="title">Price bands</h3>
+    <figure class="panel">
+      <h3>How much each price band rose, 2022 to 2026</h3>
+      <div class="legend"><span><i class="dot" style="background:var(--none)"></i>2022 median</span><span><i class="dot" style="background:var(--s1)"></i>2026 median</span></div>
+      <div class="chart" id="c-quint"></div>
+      <figcaption class="take">Pricier homes rose least: the cheapest fifth of sales is up 37.5% since 2022, the dearest fifth 13.2%. So yes, partly, to Pat's question; the evidence is moderate, not decisive.</figcaption>
+    </figure>
+    <figure class="panel">
+      <h3>Homes like ours, by town, 2025 to 2026</h3>
+      <div class="chart" id="c-comps"></div>
+      <figcaption class="take">3+ bedrooms, 2+ bathrooms, a garage: 366 recorded sales, median <b>$497,250</b>. Middleton is far cheaper; Kentville dearest. Only 8 of the 366 sold above $700,000.</figcaption>
+    </figure>
+
+    <div class="offer">
+      <h3>What this means for our offer</h3>
+      <ul>
+        <li><b>Offer a fair price from recorded sales.</b> No test is yellow or red; no sign a bidding war is needed.</li>
+        <li><b>The middle of the market for a home like ours is about $497,000.</b> Middleton sits far below it, Kentville above.</li>
+        <li><b>Sales run about 1.16 times the assessed value now, down from 1.8.</b> Use the assessment as a cross-check, never the asking price.</li>
+      </ul>
     </div>
 
-    <div class="sub">
-      <h3 class="title">Price bands</h3>
-
-      <div class="duo">
-        <figure class="panel">
-          <h3>Median sale price by year</h3>
-          <div class="chart" id="c-median"></div>
-          <figcaption class="take">The big move was 2020 to 2022. Since then a steady climb of about 5% a year, with no drop to wait for: $325,000 in 2022, $399,200 in 2026 so far (+22.8%).</figcaption>
-        </figure>
-        <figure class="panel">
-          <h3>Price per square foot by year</h3>
-          <div class="chart" id="c-ppsf"></div>
-          <figcaption class="take">Same shape: $122 in 2019, $205 in 2022, $261 in 2026. Not adjusted for inflation.</figcaption>
-        </figure>
-      </div>
-
-      <figure class="panel">
-        <h3>How much each price band rose, 2022 to 2026</h3>
-        <div class="legend"><span><i class="dot" style="background:var(--none)"></i>2022 median</span><span><i class="dot" style="background:var(--s1)"></i>2026 median</span></div>
-        <div class="chart" id="c-quint"></div>
-        <figcaption class="take">Pat's question, "is it less inflated at a higher price point?": yes, partly. Each year's sales split into five equal bands. The cheapest fifth rose 37.5% since 2022, the dearest fifth 13.2%. The evidence is moderate, not decisive, and some of the cheap-home gain is renovation this data cannot see.</figcaption>
-      </figure>
-
-      <div class="duo">
-        <figure class="panel">
-          <h3>Homes like ours, by town, 2025 to 2026</h3>
-          <div class="chart" id="c-comps"></div>
-          <figcaption class="take">3+ bedrooms, 2+ bathrooms, a garage, 1,400 to 2,600 sq ft: 366 recorded sales, median <b>$497,250</b> ($255 per sq ft). Greenwood side $470,000, Kentville side $530,000. Middleton is the cheapest by a wide margin.</figcaption>
-        </figure>
-        <figure class="panel">
-          <h3>Where those 366 homes sold, by price</h3>
-          <div class="chart" id="c-share"></div>
-          <figcaption class="take">Only <b>8 of 366</b> sold above $700,000. 73% sold between $425,000 and $700,000; 89 sold below.</figcaption>
-        </figure>
-      </div>
-
-      <div class="duo">
-        <figure class="panel">
-          <h3>Sale price ÷ assessed value</h3>
-          <div class="chart" id="c-ratio"></div>
-          <figcaption class="take">Homes still sell above the tax assessment, but the gap is closing: 1.80 times in 2022, 1.16 in 2026. Assessments run 12 to 24 months behind the market, so they are catching up; buyers are not paying a growing premium.</figcaption>
-        </figure>
-        <figure class="panel">
+    <details>
+      <summary>More price charts <span class="more">Show more</span></summary>
+      <div class="detail wide">
+        <div class="duo">
+          <figure>
+            <h3>Median sale price by year</h3>
+            <div class="chart" id="c-median"></div>
+            <figcaption class="take">The big move was 2020 to 2022. Since then a steady climb of about 5% a year: $325,000 in 2022, $399,200 in 2026 so far (+22.8%). No drop to wait for.</figcaption>
+          </figure>
+          <figure>
+            <h3>Price per square foot by year</h3>
+            <div class="chart" id="c-ppsf"></div>
+            <figcaption class="take">Same shape: $122 in 2019, $205 in 2022, $261 in 2026. Not adjusted for inflation.</figcaption>
+          </figure>
+        </div>
+        <div class="duo">
+          <figure>
+            <h3>Where those 366 homes sold, by price</h3>
+            <div class="chart" id="c-share"></div>
+            <figcaption class="take">73% sold between $425,000 and $700,000; 89 below, 8 above.</figcaption>
+          </figure>
+          <figure>
+            <h3>Sale price ÷ assessed value</h3>
+            <div class="chart" id="c-ratio"></div>
+            <figcaption class="take">1.80 in 2022, 1.16 in 2026. Assessments run 12 to 24 months behind the market and are catching up; buyers are not paying a growing premium.</figcaption>
+          </figure>
+        </div>
+        <figure>
           <h3>Yearly change in price per square foot</h3>
           <div class="legend"><span><i style="background:var(--s1)"></i>Whole Valley</span><span><i style="background:var(--s2)"></i>Greenwood to Middleton side</span></div>
           <div class="chart" id="accel"></div>
-          <figcaption class="take">The 2021 to 2022 run-up peaked at 32% a year. Since mid-2023 the yearly rise has stayed between 3% and 9%, and it has slowed for three quarters: +5.5% now.</figcaption>
+          <figcaption class="take">The 2021 to 2022 run-up peaked at 32% a year. Since mid-2023 the rise has stayed between 3% and 9%, slowing for three quarters: +5.5% now.</figcaption>
         </figure>
       </div>
-
-      <div class="offer">
-        <h3>What this means for our offer</h3>
-        <ul>
-          <li><b>Offer a fair price from recorded sales.</b> No test is yellow or red and there is no sign a bidding war is needed.</li>
-          <li><b>For a home like ours the middle of the market is about $497,000.</b> Middleton sits far below it, Kentville above.</li>
-          <li><b>Paying more does not mean buying at the frothiest end.</b> Pricier homes have risen least since 2022. That evidence is moderate, so it guides, it doesn't decide.</li>
-          <li><b>Expect a sale price near 1.16 times the assessed value,</b> not 1.8. Use the assessment as a cross-check, never the asking price.</li>
-          <li><b>Only 2 of 4 tests have data.</b> Rents and incomes arrive with the agent; sales are 26% below 2022 and prices are not inflation-adjusted.</li>
-        </ul>
+    </details>
+    <details>
+      <summary>Listing-site numbers and the tables <span class="more">Show more</span></summary>
+      <div class="detail wide">
+        <figure>
+          <h4>Median sale price by town, all detached homes, last 12 months (listing site, counted 2 Nov 2026)</h4>
+          <div class="chart" id="towns"></div>
+          <figcaption>Hover or touch a bar for the number of sales and days on market. Months of supply: 3.7 west, 3.9 east.</figcaption>
+        </figure>
+        <h4>Price change by quarter (last 8)</h4>
+        <div class="tablewrap"><table id="tbl-accel"><thead><tr><th>Quarter</th><th class="n">Valley $/sq ft</th><th class="n">Valley, yearly</th><th class="n">Greenwood side, yearly</th></tr></thead><tbody></tbody></table></div>
+        <h4>Median price and $/sq ft by year</h4>
+        <div class="tablewrap"><table id="tbl-yearly"><thead><tr><th>Year</th><th class="n">Sales</th><th class="n">Median price</th><th class="n">$/sq ft</th></tr></thead><tbody></tbody></table></div>
+        <h4>Price bands, 2022 and 2026</h4>
+        <div class="tablewrap"><table id="tbl-quint"><thead><tr><th>Band</th><th class="n">2022</th><th class="n">2026</th><th class="n">Change</th></tr></thead><tbody></tbody></table></div>
+        <h4>Towns, last 12 months (listing site)</h4>
+        <div class="tablewrap"><table id="tbl-towns"><thead><tr><th>Town</th><th>Side</th><th class="n">Sales</th><th class="n">Days on market</th><th class="n">Median price</th></tr></thead><tbody></tbody></table></div>
       </div>
-
-      <details>
-        <summary>How the four tests work, the listing-site numbers, and the tables <span class="more">Show more</span></summary>
-        <div class="detail wide">
-          <ul style="max-width:70ch">
-            <li><b>Overheating:</b> are homes selling faster than new ones come up? Sales ÷ new listings above about 70% favours sellers. We have no new-listing counts yet, so months of supply and days on market stand in.</li>
-            <li><b>Price acceleration:</b> is the yearly price rise speeding up quarter after quarter? Yellow if it speeds up 3 quarters running; red if 4 or more and the rise tops 10% a year.</li>
-            <li><b>Overvaluation:</b> does owning cost far more than renting a similar home, or are prices far above local incomes? Only the sale-price-to-assessment part has data so far.</li>
-            <li><b>Overbuilding:</b> are unsold new builds or empty rentals piling up? That would mean prices could soften.</li>
-          </ul>
-          <p class="muted" style="max-width:70ch">The lines are adapted from CMHC's Housing Market Assessment. No official test exists for a market as small as the Valley, so we read them over 6 to 12 months and treat them as signals, not proof.</p>
-          <figure>
-            <h4>Median sale price by town, all detached homes, last 12 months (listing site, counted 2 Nov 2026)</h4>
-            <div class="chart" id="towns"></div>
-            <figcaption>Hover or touch a bar for the number of sales and days on market.</figcaption>
-          </figure>
-          <h4>Price change by quarter (last 8)</h4>
-          <div class="tablewrap"><table id="tbl-accel"><thead><tr><th>Quarter</th><th class="n">Valley $/sq ft</th><th class="n">Valley, yearly</th><th class="n">Greenwood side, yearly</th></tr></thead><tbody></tbody></table></div>
-          <h4>Median price and $/sq ft by year</h4>
-          <div class="tablewrap"><table id="tbl-yearly"><thead><tr><th>Year</th><th class="n">Sales</th><th class="n">Median price</th><th class="n">$/sq ft</th></tr></thead><tbody></tbody></table></div>
-          <h4>Price bands, 2022 and 2026</h4>
-          <div class="tablewrap"><table id="tbl-quint"><thead><tr><th>Band</th><th class="n">2022</th><th class="n">2026</th><th class="n">Change</th></tr></thead><tbody></tbody></table></div>
-          <h4>Towns, last 12 months (listing site)</h4>
-          <div class="tablewrap"><table id="tbl-towns"><thead><tr><th>Town</th><th>Side</th><th class="n">Sales</th><th class="n">Days on market</th><th class="n">Median price</th></tr></thead><tbody></tbody></table></div>
-        </div>
-      </details>
-    </div>
+    </details>
   </section>
 
   
@@ -304,6 +304,7 @@ footer a{color:var(--accent)}
 
   <section aria-labelledby="t-time">
     <h2 id="t-time">Timeline</h2>
+    <p>The house hunt runs <b>January to February 2027</b>. If no great deal by <b>15 February</b>, we rent first and keep looking.</p>
     <figure class="panel">
       <div class="chart" id="gantt"></div>
       <figcaption>Bars are spans of work, diamonds are dates that matter. The dashed line is today. Touch or hover a row for the dates.</figcaption>
@@ -539,14 +540,14 @@ $('#built').textContent = new Date(DATA.built + 'T12:00:00').toLocaleDateString(
 
 /* ---- status tiles ---- */
 const T = [
-  ['Overheating', 'Calm', 'ok', '3.7 to 3.9 months of homes for sale; most sell in about 5 weeks. No tested line yet.'],
-  ['Price acceleration', 'Green', 'ok', '+5.5% a year and slowing for 3 quarters.'],
-  ['Overvaluation', 'Partly checked', 'none', 'Sales ran 1.16 times assessment in 2026, down from 1.80 in 2022. Rents and incomes still to collect.'],
-  ['Overbuilding', 'Baseline set', 'base', '26 new builds listed against about 30 sales a month; we compare each month.'],
+  ['Overheating', 'Calm', 'ok', 'Rule: sales ÷ new listings. Green under 60%, yellow 60 to 70%, red over 70% twice running. No listing counts yet, so no score: 3.7 to 3.9 months of supply and 35 days to sell read calm, with no agreed line.'],
+  ['Price acceleration', 'Green', 'ok', 'Rule: is the yearly rise speeding up? Green if not, or for 1 to 2 quarters. Yellow 3 quarters running. Red 4 or more and over 10% a year. Now +5.5% and slowing for 3 quarters.'],
+  ['Overvaluation', 'No data yet', 'none', 'Rule: own cost vs rent (green within 15%, yellow 15 to 30% over, red over 30%) and price vs local income (yellow 10 to 20% over history, red over 20%). No rents or incomes yet. Cross-check: sales 1.16 times assessment, down from 1.80, no warning.'],
+  ['Overbuilding', 'First count', 'base', 'Rule: rental vacancy under 3% green, 3 to 4.4% yellow, over 4.4% red; unsold new builds rising 2 quarters yellow, 3 red. No agreed count yet: 26 new builds listed; we compare month to month.'],
 ];
 for (const [name, word, cls, note] of T) {
   const d = document.createElement('div'); d.className = 'tile';
-  d.innerHTML = `<p class="eyebrow">${name}</p><span class="pill ${cls}"><svg viewBox="0 0 12 12" aria-hidden="true">${cls === 'ok' ? '<path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/>' : '<circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="2" fill="none"/>'}</svg>${word}</span><p class="muted small">${note}</p>`;
+  d.innerHTML = `<p class="eyebrow">${name}</p><span class="pill ${cls}"><svg viewBox="0 0 12 12" aria-hidden="true">${cls === 'ok' ? '<path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/>' : '<circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="2" fill="none"/>'}</svg>${word}</span><p class="rule">${note}</p>`;
   $('#tiles').appendChild(d);
 }
 
@@ -697,31 +698,31 @@ responsive($('#towns'), (W, box, tip) => {
 
 /* ---- decisions: closed rows; question, lean and decide-by visible, the rest behind the chevron ---- */
 const chev = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>';
-const DEC = [
+const DEC = [ // because: the one-line reason shown next to the lean, from the rulings and research
   { q: 'Buy on the January hunt, or rent first?', by: '15 February 2027', opts: ['Buy during the January to February hunt', 'Rent first, then buy within the 2-year window', 'Wait until summer if nothing fits'], lean: 0,
     why: 'The market reads calm, not overheated, so a fair offer based on recorded sales is reasonable. We rent only if nothing passes our must-haves.',
-    dep: 'pre-approval, the monthly market check, the move date', more: 'annex-options', label: 'Renting first' },
+    dep: 'pre-approval, the monthly market check, the move date', more: 'annex-options', label: 'Renting first', because: 'the market reads calm and a fair offer from recorded sales is reasonable; we rent only if nothing passes our must-haves' },
   { q: 'Which lenders, and when?', by: 'early December', opts: ['Our bank only', 'A broker only', 'Our bank plus a broker'], lean: 2,
     why: 'Two quotes keep each honest. We ask each for two down-payment scenarios, and we do it before any car loan.',
-    dep: 'a pay stub, an employment letter and tax slips; the move date', more: 'annex-options', label: 'Pre-approval and the stress test' },
+    dep: 'a pay stub, an employment letter and tax slips; the move date', more: 'annex-options', label: 'Pre-approval and the stress test', because: 'Pat\'s call: two lenders give two quotes, each on two down-payment scenarios, before any car loan' },
   { q: 'Buyer\'s agent, or search on our own?', by: 'pick by early January', opts: ['Agent only', 'Our own system only', 'Our own system plus an agent'], lean: 2,
     why: 'An agent brings live listing stats and the offer paperwork; our own system prices every home from recorded sales.',
-    dep: 'a shortlist in December', more: 'annex-options', label: 'Agents and listing data' },
+    dep: 'a shortlist in December', more: 'annex-options', label: 'Agents and listing data', because: 'an agent brings live listing stats, showings and the offer paperwork; our own system prices each home from recorded sales' },
   { q: 'Keep or sell the home we rent out?', by: 'after pre-approval, mid-December', opts: ['Keep it as a rental', 'Sell it and use the proceeds', 'Decide later'], lean: 0,
     why: 'Pat leans keep, expecting that market to rise. The sales data does not show that rise yet, so this is a lean, not a call.',
-    dep: 'the two pre-approval scenarios and the tax election check', more: 'annex-options', label: 'Keep or sell: the trade-offs' },
+    dep: 'the two pre-approval scenarios and the tax election check', more: 'annex-options', label: 'Keep or sell: the trade-offs', because: 'Pat expects that market to rise with coming investment; the sales data does not show it yet' },
   { q: 'Which towns, and which price band?', by: 'after pre-approval', opts: ['Greenwood side only', 'Kentville side only', 'Either, decided by the listing'], lean: 2,
     why: 'Middleton to Kentville, within 30 to 40 minutes of Greenwood. The price-band charts above say pricier homes have risen less since 2022; our own ceiling waits on pre-approval.',
-    dep: 'pre-approval; the comparable sales for each listing', more: 't-mkt', label: 'The market' },
+    dep: 'pre-approval; the comparable sales for each listing', more: 't-mkt', label: 'The market', because: 'Julia would rather work toward Kentville, so up to 30 to 40 minutes from Greenwood and no further west than Middleton' },
   { q: 'When do we open the FHSAs?', by: 'before 1 January 2027', opts: ['December 2026', 'On or after 1 January 2027', 'Skip it'], lean: 1,
     why: 'December would fail the four-year look-back; January passes it. $8,000 each, tax-deductible.',
-    dep: 'a written answer from CRA on the rental question', more: 'annex-costs', label: 'Costs, taxes and buyer programs' },
+    dep: 'a written answer from CRA on the rental question', more: 'annex-costs', label: 'Costs, taxes and buyer programs', because: 'December fails the four-year look-back; January passes it' },
   { q: 'If we rent first, where?', by: 'January', opts: ['Base housing', 'A private rental', 'A short stay with family'], lean: null,
     why: 'Not decided yet. Base housing is the cheapest at $747 to $921 a month for a 3-bedroom, but its wait time isn\'t published.',
     dep: 'the buy-or-rent decision', more: 'annex-options', label: 'Renting first' },
 ];
 $('#decs').innerHTML = DEC.map(d => `<details class="dec">
-  <summary><h3>${esc(d.q)}</h3><span class="meta">${d.lean == null ? '<b>Not decided yet</b>' : `<b class="lean">${esc(d.opts[d.lean])}</b>`}<span>Decide by: ${esc(d.by)}</span></span><span class="chev"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg></span></summary>
+  <summary><h3>${esc(d.q)}</h3><span class="meta">${d.lean == null ? '<b>Not decided</b>' : `<b class="lean">${esc(d.opts[d.lean])}</b> <span class="because">because ${esc(d.because)}</span>`}<span class="by">Decide by: ${esc(d.by)}</span></span><span class="chev"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg></span></summary>
   <div class="detail wide">
     <ul class="opts" aria-label="Options">${d.opts.map((o, i) => `<li class="${i === d.lean ? 'lean' : ''}">${esc(o)}</li>`).join('')}</ul>
     <div class="kv"><b>${d.lean == null ? 'Status' : 'Why'}</b><span>${esc(d.why)}</span><b>Depends on</b><span>${esc(d.dep)}</span></div>

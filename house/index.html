@@ -9,32 +9,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
-/* Layout: one calm column, decision document order: where we are, the one next action each, the decisions as cards,
-   then the timeline and the market reading with charts, then everything else behind "Show more" panels.
-   Tokens match the family's baby gear page so the pages read as one site. */
+/* Layout: one calm column. Order: slim header and one "where we are" line; The market (four tests, then the price-band research
+   as charts with one-line takeaways and an offer box); Decisions as closed rows; Timeline; Read more; next steps; sources.
+   One accent per section: teal for the market charts, orange only for the lean and the hunt. Tokens match the family's baby gear page. */
 :root{
   --bg:#f6f5f1; --panel:#ffffff; --ink:#1d2a2e; --muted:#5b6b70; --line:#dcdfd8; --chip:#eceee8;
   --accent:#1f5f6b; --accent-soft:#e3eff1; --pick:#b8651b; --pick-soft:#fbeedd;
-  --ok:#2e7d4f; --ok-soft:#e4f2e9; --warn:#a66a00; --warn-soft:#f8eed8; --bad:#b23b3b; --none:#7a878b; --none-soft:#eef0ec;
-  --s1:#0891b2; --s2:#c2651a; --shadow:0 1px 2px rgb(29 42 46 / .06), 0 6px 18px rgb(29 42 46 / .06);
+  --ok:#2e7d4f; --ok-soft:#e4f2e9; --warn:#a66a00; --warn-soft:#f8eed8; --none:#7a878b; --none-soft:#eef0ec;
+  --s1:#0891b2; --s2:#c2651a; --s1-soft:#d5eef4; --shadow:0 1px 2px rgb(29 42 46 / .05), 0 4px 14px rgb(29 42 46 / .05);
   --display:"Outfit",system-ui,sans-serif; --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#15191b; --panel:#1e2427; --ink:#e8ebe6; --muted:#a3b0b4; --line:#2f383c; --chip:#273034;
   --accent:#6fb7c4; --accent-soft:#1c3237; --pick:#e0954f; --pick-soft:#3a2a1a;
-  --ok:#6cc08d; --ok-soft:#1d3226; --warn:#e0b04f; --warn-soft:#3a2f17; --bad:#e07a7a; --none:#93a0a4; --none-soft:#262d30;
-  --s1:#1a9ab8; --s2:#d95926; --shadow:0 1px 2px rgb(0 0 0 / .3), 0 6px 18px rgb(0 0 0 / .25); color-scheme:dark }}
+  --ok:#6cc08d; --ok-soft:#1d3226; --warn:#e0b04f; --warn-soft:#3a2f17; --none:#93a0a4; --none-soft:#262d30;
+  --s1:#1a9ab8; --s2:#d95926; --s1-soft:#1d3a44; --shadow:0 1px 2px rgb(0 0 0 / .3), 0 4px 14px rgb(0 0 0 / .25); color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#15191b; --panel:#1e2427; --ink:#e8ebe6; --muted:#a3b0b4; --line:#2f383c; --chip:#273034;
   --accent:#6fb7c4; --accent-soft:#1c3237; --pick:#e0954f; --pick-soft:#3a2a1a;
-  --ok:#6cc08d; --ok-soft:#1d3226; --warn:#e0b04f; --warn-soft:#3a2f17; --bad:#e07a7a; --none:#93a0a4; --none-soft:#262d30;
-  --s1:#1a9ab8; --s2:#d95926; --shadow:0 1px 2px rgb(0 0 0 / .3), 0 6px 18px rgb(0 0 0 / .25); color-scheme:dark }
+  --ok:#6cc08d; --ok-soft:#1d3226; --warn:#e0b04f; --warn-soft:#3a2f17; --none:#93a0a4; --none-soft:#262d30;
+  --s1:#1a9ab8; --s2:#d95926; --s1-soft:#1d3a44; --shadow:0 1px 2px rgb(0 0 0 / .3), 0 4px 14px rgb(0 0 0 / .25); color-scheme:dark }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
-.wrap{max-width:860px;margin:0 auto;padding-block:20px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:32px}
+.wrap{max-width:860px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
 h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
-h1{font-size:clamp(28px,5vw,40px);font-weight:700}
-h2{font-size:22px;font-weight:600}
+h1{font-size:clamp(28px,5vw,38px);font-weight:700}
+h2{font-size:24px;font-weight:600}
 h3{font-size:17px;font-weight:600}
 h4{font-size:15px;font-weight:600;margin-top:6px}
 p{margin:0}
@@ -44,26 +44,74 @@ a{color:var(--accent)}
 .eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .back{color:var(--accent);text-decoration:none;font-weight:700;font-size:14px}
 .back:hover{text-decoration:underline}
-section{display:grid;gap:12px}
+section{display:grid;gap:16px}
+section>h2{padding-bottom:8px;border-bottom:1px solid var(--line)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
-.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-
-/* status */
-.status{display:grid;gap:14px}
-.status .now{font-size:18px}
-.light{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.lede{font-size:18px;max-width:62ch}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
 .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.none{background:var(--none-soft);color:var(--none)} .pill.base{background:var(--accent-soft);color:var(--accent)} .pill.pick{background:var(--pick-soft);color:var(--pick)}
 .pill svg{width:12px;height:12px}
-.meter{display:grid;gap:6px}
-.meter .bar{height:8px;border-radius:999px;background:var(--chip);overflow:hidden}
-.meter .bar i{display:block;height:100%;background:var(--ok);border-radius:999px;transition:width .3s}
 
-/* next actions */
-.next{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media (max-width:560px){.next{grid-template-columns:1fr}}
-.next .panel{display:grid;gap:8px;align-content:start;border-top:4px solid var(--pick)}
-.next .act{font-size:18px;font-weight:700;font-family:var(--display);line-height:1.3}
+/* market */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tile{display:grid;gap:6px;align-content:start;background:var(--chip);border-radius:10px;padding:14px}
+.tile .big{font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.sub{display:grid;gap:14px}
+.sub h3.title{font-size:20px;margin-top:8px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.duo{grid-template-columns:1fr}}
+figure{margin:0;display:grid;gap:8px;min-width:0;align-content:start}
+figure.panel{box-shadow:var(--shadow)}
+figure h3{font-size:16px}
+figcaption{font-size:14px;color:var(--muted)}
+.take{font-size:15px;color:var(--ink);padding-left:10px;border-left:3px solid var(--s1)}
+.chart{position:relative;min-width:0}
+.chart svg{display:block;width:100%;height:auto}
+.chart text{fill:var(--muted);font-family:var(--body);font-size:12px;pointer-events:none}
+.chart text.lab{fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.tip{position:absolute;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;box-shadow:var(--shadow);white-space:nowrap;font-variant-numeric:tabular-nums;z-index:2}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px}
+.legend i.dot{width:10px;height:10px;border-radius:50%}
+.offer{background:var(--s1-soft);border-radius:12px;padding:18px 20px;display:grid;gap:8px}
+.offer ul{margin:0;padding-left:20px;display:grid;gap:6px}
+
+/* decisions */
+.wants{font-size:15px;color:var(--muted);max-width:65ch}
+.declist{display:grid;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+details.dec{background:transparent;border:0;border-radius:0;border-top:1px solid var(--line)}
+details.dec:first-child{border-top:0}
+details.dec summary{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px 16px;font-family:var(--body);font-weight:400;font-size:15px;align-items:center}
+details.dec summary h3{grid-column:1}
+details.dec summary .chev{grid-column:2;grid-row:1 / span 2;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;transition:transform .15s,background .12s}
+details.dec summary:hover .chev{background:var(--accent);color:var(--panel)}
+details.dec[open] summary .chev{transform:rotate(180deg)}
+details.dec summary .chev svg{width:12px;height:12px}
+details.dec summary .meta{grid-column:1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:14px;color:var(--muted)}
+details.dec summary .meta b{color:var(--ink)}
+details.dec summary .meta b.lean::before{content:"★ ";color:var(--pick)}
+details.dec .detail{padding:0 16px 18px 16px;gap:12px}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.opts li{background:var(--chip);border-radius:8px;padding:5px 10px;font-size:14px}
+.opts li.lean{background:var(--pick-soft);color:var(--ink);font-weight:700}
+.opts li.lean::before{content:"★ ";color:var(--pick)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
+.kv b{color:var(--muted);font-weight:700;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:14px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:7px 12px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;justify-self:start;transition:transform .12s,background .12s}
+.btn:hover{background:var(--accent);color:var(--panel);transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn svg{width:12px;height:12px}
+.diagram svg{max-width:420px;width:100%;height:auto;display:block;margin:0 auto;color:var(--ink);font-family:var(--body)}
+.diagram text{font-size:12px;fill:currentColor}
+.diagram .note{fill:var(--muted);font-size:11px}
+
+/* steps */
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:560px){.people{grid-template-columns:1fr}}
+.people ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.people li{font-size:15px}
 .todo{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
 .todo button{all:unset;cursor:pointer;width:20px;height:20px;border:2px solid var(--muted);border-radius:6px;margin-top:3px;display:grid;place-items:center;color:transparent;background:var(--panel)}
 .todo button:hover{border-color:var(--ok)}
@@ -72,62 +120,17 @@ section{display:grid;gap:12px}
 .todo button svg{width:12px;height:12px}
 .todo.is-done .t{text-decoration:line-through;color:var(--muted)}
 .when{color:var(--muted);font-size:13px;display:block}
-.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media (max-width:560px){.people{grid-template-columns:1fr}}
-.people ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
-.people li{font-size:15px}
-
-/* decisions */
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media (max-width:640px){.cards{grid-template-columns:1fr}}
-.card{display:grid;gap:10px;align-content:start;position:relative;box-shadow:var(--shadow)}
-.card.big{grid-column:1 / -1}
-.card .by{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
-.opts{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
-.opts li{background:var(--chip);border-radius:8px;padding:5px 10px;font-size:14px;border:1px solid transparent}
-.opts li.lean{background:var(--pick-soft);border-color:var(--pick);color:var(--ink);font-weight:700}
-.opts li.lean::before{content:"★ ";color:var(--pick)}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:14px}
-.kv b{color:var(--muted);font-weight:700;white-space:nowrap}
-.btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:14px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:7px 12px;border-radius:999px;text-decoration:none;border:1px solid transparent;cursor:pointer;justify-self:start;transition:transform .12s, background .12s}
-.btn:hover{background:var(--accent);color:var(--panel);transform:translateY(-1px)}
-.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.btn svg{width:12px;height:12px}
-.group{display:grid;gap:10px}
-
-/* charts */
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.tile{display:grid;gap:6px;align-content:start}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{background:var(--chip);border-radius:8px;padding:6px 10px;font-size:14px}
-.chip b{font-weight:700}
-figure{margin:0;display:grid;gap:8px}
-figcaption{font-size:14px;color:var(--muted)}
-.chart{position:relative}
-.chart svg{display:block;width:100%;height:auto}
-.chart text{fill:var(--muted);font-family:var(--body);font-size:12px}
-.chart .grid{stroke:var(--line);stroke-width:1}
-.chart text.lab{paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
-.tip{position:absolute;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px;box-shadow:var(--shadow);white-space:nowrap;font-variant-numeric:tabular-nums;z-index:2}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.legend span{display:inline-flex;align-items:center;gap:6px}
-.legend i{display:inline-block;width:16px;height:3px;border-radius:2px}
-.diagram svg{max-width:420px;width:100%;height:auto;display:block;margin:0 auto;color:var(--ink);font-family:var(--body)}
-.diagram text{font-size:12px;fill:currentColor}
-.diagram .note{fill:var(--muted);font-size:11px}
 
 /* expanders */
 details{background:var(--panel);border:1px solid var(--line);border-radius:12px}
-details.flat{background:transparent;border:0}
 summary{cursor:pointer;list-style:none;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--display);font-weight:600;font-size:17px}
-details.flat summary{padding:8px 0;font-size:15px}
 summary::-webkit-details-marker{display:none}
 summary:hover .more{background:var(--accent);color:var(--panel)}
 summary .more{font-family:var(--body);font-size:13px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px;white-space:nowrap;transition:background .12s}
 details[open] summary .more::after{content:" ▲"} details:not([open]) summary .more::after{content:" ▼"}
 summary:focus-visible,.back:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
 .detail{padding:0 16px 16px;display:grid;gap:10px;max-width:70ch}
-details.flat .detail{padding:0 0 8px}
+.detail.wide{max-width:none}
 .detail ul,.detail ol{margin:0;padding-left:20px;display:grid;gap:6px}
 .detail .key{background:var(--accent-soft);border-radius:8px;padding:10px 12px}
 .detail .keypoints li::marker{color:var(--pick)}
@@ -138,8 +141,8 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 th{color:var(--muted);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
 td.n,th.n{text-align:right}
 .tablewrap{overflow-x:auto}
-.annexes{display:grid;gap:12px}
-footer{font-size:13px;color:var(--muted);display:grid;gap:6px}
+.annexes{display:grid;gap:10px}
+footer{font-size:13px;color:var(--muted);display:grid;gap:6px;padding-top:16px;border-top:1px solid var(--line)}
 footer a{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){details[open] .detail{animation:fade .2s ease-out}@keyframes fade{from{opacity:.4}to{opacity:1}}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -153,40 +156,117 @@ footer a{color:var(--accent)}
     <a class="back" href="../">← Home</a>
     <p class="eyebrow">Pat &amp; Julia · updated <span id="built"></span></p>
     <h1>Our Greenwood home plan</h1>
-    <p class="muted" style="max-width:62ch">A decision page for the two of us. The short version is at the top. Everything behind a <b>Show more</b> or <b>Read more</b> button is the detail.</p>
+    <p class="lede"><b>Where we are:</b> the market reads <span class="pill ok" style="vertical-align:middle">calm</span> (no test yellow or red, 2 of 4 with data). The house hunt runs <b>January to February 2027</b>; if no great deal by <b>15 February</b>, we rent first and keep looking.</p>
   </header>
 
-  <section class="panel status" aria-label="Where we are">
-    <p class="now"><b>Where we are:</b> research is done and the market reads calm. The house hunt runs <b>January to February 2027</b>. If no great deal shows up by <b>15 February</b>, we rent first and keep looking.</p>
-    <div class="light">
-      <span class="pill ok"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="6" fill="currentColor"/></svg>Market: calm</span>
-      <span class="pill pick"><svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="6" fill="currentColor"/></svg>7 decisions ahead</span>
-      <span class="muted small">Re-checked on the 3rd of every month.</span>
+  <section aria-labelledby="t-mkt">
+    <h2 id="t-mkt">The market</h2>
+    <p class="muted" style="max-width:65ch">Detached homes, Middleton to Kentville, from recorded sales (Nova Scotia assessment data) and listing counts. Re-checked on the 3rd of every month.</p>
+
+    <div class="sub">
+      <h3 class="title">The four warning tests</h3>
+      <div class="tiles" id="tiles"></div>
+      <p class="muted small">The four tests Canada's housing agency (CMHC) uses, adapted to the Valley. Green means no warning, yellow means be careful, red means don't overpay. Only 2 of the 4 have full data; rents and incomes come with the agent in December.</p>
     </div>
-    <div class="meter" aria-live="polite"><div class="bar"><i id="meter-fill" style="width:0%"></i></div><p class="small muted"><b id="meter-text">0 of 0</b> steps done. Tick a box as you finish a step; the page remembers it on this phone or computer.</p></div>
+
+    <div class="sub">
+      <h3 class="title">Price bands</h3>
+
+      <div class="duo">
+        <figure class="panel">
+          <h3>Median sale price by year</h3>
+          <div class="chart" id="c-median"></div>
+          <figcaption class="take">The big move was 2020 to 2022. Since then a steady climb of about 5% a year, with no drop to wait for: $325,000 in 2022, $399,200 in 2026 so far (+22.8%).</figcaption>
+        </figure>
+        <figure class="panel">
+          <h3>Price per square foot by year</h3>
+          <div class="chart" id="c-ppsf"></div>
+          <figcaption class="take">Same shape: $122 in 2019, $205 in 2022, $261 in 2026. Not adjusted for inflation.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="panel">
+        <h3>How much each price band rose, 2022 to 2026</h3>
+        <div class="legend"><span><i class="dot" style="background:var(--none)"></i>2022 median</span><span><i class="dot" style="background:var(--s1)"></i>2026 median</span></div>
+        <div class="chart" id="c-quint"></div>
+        <figcaption class="take">Pat's question, "is it less inflated at a higher price point?": yes, partly. Each year's sales split into five equal bands. The cheapest fifth rose 37.5% since 2022, the dearest fifth 13.2%. The evidence is moderate, not decisive, and some of the cheap-home gain is renovation this data cannot see.</figcaption>
+      </figure>
+
+      <div class="duo">
+        <figure class="panel">
+          <h3>Homes like ours, by town, 2025 to 2026</h3>
+          <div class="chart" id="c-comps"></div>
+          <figcaption class="take">3+ bedrooms, 2+ bathrooms, a garage, 1,400 to 2,600 sq ft: 366 recorded sales, median <b>$497,250</b> ($255 per sq ft). Greenwood side $470,000, Kentville side $530,000. Middleton is the cheapest by a wide margin.</figcaption>
+        </figure>
+        <figure class="panel">
+          <h3>Where those 366 homes sold, by price</h3>
+          <div class="chart" id="c-share"></div>
+          <figcaption class="take">Only <b>8 of 366</b> sold above $700,000. 73% sold between $425,000 and $700,000; 89 sold below.</figcaption>
+        </figure>
+      </div>
+
+      <div class="duo">
+        <figure class="panel">
+          <h3>Sale price ÷ assessed value</h3>
+          <div class="chart" id="c-ratio"></div>
+          <figcaption class="take">Homes still sell above the tax assessment, but the gap is closing: 1.80 times in 2022, 1.16 in 2026. Assessments run 12 to 24 months behind the market, so they are catching up; buyers are not paying a growing premium.</figcaption>
+        </figure>
+        <figure class="panel">
+          <h3>Yearly change in price per square foot</h3>
+          <div class="legend"><span><i style="background:var(--s1)"></i>Whole Valley</span><span><i style="background:var(--s2)"></i>Greenwood to Middleton side</span></div>
+          <div class="chart" id="accel"></div>
+          <figcaption class="take">The 2021 to 2022 run-up peaked at 32% a year. Since mid-2023 the yearly rise has stayed between 3% and 9%, and it has slowed for three quarters: +5.5% now.</figcaption>
+        </figure>
+      </div>
+
+      <div class="offer">
+        <h3>What this means for our offer</h3>
+        <ul>
+          <li><b>Offer a fair price from recorded sales.</b> No test is yellow or red and there is no sign a bidding war is needed.</li>
+          <li><b>For a home like ours the middle of the market is about $497,000.</b> Middleton sits far below it, Kentville above.</li>
+          <li><b>Paying more does not mean buying at the frothiest end.</b> Pricier homes have risen least since 2022. That evidence is moderate, so it guides, it doesn't decide.</li>
+          <li><b>Expect a sale price near 1.16 times the assessed value,</b> not 1.8. Use the assessment as a cross-check, never the asking price.</li>
+          <li><b>Only 2 of 4 tests have data.</b> Rents and incomes arrive with the agent; sales are 26% below 2022 and prices are not inflation-adjusted.</li>
+        </ul>
+      </div>
+
+      <details>
+        <summary>How the four tests work, the listing-site numbers, and the tables <span class="more">Show more</span></summary>
+        <div class="detail wide">
+          <ul style="max-width:70ch">
+            <li><b>Overheating:</b> are homes selling faster than new ones come up? Sales ÷ new listings above about 70% favours sellers. We have no new-listing counts yet, so months of supply and days on market stand in.</li>
+            <li><b>Price acceleration:</b> is the yearly price rise speeding up quarter after quarter? Yellow if it speeds up 3 quarters running; red if 4 or more and the rise tops 10% a year.</li>
+            <li><b>Overvaluation:</b> does owning cost far more than renting a similar home, or are prices far above local incomes? Only the sale-price-to-assessment part has data so far.</li>
+            <li><b>Overbuilding:</b> are unsold new builds or empty rentals piling up? That would mean prices could soften.</li>
+          </ul>
+          <p class="muted" style="max-width:70ch">The lines are adapted from CMHC's Housing Market Assessment. No official test exists for a market as small as the Valley, so we read them over 6 to 12 months and treat them as signals, not proof.</p>
+          <figure>
+            <h4>Median sale price by town, all detached homes, last 12 months (listing site, counted 2 Nov 2026)</h4>
+            <div class="chart" id="towns"></div>
+            <figcaption>Hover or touch a bar for the number of sales and days on market.</figcaption>
+          </figure>
+          <h4>Price change by quarter (last 8)</h4>
+          <div class="tablewrap"><table id="tbl-accel"><thead><tr><th>Quarter</th><th class="n">Valley $/sq ft</th><th class="n">Valley, yearly</th><th class="n">Greenwood side, yearly</th></tr></thead><tbody></tbody></table></div>
+          <h4>Median price and $/sq ft by year</h4>
+          <div class="tablewrap"><table id="tbl-yearly"><thead><tr><th>Year</th><th class="n">Sales</th><th class="n">Median price</th><th class="n">$/sq ft</th></tr></thead><tbody></tbody></table></div>
+          <h4>Price bands, 2022 and 2026</h4>
+          <div class="tablewrap"><table id="tbl-quint"><thead><tr><th>Band</th><th class="n">2022</th><th class="n">2026</th><th class="n">Change</th></tr></thead><tbody></tbody></table></div>
+          <h4>Towns, last 12 months (listing site)</h4>
+          <div class="tablewrap"><table id="tbl-towns"><thead><tr><th>Town</th><th>Side</th><th class="n">Sales</th><th class="n">Days on market</th><th class="n">Median price</th></tr></thead><tbody></tbody></table></div>
+        </div>
+      </details>
+    </div>
   </section>
 
-  <section aria-labelledby="t-next">
-    <h2 id="t-next">The one next thing</h2>
-    <div class="next" id="next"></div>
-    <details class="flat">
-      <summary>All steps, by person <span class="more">Show more</span></summary>
-      <div class="detail" style="max-width:none"><div class="people" id="people"></div></div>
-    </details>
-  </section>
+  
 
   <section aria-labelledby="t-dec">
-    <div class="sechead"><h2 id="t-dec">Decisions we need to make</h2><p class="muted small">★ marks our current lean. Nothing is final until both of us say yes.</p></div>
-    <div class="group">
-      <p class="eyebrow">First, in December</p>
-      <div class="cards" id="dec-dec"></div>
-    </div>
-    <div class="group">
-      <p class="eyebrow">Then, in the new year</p>
-      <div class="cards" id="dec-jan"></div>
-    </div>
-    <figure class="panel diagram">
-      <h3>How the hunt resolves</h3>
+    <h2 id="t-dec">Decisions</h2>
+    <p class="wants">We want 3 bedrooms plus an office, a garage, 2 or more bathrooms, Middleton to Kentville, cosmetic work only, priced from recorded sales. ★ marks our current lean; nothing is final until both of us say yes.</p>
+    <div class="declist" id="decs"></div>
+    <details class="diagram">
+      <summary>How the hunt resolves <span class="more">Show more</span></summary>
+      <div class="detail wide">
       <svg viewBox="0 0 360 440" role="img" aria-label="Flow: pre-approval in early December, pick the buyer's agent by early January, hunt January to February with the monthly market check, then the 15 February question: a great deal means offer and close by about 15 March; no deal means rent first and keep looking, buying within two years with the move benefits kept.">
         <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
         <g fill="none" stroke="currentColor" stroke-width="1.5">
@@ -217,8 +297,9 @@ footer a{color:var(--accent)}
         </g>
         <text x="8" y="150" class="note">monthly</text><text x="8" y="162" class="note">market check</text>
       </svg>
-      <figcaption>The 15 February question is the hinge. Renting first keeps the purchase benefits as long as we close inside the two-year window.</figcaption>
-    </figure>
+      <p class="muted small">The 15 February question is the hinge. Renting first keeps the purchase benefits as long as we close inside the two-year window.</p>
+      </div>
+    </details>
   </section>
 
   <section aria-labelledby="t-time">
@@ -229,117 +310,10 @@ footer a{color:var(--accent)}
     </figure>
   </section>
 
-  <section aria-labelledby="t-mkt">
-    <div class="sechead"><h2 id="t-mkt">Is the market overheated?</h2><a class="btn" href="#annex-market">Read more<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg></a></div>
-    <p class="muted" style="max-width:65ch">We use the four warning tests Canada's housing agency (CMHC) uses, adapted to the Valley. Green means no warning, yellow means be careful, red means don't overpay. Today: no test is yellow or red, but only 2 of the 4 have full data.</p>
-    <div class="tiles" id="tiles"></div>
-    <figure class="panel">
-      <h3>Yearly change in price per square foot</h3>
-      <div class="legend"><span><i style="background:var(--s1)"></i>Whole Valley</span><span><i style="background:var(--s2)"></i>Greenwood to Middleton side</span></div>
-      <div class="chart" id="accel"></div>
-      <figcaption>The 2021 to 2022 run-up is the hump: prices rose up to 32% a year. Since mid-2023 the yearly rise has stayed between 3% and 9%, and it has slowed for the last three quarters. Detached homes, recorded sales (Nova Scotia assessment data), trailing four quarters.</figcaption>
-    </figure>
-    <figure class="panel">
-      <h3>Median sale price by town, last 12 months</h3>
-      <div class="chart" id="towns"></div>
-      <figcaption>Detached homes sold in the last 12 months (ViewPoint, counted 2 Nov 2026). Hover or touch a bar for the number of sales and days on market.</figcaption>
-    </figure>
-    <details>
-      <summary>How the four tests work, and the numbers <span class="more">Show more</span></summary>
-      <div class="detail">
-        <ul>
-          <li><b>Overheating:</b> are homes selling faster than new ones come up? Sales ÷ new listings above about 70% favours sellers. We have no new-listing counts yet, so we use months of supply and days on market as stand-ins.</li>
-          <li><b>Price acceleration:</b> is the yearly price rise speeding up quarter after quarter? Yellow if it speeds up 3 quarters running; red if 4 or more and the rise tops 10% a year.</li>
-          <li><b>Overvaluation:</b> does owning cost far more than renting a similar home, or are prices far above local incomes? Only the sale-price-to-assessment part has data so far.</li>
-          <li><b>Overbuilding:</b> are unsold new builds or empty rentals piling up? That would mean prices could soften.</li>
-        </ul>
-        <p class="muted">The lines are adapted from CMHC's Housing Market Assessment. No official test exists for a market as small as the Valley, so we read them over 6 to 12 months and treat them as signals, not proof.</p>
-        <h4>Price change by quarter (last 8)</h4>
-        <div class="tablewrap"><table id="tbl-accel"><thead><tr><th>Quarter</th><th class="n">Valley $/sq ft</th><th class="n">Valley, yearly</th><th class="n">Greenwood side, yearly</th></tr></thead><tbody></tbody></table></div>
-        <h4>Towns, last 12 months</h4>
-        <div class="tablewrap"><table id="tbl-towns"><thead><tr><th>Town</th><th>Side</th><th class="n">Sales</th><th class="n">Days on market</th><th class="n">Median price</th></tr></thead><tbody></tbody></table></div>
-      </div>
-    </details>
-  </section>
-
-  <section aria-labelledby="t-want">
-    <h2 id="t-want">What we're looking for</h2>
-    <div class="chips">
-      <span class="chip"><b>3 bedrooms</b> + an office</span>
-      <span class="chip"><b>Garage</b></span>
-      <span class="chip"><b>2+ bathrooms</b></span>
-      <span class="chip">Between <b>Middleton</b> and <b>Kentville</b></span>
-      <span class="chip">Town or country, decided by the listing</span>
-      <span class="chip"><b>Cosmetic work only</b>, nothing structural</span>
-      <span class="chip">Priced from <b>recorded sales</b>, never the asking price</span>
-    </div>
-  </section>
-
-  
-
   <section aria-labelledby="t-read">
-    <div class="sechead"><h2 id="t-read">Read more</h2><p class="muted small">The research, most useful first.</p></div>
+    <h2 id="t-read">Read more</h2>
     <div class="annexes">
-      <details class="annex" id="annex-market">
-  <summary><span>Market and price bands</span> <span class="more">Show more</span></summary>
-  <div class="detail">
-    <p class="key"><b>In short:</b> The big jump came in 2020 to 2022. Since then prices have kept rising at a steady pace of about 5% a year, with fewer sales, not a frenzy. Pricier homes have gone up less than cheaper ones.</p>
-    <ul class="keypoints">
-      <li>The Valley median sale price (detached homes, Middleton to Kentville) was $325,000 in 2022 and $399,200 in 2026 so far (to 28 Oct), up 22.8%. It rose every year after 2022; there was no drop to wait for.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>No sign of a speculative run-up. Sales are about 26% below 2022 and 5% below 2025 for the same dates. Fewer sales with slowly rising prices looks like a tight, slow market, not quick flipping.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>Pat's question: yes, partly. Since 2022 the top fifth of sales rose 13.2%, against 37.5% for the cheapest fifth. The evidence for the gap is moderate, not decisive.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>Homes like ours (3+ bed, 2+ bath, garage, 1,400 to 2,600 sq ft) sold for a median of $497,250 in 2025 to 2026 (366 sales). 73% sold between $425,000 and $700,000.<sup><a href="#src-market-1">1</a></sup></li>
-      <li>The monthly check shows no red or yellow flags, but only 2 of its 4 tests have data. Not an all-clear yet.<sup><a href="#src-market-3">3</a></sup></li>
-    </ul>
-
-    <h4>Median price by year</h4>
-    <div class="tablewrap"><table>
-      <tr><th>Year</th><th class="n">Median price</th><th class="n">Per sq ft</th></tr>
-      <tr><td>2019</td><td class="n">$186,500</td><td class="n">$122</td></tr>
-      <tr><td>2022</td><td class="n">$325,000</td><td class="n">$205</td></tr>
-      <tr><td>2026 (to 28 Oct)</td><td class="n">$399,200</td><td class="n">$261</td></tr>
-    </table></div>
-    <p class="muted">Prices are not adjusted for inflation.</p>
-
-    <h4>Growth by price band since 2022</h4>
-    <p>Each year's sales are split into five equal groups, cheapest to dearest.</p>
-    <div class="tablewrap"><table>
-      <tr><th>Group</th><th class="n">2022</th><th class="n">2026</th><th class="n">Change</th></tr>
-      <tr><td>Cheapest fifth</td><td class="n">$160,000</td><td class="n">$220,000</td><td class="n">+37.5%</td></tr>
-      <tr><td>Second</td><td class="n">$255,000</td><td class="n">$330,000</td><td class="n">+29.4%</td></tr>
-      <tr><td>Middle</td><td class="n">$325,000</td><td class="n">$399,900</td><td class="n">+23.0%</td></tr>
-      <tr><td>Fourth</td><td class="n">$400,000</td><td class="n">$473,750</td><td class="n">+18.4%</td></tr>
-      <tr><td>Dearest fifth</td><td class="n">$530,000</td><td class="n">$600,000</td><td class="n">+13.2%</td></tr>
-    </table></div>
-    <p>The gap opened only after 2022. Repeat sales agree: from 2022 to 2026, homes that started in the top third by price gained 2.0% a year, against 12.0% a year for the bottom third. Some of the cheap-home gain is renovation, which this data cannot see.<sup><a href="#src-market-1">1</a></sup></p>
-
-    <h4>Sale price against the tax value</h4>
-    <p>Homes sell above the tax assessment, but the gap is closing: 1.80 times in 2022, 1.16 times in 2026. Assessments run 12 to 24 months behind the market, so some gap is normal.<sup><a href="#src-market-1">1</a></sup></p>
-
-    <h4>What homes like ours sell for</h4>
-    <p>By area, 2025 to 2026 (towns with few sales are a rough guide):<sup><a href="#src-market-1">1</a></sup></p>
-    <ul>
-      <li>West side (Greenwood, Kingston, Middleton and nearby): median $470,000, $237 per sq ft (124 sales). Greenwood $480,000, Kingston $504,000, Middleton $337,750.</li>
-      <li>East side (Kentville, Coldbrook, Berwick and nearby): median $530,000, $280 per sq ft (123 sales). Kentville $578,900, Coldbrook $497,500, Berwick $442,500.</li>
-    </ul>
-    <p>Only 8 of the 366 sold above $700,000. We use medians because some very low prices are probably not normal sales.<sup><a href="#src-market-1">1</a></sup></p>
-
-    <h4>What the monthly check says today</h4>
-    <p>The four tests and their numbers are on the front page. Overheating has no sales-to-listings data yet; as a stand-in, ViewPoint shows about 3.7 months of supply in the west and 3.9 in the east, and homes take a median 35 to 36 days to sell.<sup><a href="#src-market-2">2</a></sup> Today's reading: offer a fair price based on recorded sales. There is no sign a bidding war is needed.<sup><a href="#src-market-3">3</a></sup></p>
-
-    <h4>What this cannot tell us</h4>
-    <p>Direction and pace only: not whether prices are fair against local incomes or rents, nor a home's condition or lot. Past growth does not forecast the years we would own the home.<sup><a href="#src-market-1">1</a></sup></p>
-
-    <h4>Sources</h4>
-    <ol class="sources">
-      <li id="src-market-1">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
-      <li id="src-market-2">Our counts from the ViewPoint listing site (one read-only session, 2 Nov 2026; only the last 12 months of sales are shown)</li>
-      <li id="src-market-3">Our monthly market check, run 3 Nov 2026</li>
-    </ol>
-  </div>
-</details>
-
-<details class="annex" id="annex-costs">
+      <details class="annex" id="annex-costs">
   <summary><span>Costs, taxes and buyer programs</span> <span class="more">Show more</span></summary>
   <div class="detail">
     <p class="key"><b>In short:</b> Deed transfer tax is the one big closing tax, at 1.5% in most of the Valley. The FHSA can only be opened from 1 Jan 2027, and its tax refund comes after a spring 2027 purchase.</p>
@@ -389,6 +363,42 @@ footer a{color:var(--accent)}
       <li id="src-costs-6">Federal employer relocation rules, 1 April 2026 version, purchase sections (read Nov 2026)</li>
       <li id="src-costs-7">Nova Scotia assessment cap, 2026 rate, as summarised in our research (read Nov 2026)</li>
       <li id="src-costs-8"><a href="https://advisor.ca/tax/what-are-the-fhsa-eligibility-rules/">Advisor.ca, What are the FHSA eligibility rules?</a> (read Nov 2026)</li>
+    </ol>
+  </div>
+</details>
+
+<details class="annex" id="annex-house">
+  <summary><span>Checking a house and its price</span> <span class="more">Show more</span></summary>
+  <div class="detail">
+    <p class="key"><b>In short:</b> Nova Scotia has no septic inspection at sale, so we test radon, water and the oil tank ourselves and write them into the offer as conditions. For price, we compare recorded sales, but the public data is thin, so the price method is still being built.</p>
+    <ul class="keypoints">
+      <li>Radon: about 36.8% of Nova Scotia homes are expected to be above 200 Bq/m3, against 17.8% across Canada. There is no figure for Kings or Annapolis county. Test for at least 91 days.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>Septic: there is no inspection when a house is sold. An owner must report a malfunction within 15 days, and only certified installers may do the work.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>Wells: test for bacteria every year and for chemistry every five years.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>In the sales data, 25,727 of 67,394 sales since 1 January 2025 show a price of 0, so some sales cannot be used.<sup><a href="#src-house-2">2</a></sup></li>
+    </ul>
+    <h4>Checks before an offer</h4>
+    <ul>
+      <li>Radon: the guideline is 200 Bq/m3. If a home is over it, fix it within 1 year.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>Well water: the minimum test covers arsenic, uranium, manganese, lead, nitrate, fluoride and hardness. Health Canada limits include arsenic 0.010, uranium 0.02 and no E. coli at all.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>Oil tank: it must be installed by a licensed Oil Burner Technician, and used tanks are not allowed. Corrosion causes 35-45% of failures. The provincial checklist asks if the tank is under 15 years old. An insurer rule of 20-25 years is not yet confirmed.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>Noise: Kings County planning limits building next to the airport, especially in the NEF 35 and above zone. NEF is a measure of aircraft noise.<sup><a href="#src-house-1">1</a></sup></li>
+    </ul>
+    <h4>Forms and conditions</h4>
+    <ul>
+      <li>The Property Condition Disclosure Statement (Form 211) is optional. A buyer can ask for it as a condition. Form 431 is the water and septic schedule. Since 1 July 2025 it can also ask about flooding, coastal erosion and drainage.<sup><a href="#src-house-1">1</a></sup></li>
+      <li>An agreement has dated conditions for inspection, financing and a lawyer. The deposit comes back if a valid financing condition is used in time. This comes from a secondary source. After conditions are removed, the deal is binding and the deposit is at risk.<sup><a href="#src-house-1">1</a></sup></li>
+    </ul>
+    <h4>Judging a fair price</h4>
+    <p>The plan is to compare a home with recent recorded sales nearby. The sales table has price, date and location only. Size, style, age and bedrooms come from a separate assessment file, which may be out of date. It holds nothing on condition or renovations. Sales at 0 may hide family sales, which are not true market prices.<sup><a href="#src-house-2">2</a></sup></p>
+    <p>An assessment is a useful cross-check, but it reflects market value on 1 January of the prior year. The assessor also warns that a sale price may not match market value.<sup><a href="#src-house-2">2</a></sup></p>
+    <p>Sellers who would sell at a loss tend to ask 25-35% of the gap above the expected price.<sup><a href="#src-house-2">2</a></sup></p>
+    <p class="muted">Not yet confirmed: the sources do not set out the exact time adjustment, the walk-away price rule or the number of calibration viewings. Those steps are still to be tested. People tend to stop looking too early, so viewing a first batch of homes without buying is the idea; the "37%" rule of thumb is from research, not tested here.<sup><a href="#src-house-2">2</a></sup></p>
+    <p class="muted">Costs for wells, treatment, septic, tanks, radon systems, rewiring and foundations are rough ranges and not yet confirmed.<sup><a href="#src-house-1">1</a></sup></p>
+    <h4>Sources</h4>
+    <ol class="sources">
+      <li id="src-house-1">Our research notes on Nova Scotia house checks, drawn from provincial and Health Canada guidance (Nov 2026)</li>
+      <li id="src-house-2">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
     </ol>
   </div>
 </details>
@@ -448,38 +458,25 @@ footer a{color:var(--accent)}
   </div>
 </details>
 
-<details class="annex" id="annex-house">
-  <summary><span>Checking a house and its price</span> <span class="more">Show more</span></summary>
+<details class="annex" id="annex-market">
+  <summary><span>Market: notes and sources</span> <span class="more">Show more</span></summary>
   <div class="detail">
-    <p class="key"><b>In short:</b> Nova Scotia has no septic inspection at sale, so we test radon, water and the oil tank ourselves and write them into the offer as conditions. For price, we compare recorded sales, but the public data is thin, so the price method is still being built.</p>
+    <p class="key"><b>In short:</b> The charts in The market section carry the research. These are the notes that go with them: what the data is, what it cannot see, and where it comes from.</p>
     <ul class="keypoints">
-      <li>Radon: about 36.8% of Nova Scotia homes are expected to be above 200 Bq/m3, against 17.8% across Canada. There is no figure for Kings or Annapolis county. Test for at least 91 days.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Septic: there is no inspection when a house is sold. An owner must report a malfunction within 15 days, and only certified installers may do the work.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Wells: test for bacteria every year and for chemistry every five years.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>In the sales data, 25,727 of 67,394 sales since 1 January 2025 show a price of 0, so some sales cannot be used.<sup><a href="#src-house-2">2</a></sup></li>
+      <li>No sign of a speculative run-up. Sales are about 26% below 2022 and 5% below 2025 for the same dates. Fewer sales with slowly rising prices looks like a tight, slow market, not quick flipping.<sup><a href="#src-market-1">1</a></sup></li>
+      <li>Repeat sales of the same homes grew about 21.9% a year in 2019 to 2022 and 5.4% a year in 2022 to 2026. From 2022 to 2026, homes that started in the top third by price gained 2.0% a year, against 12.0% a year for the bottom third.<sup><a href="#src-market-1">1</a></sup></li>
+      <li>The listing site shows about 3.7 months of supply in the west and 3.9 in the east, and homes take a median 35 to 36 days to sell. There is no tested warning line for these, so they read as calm, not as proof.<sup><a href="#src-market-2">2</a></sup></li>
+      <li>The monthly check shows no red or yellow flags, but only 2 of its 4 tests have data. Not an all-clear yet.<sup><a href="#src-market-3">3</a></sup></li>
     </ul>
-    <h4>Checks before an offer</h4>
-    <ul>
-      <li>Radon: the guideline is 200 Bq/m3. If a home is over it, fix it within 1 year.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Well water: the minimum test covers arsenic, uranium, manganese, lead, nitrate, fluoride and hardness. Health Canada limits include arsenic 0.010, uranium 0.02 and no E. coli at all.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Oil tank: it must be installed by a licensed Oil Burner Technician, and used tanks are not allowed. Corrosion causes 35-45% of failures. The provincial checklist asks if the tank is under 15 years old. An insurer rule of 20-25 years is not yet confirmed.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>Noise: Kings County planning limits building next to the airport, especially in the NEF 35 and above zone. NEF is a measure of aircraft noise.<sup><a href="#src-house-1">1</a></sup></li>
-    </ul>
-    <h4>Forms and conditions</h4>
-    <ul>
-      <li>The Property Condition Disclosure Statement (Form 211) is optional. A buyer can ask for it as a condition. Form 431 is the water and septic schedule. Since 1 July 2025 it can also ask about flooding, coastal erosion and drainage.<sup><a href="#src-house-1">1</a></sup></li>
-      <li>An agreement has dated conditions for inspection, financing and a lawyer. The deposit comes back if a valid financing condition is used in time. This comes from a secondary source. After conditions are removed, the deal is binding and the deposit is at risk.<sup><a href="#src-house-1">1</a></sup></li>
-    </ul>
-    <h4>Judging a fair price</h4>
-    <p>The plan is to compare a home with recent recorded sales nearby. The sales table has price, date and location only. Size, style, age and bedrooms come from a separate assessment file, which may be out of date. It holds nothing on condition or renovations. Sales at 0 may hide family sales, which are not true market prices.<sup><a href="#src-house-2">2</a></sup></p>
-    <p>An assessment is a useful cross-check, but it reflects market value on 1 January of the prior year. The assessor also warns that a sale price may not match market value.<sup><a href="#src-house-2">2</a></sup></p>
-    <p>Sellers who would sell at a loss tend to ask 25-35% of the gap above the expected price.<sup><a href="#src-house-2">2</a></sup></p>
-    <p class="muted">Not yet confirmed: the sources do not set out the exact time adjustment, the walk-away price rule or the number of calibration viewings. Those steps are still to be tested. People tend to stop looking too early, so viewing a first batch of homes without buying is the idea; the "37%" rule of thumb is from research, not tested here.<sup><a href="#src-house-2">2</a></sup></p>
-    <p class="muted">Costs for wells, treatment, septic, tanks, radon systems, rewiring and foundations are rough ranges and not yet confirmed.<sup><a href="#src-house-1">1</a></sup></p>
+    <h4>What the data is</h4>
+    <p>Recorded sales of detached homes in the Middleton to Kentville zone, 2015 to 28 October 2026, joined to the assessor's records for size, beds, baths and garage. Prices are not adjusted for inflation. Towns with few sales are only a rough guide. Some very low prices are probably not normal sales, so we use medians.<sup><a href="#src-market-1">1</a></sup></p>
+    <h4>What this cannot tell us</h4>
+    <p>Direction and pace only: not whether prices are fair against local incomes or rents, nor a home's condition, lot or renovations. Past growth does not forecast the years we would own the home.<sup><a href="#src-market-1">1</a></sup></p>
     <h4>Sources</h4>
     <ol class="sources">
-      <li id="src-house-1">Our research notes on Nova Scotia house checks, drawn from provincial and Health Canada guidance (Nov 2026)</li>
-      <li id="src-house-2">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
+      <li id="src-market-1">Our analysis of Nova Scotia assessment data (PVSC via datazONE), Nov 2026</li>
+      <li id="src-market-2">Our counts from the ViewPoint listing site (one read-only session, 2 Nov 2026; only the last 12 months of sales are shown)</li>
+      <li id="src-market-3">Our monthly market check, run 3 Nov 2026</li>
     </ol>
   </div>
 </details>
@@ -516,113 +513,221 @@ footer a{color:var(--accent)}
         <li>Write a walk-away price before any viewing, and never go past it. This is our rule; it hasn't been tested on real homes yet.</li>
       </ul></div>
     </details>
+    <details>
+      <summary>Next steps, by person <span class="more">Show more</span></summary>
+      <div class="detail wide"><p class="muted small">Tick a box as you finish a step; the page remembers it on this phone or computer only.</p><div class="people" id="people"></div></div>
+    </details>
     </div>
   </section>
 
   <footer>
-    <p>Sources: Nova Scotia property assessment data (PVSC, via datazONE), ViewPoint.ca sold listings (counts only), CMHC Housing Market Assessment, Canada Revenue Agency FHSA pages, the federal relocation directive. Each annex lists its own.</p>
+    <p>Sources: Nova Scotia property assessment data (PVSC, via datazONE; our analysis, Nov 2026), ViewPoint.ca sold listings (counts only, 2 Nov 2026), our monthly market check (3 Nov 2026), CMHC Housing Market Assessment, Canada Revenue Agency FHSA pages, the federal relocation directive. Each annex lists its own.</p>
     <p>Built from our planning files. Nothing here is advice; offers need both of us to say yes.</p>
   </footer>
 </div>
 
 <script>
-const DATA = {"built":"2026-11-03","accel":[{"q":"2019Q1","ppsf":117,"yoy":2.6,"west":3.2},{"q":"2019Q2","ppsf":120,"yoy":5.8,"west":1.8},{"q":"2019Q3","ppsf":121,"yoy":4.6,"west":6.5},{"q":"2019Q4","ppsf":122,"yoy":4.7,"west":5.0},{"q":"2020Q1","ppsf":123,"yoy":5.1,"west":7.7},{"q":"2020Q2","ppsf":125,"yoy":4.2,"west":9.1},{"q":"2020Q3","ppsf":129,"yoy":6.1,"west":8.2},{"q":"2020Q4","ppsf":132,"yoy":8.0,"west":9.5},{"q":"2021Q1","ppsf":135,"yoy":9.9,"west":7.5},{"q":"2021Q2","ppsf":142,"yoy":13.3,"west":10.1},{"q":"2021Q3","ppsf":158,"yoy":22.7,"west":21.1},{"q":"2021Q4","ppsf":171,"yoy":29.7,"west":25.0},{"q":"2022Q1","ppsf":176,"yoy":30.6,"west":30.7},{"q":"2022Q2","ppsf":188,"yoy":32.4,"west":32.5},{"q":"2022Q3","ppsf":200,"yoy":26.4,"west":26.4},{"q":"2022Q4","ppsf":205,"yoy":19.9,"west":24.9},{"q":"2023Q1","ppsf":207,"yoy":17.5,"west":20.3},{"q":"2023Q2","ppsf":209,"yoy":11.1,"west":16.7},{"q":"2023Q3","ppsf":216,"yoy":8.1,"west":8.3},{"q":"2023Q4","ppsf":224,"yoy":9.3,"west":8.2},{"q":"2024Q1","ppsf":225,"yoy":8.7,"west":7.4},{"q":"2024Q2","ppsf":226,"yoy":8.0,"west":5.5},{"q":"2024Q3","ppsf":230,"yoy":6.3,"west":6.7},{"q":"2024Q4","ppsf":231,"yoy":3.3,"west":1.1},{"q":"2025Q1","ppsf":234,"yoy":4.3,"west":1.2},{"q":"2025Q2","ppsf":238,"yoy":5.6,"west":4.5},{"q":"2025Q3","ppsf":248,"yoy":8.1,"west":3.5},{"q":"2025Q4","ppsf":252,"yoy":8.9,"west":8.3},{"q":"2026Q1","ppsf":252,"yoy":7.5,"west":7.8},{"q":"2026Q2","ppsf":252,"yoy":5.9,"west":5.7},{"q":"2026Q3","ppsf":262,"yoy":5.5,"west":5.3}],"towns":[{"town":"Middleton","sales":24,"dom":37,"price":315000,"side":"West"},{"town":"Wilmot","sales":21,"dom":27,"price":353000,"side":"West"},{"town":"Kingston","sales":49,"dom":42,"price":470000,"side":"West"},{"town":"Greenwood","sales":44,"dom":36,"price":435000,"side":"West"},{"town":"Aylesford","sales":13,"dom":35,"price":320000,"side":"West"},{"town":"Berwick","sales":38,"dom":50,"price":431000,"side":"East"},{"town":"Cambridge","sales":12,"dom":38,"price":391000,"side":"East"},{"town":"Coldbrook","sales":26,"dom":34,"price":483000,"side":"East"},{"town":"New Minas","sales":37,"dom":43,"price":408000,"side":"East"},{"town":"Kentville","sales":98,"dom":35,"price":434000,"side":"East"}]};
+const DATA = {"built":"2026-11-03","accel":[{"q":"2019Q1","ppsf":117,"yoy":2.6,"west":3.2},{"q":"2019Q2","ppsf":120,"yoy":5.8,"west":1.8},{"q":"2019Q3","ppsf":121,"yoy":4.6,"west":6.5},{"q":"2019Q4","ppsf":122,"yoy":4.7,"west":5.0},{"q":"2020Q1","ppsf":123,"yoy":5.1,"west":7.7},{"q":"2020Q2","ppsf":125,"yoy":4.2,"west":9.1},{"q":"2020Q3","ppsf":129,"yoy":6.1,"west":8.2},{"q":"2020Q4","ppsf":132,"yoy":8.0,"west":9.5},{"q":"2021Q1","ppsf":135,"yoy":9.9,"west":7.5},{"q":"2021Q2","ppsf":142,"yoy":13.3,"west":10.1},{"q":"2021Q3","ppsf":158,"yoy":22.7,"west":21.1},{"q":"2021Q4","ppsf":171,"yoy":29.7,"west":25.0},{"q":"2022Q1","ppsf":176,"yoy":30.6,"west":30.7},{"q":"2022Q2","ppsf":188,"yoy":32.4,"west":32.5},{"q":"2022Q3","ppsf":200,"yoy":26.4,"west":26.4},{"q":"2022Q4","ppsf":205,"yoy":19.9,"west":24.9},{"q":"2023Q1","ppsf":207,"yoy":17.5,"west":20.3},{"q":"2023Q2","ppsf":209,"yoy":11.1,"west":16.7},{"q":"2023Q3","ppsf":216,"yoy":8.1,"west":8.3},{"q":"2023Q4","ppsf":224,"yoy":9.3,"west":8.2},{"q":"2024Q1","ppsf":225,"yoy":8.7,"west":7.4},{"q":"2024Q2","ppsf":226,"yoy":8.0,"west":5.5},{"q":"2024Q3","ppsf":230,"yoy":6.3,"west":6.7},{"q":"2024Q4","ppsf":231,"yoy":3.3,"west":1.1},{"q":"2025Q1","ppsf":234,"yoy":4.3,"west":1.2},{"q":"2025Q2","ppsf":238,"yoy":5.6,"west":4.5},{"q":"2025Q3","ppsf":248,"yoy":8.1,"west":3.5},{"q":"2025Q4","ppsf":252,"yoy":8.9,"west":8.3},{"q":"2026Q1","ppsf":252,"yoy":7.5,"west":7.8},{"q":"2026Q2","ppsf":252,"yoy":5.9,"west":5.7},{"q":"2026Q3","ppsf":262,"yoy":5.5,"west":5.3}],"towns":[{"town":"Middleton","sales":24,"dom":37,"price":315000,"side":"West"},{"town":"Wilmot","sales":21,"dom":27,"price":353000,"side":"West"},{"town":"Kingston","sales":49,"dom":42,"price":470000,"side":"West"},{"town":"Greenwood","sales":44,"dom":36,"price":435000,"side":"West"},{"town":"Aylesford","sales":13,"dom":35,"price":320000,"side":"West"},{"town":"Berwick","sales":38,"dom":50,"price":431000,"side":"East"},{"town":"Cambridge","sales":12,"dom":38,"price":391000,"side":"East"},{"town":"Coldbrook","sales":26,"dom":34,"price":483000,"side":"East"},{"town":"New Minas","sales":37,"dom":43,"price":408000,"side":"East"},{"town":"Kentville","sales":98,"dom":35,"price":434000,"side":"East"}],"yearly":[{"year":2015,"n":618,"median":170000,"ppsf":108},{"year":2016,"n":681,"median":161000,"ppsf":109},{"year":2017,"n":723,"median":175000,"ppsf":111},{"year":2018,"n":801,"median":180000,"ppsf":116},{"year":2019,"n":837,"median":186500,"ppsf":122},{"year":2020,"n":866,"median":210000,"ppsf":132},{"year":2021,"n":1022,"median":275000,"ppsf":171},{"year":2022,"n":804,"median":325000,"ppsf":205},{"year":2023,"n":635,"median":345700,"ppsf":224},{"year":2024,"n":646,"median":362000,"ppsf":231},{"year":2025,"n":648,"median":385000,"ppsf":252},{"year":2026,"n":518,"median":399200,"ppsf":261}],"quint":[{"band":"Cheapest fifth","p2022":160000,"p2026":220000,"growth":37.5},{"band":"Second fifth","p2022":255000,"p2026":330000,"growth":29.4},{"band":"Middle fifth","p2022":325000,"p2026":399900,"growth":23.0},{"band":"Fourth fifth","p2022":400000,"p2026":473750,"growth":18.4},{"band":"Dearest fifth","p2022":530000,"p2026":600000,"growth":13.2}],"ratio":[{"year":2022,"ratio":1.796},{"year":2023,"ratio":1.467},{"year":2024,"ratio":1.31},{"year":2025,"ratio":1.223},{"year":2026,"ratio":1.157}],"comps":[{"town":"Kingston","n":53,"median":504000,"ppsf":245},{"town":"Kentville","n":51,"median":578900,"ppsf":293},{"town":"Greenwood","n":35,"median":480000,"ppsf":246},{"town":"Coldbrook","n":26,"median":497500,"ppsf":294},{"town":"Middleton","n":16,"median":337750,"ppsf":191},{"town":"Berwick","n":16,"median":442500,"ppsf":230},{"town":"Centreville","n":16,"median":466500,"ppsf":253}],"comp_all":{"n":366,"median":497250,"ppsf":255},"share":{"inband":269,"total":366,"pct":73,"below":89,"above":8,"lo":425000,"hi":700000},"region":[{"region":"West","n":124,"median":470000,"ppsf":237},{"region":"East","n":123,"median":530000,"ppsf":280},{"region":"Other","n":119,"median":515000,"ppsf":260}]};
 const $ = s => document.querySelector(s);
 const NS = 'http://www.w3.org/2000/svg';
 const el = (t, a = {}, parent) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (parent) parent.appendChild(e); return e; };
+const txt = (svg, a, s, cls) => { const t = el('text', a, svg); t.textContent = s; if (cls) t.setAttribute('class', cls); return t; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const money = v => '$' + v.toLocaleString('en-CA');
+const k = v => '$' + Math.round(v / 1000) + 'k';
 $('#built').textContent = new Date(DATA.built + 'T12:00:00').toLocaleDateString('en-CA', { day: 'numeric', month: 'short', year: 'numeric' });
 
-/* ---- per-viewer checkbox memory (localStorage, optional) ---- */
-const store = {
-  key: 'hp-steps-v1',
-  read() { try { return JSON.parse(localStorage.getItem(this.key) || '{}'); } catch (e) { return {}; } },
-  write(o) { try { localStorage.setItem(this.key, JSON.stringify(o)); } catch (e) { /* private window or blocked storage: the page still works */ } }
-};
-let done = store.read();
-
-/* ---- steps ---- */
-const STEPS = [
-  ['Pat', [
-    ['pat-move', 'Ask this week when the move date will be confirmed', 'this week'],
-    ['pat-tax', 'Check the tax election on the home we rent out', 'November'],
-    ['pat-vp', 'Start the monthly listing-site check on the PC once', 'before 2 December'],
-    ['pat-pre', 'Book pre-approval with our bank and a mortgage broker, two down-payment scenarios', 'early December']]],
-  ['Julia', [
-    ['jul-read', 'Read this page and flag anything that\'s off', 'this week'],
-    ['jul-work', 'Say when work starts after leave', 'November'],
-    ['jul-agent', 'Shortlist buyer\'s agents with Pat', 'December']]],
-  ['Together', [
-    ['tog-cra', 'Write to CRA about the FHSA rental question', 'November'],
-    ['tog-agent', 'Pick the buyer\'s agent', 'by early January'],
-    ['tog-fhsa', 'Open an FHSA each and put in $8,000', 'from 1 January'],
-    ['tog-keep', 'Decide: keep or sell the home we rent out', 'after pre-approval'],
-    ['tog-hunt', 'House hunt', 'January to February'],
-    ['tog-switch', 'Switch date: buy, or rent first', '15 February']]],
-  ['Claude', [
-    ['cl-research', 'Research filed and the market check built', 'done', true],
-    ['cl-monthly', 'Monthly market check', '3rd of each month'],
-    ['cl-fair', 'Fair-price method and the house tracker', 'November']]],
+/* ---- status tiles ---- */
+const T = [
+  ['Overheating', 'Calm', 'ok', '3.7 to 3.9 months of homes for sale; most sell in about 5 weeks. No tested line yet.'],
+  ['Price acceleration', 'Green', 'ok', '+5.5% a year and slowing for 3 quarters.'],
+  ['Overvaluation', 'Partly checked', 'none', 'Sales ran 1.16 times assessment in 2026, down from 1.80 in 2022. Rents and incomes still to collect.'],
+  ['Overbuilding', 'Baseline set', 'base', '26 new builds listed against about 30 sales a month; we compare each month.'],
 ];
-const NEXT = { Pat: 'pat-move', Julia: 'jul-read' };
-const all = STEPS.flatMap(([, items]) => items);
-const isDone = s => !!(s[3] || done[s[0]]);
-function todoHTML(s, big) {
-  const d = isDone(s);
-  return `<div class="todo${d ? ' is-done' : ''}" data-id="${s[0]}"><button type="button" class="${d ? 'done' : ''}" aria-pressed="${d}" aria-label="${d ? 'Done: ' : 'Mark done: '}${esc(s[1])}"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/></svg></button><span><span class="t${big ? ' act' : ''}">${esc(s[1])}</span><span class="when">${esc(s[2])}</span></span></div>`;
+for (const [name, word, cls, note] of T) {
+  const d = document.createElement('div'); d.className = 'tile';
+  d.innerHTML = `<p class="eyebrow">${name}</p><span class="pill ${cls}"><svg viewBox="0 0 12 12" aria-hidden="true">${cls === 'ok' ? '<path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/>' : '<circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="2" fill="none"/>'}</svg>${word}</span><p class="muted small">${note}</p>`;
+  $('#tiles').appendChild(d);
 }
-function renderSteps() {
-  $('#next').innerHTML = Object.entries(NEXT).map(([who, id]) => { const s = all.find(x => x[0] === id); return `<div class="panel"><p class="eyebrow">${who}, next</p>${todoHTML(s, true)}</div>`; }).join('');
-  $('#people').innerHTML = STEPS.map(([who, items]) => `<div class="panel"><h3 style="margin-bottom:10px">${who}</h3><ul>${items.map(s => `<li>${todoHTML(s)}</li>`).join('')}</ul></div>`).join('');
-  const n = all.filter(isDone).length;
-  $('#meter-fill').style.width = Math.round(n / all.length * 100) + '%';
-  $('#meter-text').textContent = `${n} of ${all.length}`;
+
+/* ---- chart helpers: each chart draws at the container's pixel width so text stays legible on a phone ---- */
+function tipFor(box) { const t = document.createElement('div'); t.className = 'tip'; t.hidden = true; box.appendChild(t); return t; }
+function place(tip, box, x, y) { const w = box.clientWidth; tip.hidden = false; const tw = tip.offsetWidth; tip.style.left = Math.max(0, Math.min(w - tw, x - tw / 2)) + 'px'; tip.style.top = Math.max(0, y - tip.offsetHeight - 14) + 'px'; }
+function responsive(box, draw) {
+  let last = 0;
+  const run = () => { const w = Math.max(280, Math.floor(box.clientWidth)); if (w === last) return; last = w; box.innerHTML = ''; draw(w, box, tipFor(box)); };
+  run();
+  if ('ResizeObserver' in window) new ResizeObserver(() => requestAnimationFrame(run)).observe(box); else addEventListener('resize', run);
 }
-renderSteps();
-document.addEventListener('click', ev => {
-  const b = ev.target.closest('.todo button'); if (!b) return;
-  const id = b.closest('.todo').dataset.id; const s = all.find(x => x[0] === id); if (!s || s[3]) return;
-  if (done[id]) delete done[id]; else done[id] = true;
-  store.write(done); renderSteps();
+function hover(svg, box, tip, rect, html) {
+  rect.addEventListener('pointermove', ev => { const r = box.getBoundingClientRect(); tip.innerHTML = html(); place(tip, box, ev.clientX - r.left, ev.clientY - r.top); });
+  rect.addEventListener('pointerleave', () => tip.hidden = true);
+}
+const fmtD = d => new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { day: 'numeric', month: 'short' });
+
+/* ---- vertical bars by year (median price, $/sq ft) ---- */
+function yearBars(id, key, fmt, label) {
+  responsive($(id), (W, box, tip) => {
+    const Y = DATA.yearly; const H = 200, L = 46, R = 10, Tp = 22, B = 24; const n = Y.length;
+    const max = Math.max(...Y.map(y => y[key])); const step = key === 'median' ? 100000 : 100; const ymax = Math.ceil(max / step) * step;
+    const bw = (W - L - R) / n; const x = i => L + i * bw; const y = v => Tp + (1 - v / ymax) * (H - Tp - B);
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `${label} by year, ${Y[0].year} to ${Y[n - 1].year}: ${fmt(Y[0][key])} to ${fmt(Y[n - 1][key])}.` }, box);
+    for (let v = 0; v <= ymax; v += step) { el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), class: 'grid' }, svg); txt(svg, { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, key === 'median' ? k(v) : '$' + v); }
+    Y.forEach((d, i) => {
+      el('rect', { x: x(i) + 2, y: y(d[key]), width: bw - 4, height: Math.max(1, y(0) - y(d[key])), rx: 3, fill: d.year >= 2022 ? 'var(--s1)' : 'var(--none)' }, svg);
+      if (d.year % 2 === 1 || W > 500) txt(svg, { x: x(i) + bw / 2, y: H - 8, 'text-anchor': 'middle' }, String(d.year).slice(W > 500 ? 0 : 2));
+      if (d.year === 2022) txt(svg, { x: x(i) + bw / 2, y: y(d[key]) - 6, 'text-anchor': 'middle' }, fmt(d[key]), 'lab');
+      if (i === n - 1) txt(svg, { x: x(i) + bw - 2, y: y(d[key]) - 6, 'text-anchor': 'end' }, fmt(d[key]), 'lab');
+      hover(svg, box, tip, el('rect', { x: x(i), y: Tp, width: bw, height: H - Tp - B, fill: 'transparent' }, svg), () => `<b>${d.year}</b><br>${fmt(d[key])} · ${d.n} sales`);
+    });
+  });
+}
+yearBars('#c-median', 'median', money, 'Median sale price');
+yearBars('#c-ppsf', 'ppsf', v => '$' + v + '/sq ft', 'Median price per square foot');
+
+/* ---- quintile dumbbells ---- */
+responsive($('#c-quint'), (W, box, tip) => {
+  const Q = DATA.quint; const rowH = 34, L = W < 520 ? 96 : 120, R = 64, Tp = 10; const H = Tp + Q.length * rowH + 22;
+  const max = Math.ceil(Math.max(...Q.map(q => q.p2026)) / 100000) * 100000; const x = v => L + v / max * (W - L - R);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Median price of each fifth of sales in 2022 and 2026: the cheapest fifth rose 37.5%, the dearest fifth 13.2%.' }, box);
+  for (let v = 0; v <= max; v += 100000) { el('line', { x1: x(v), x2: x(v), y1: Tp, y2: H - 20, class: 'grid' }, svg); if (W > 520 || v % 200000 === 0) txt(svg, { x: x(v), y: H - 4, 'text-anchor': 'middle' }, k(v)); }
+  Q.forEach((q, i) => {
+    const cy = Tp + i * rowH + rowH / 2;
+    txt(svg, { x: L - 10, y: cy + 4, 'text-anchor': 'end' }, q.band, 'lab');
+    el('line', { x1: x(q.p2022), x2: x(q.p2026), y1: cy, y2: cy, stroke: 'var(--s1)', 'stroke-width': 4, 'stroke-linecap': 'round', opacity: .45 }, svg);
+    el('circle', { cx: x(q.p2022), cy, r: 6, fill: 'var(--none)', stroke: 'var(--panel)', 'stroke-width': 2 }, svg);
+    el('circle', { cx: x(q.p2026), cy, r: 6, fill: 'var(--s1)', stroke: 'var(--panel)', 'stroke-width': 2 }, svg);
+    txt(svg, { x: x(q.p2026) + 12, y: cy + 4 }, '+' + q.growth + '%', 'lab');
+    hover(svg, box, tip, el('rect', { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: 'transparent' }, svg), () => `<b>${q.band}</b><br>2022: ${money(q.p2022)} · 2026: ${money(q.p2026)} · +${q.growth}%`);
+  });
+});
+{ const tb = $('#tbl-quint tbody'); for (const q of DATA.quint) { const r = document.createElement('tr'); r.innerHTML = `<td>${q.band}</td><td class="n">${money(q.p2022)}</td><td class="n">${money(q.p2026)}</td><td class="n">+${q.growth}%</td>`; tb.appendChild(r); } }
+
+/* ---- comparable homes by town ---- */
+responsive($('#c-comps'), (W, box, tip) => {
+  const D = [...DATA.comps].sort((a, b) => b.median - a.median); const rowH = 26, L = 84, R = 54, Tp = 6; const H = Tp + D.length * rowH + 22;
+  const max = Math.ceil(Math.max(...D.map(d => d.median)) / 100000) * 100000; const x = v => L + v / max * (W - L - R);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Median sale price of homes like ours by town, 2025 to 2026: ${D.map(d => d.town + ' ' + k(d.median)).join(', ')}.` }, box);
+  for (let v = 0; v <= max; v += 100000) { el('line', { x1: x(v), x2: x(v), y1: Tp, y2: H - 20, class: 'grid' }, svg); if (W > 520 || v % 200000 === 0) txt(svg, { x: x(v), y: H - 4, 'text-anchor': 'middle' }, k(v)); }
+  const all = el('line', { x1: x(DATA.comp_all.median), x2: x(DATA.comp_all.median), y1: Tp, y2: H - 20, stroke: 'var(--ink)', 'stroke-dasharray': '4 4', 'stroke-width': 1.5 }, svg);
+  D.forEach((d, i) => {
+    const cy = Tp + i * rowH + rowH / 2;
+    const t = txt(svg, { x: L - 8, y: cy + 4, 'text-anchor': 'end' }, d.town, 'lab'); if (d.town === 'Greenwood') t.style.fontWeight = 700;
+    el('rect', { x: L, y: cy - 7, width: x(d.median) - L, height: 14, rx: 4, fill: 'var(--s1)' }, svg);
+    txt(svg, { x: x(d.median) + 6, y: cy + 4 }, k(d.median));
+    hover(svg, box, tip, el('rect', { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: 'transparent' }, svg), () => `<b>${d.town}</b><br>${money(d.median)} · $${d.ppsf}/sq ft · ${d.n} sales`);
+  });
+  txt(svg, { x: x(DATA.comp_all.median) + 5, y: Tp + (D.length - 1) * rowH + rowH / 2 + 4 }, 'all 366: ' + k(DATA.comp_all.median), 'lab');
 });
 
-/* ---- decisions ---- */
+/* ---- share by price band: one 100% bar ---- */
+responsive($('#c-share'), (W, box, tip) => {
+  const S = DATA.share; const H = 150, L = 8, R = 8, y0 = 46, bh = 34;
+  const segs = [['below ' + k(S.lo), S.below, 'var(--none)'], [k(S.lo) + ' to ' + k(S.hi), S.inband, 'var(--s1)'], ['above ' + k(S.hi), S.above, 'var(--s2)']];
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Of ${S.total} homes like ours sold in 2025 to 2026, ${S.below} sold below $425,000, ${S.inband} between $425,000 and $700,000, and ${S.above} above $700,000.` }, box);
+  let x = L; const scale = (W - L - R) / S.total;
+  segs.forEach(([name, n, c], i) => {
+    const w = n * scale; el('rect', { x: x + (i ? 1 : 0), y: y0, width: Math.max(2, w - (i ? 1 : 0)), height: bh, rx: 4, fill: c }, svg);
+    const cx = x + w / 2; const lab = i === 2;
+    txt(svg, { x: lab ? W - R : cx, y: lab ? y0 - 6 : y0 + bh / 2 + 4, 'text-anchor': lab ? 'end' : 'middle', fill: lab ? 'var(--ink)' : '#fff' }, lab ? n + ' above' : String(n), lab ? 'lab' : '');
+    txt(svg, { x: lab ? W - R : cx, y: y0 + bh + 18, 'text-anchor': lab ? 'end' : 'middle' }, name);
+    hover(svg, box, tip, el('rect', { x, y: 24, width: w, height: H - 24, fill: 'transparent' }, svg), () => `<b>${name}</b><br>${n} of ${S.total} (${Math.round(n / S.total * 100)}%)`);
+    x += w;
+  });
+  txt(svg, { x: L, y: 20 }, `${S.total} recorded sales of homes like ours, 2025 to 2026`);
+  txt(svg, { x: L, y: H - 12 }, `${S.pct}% sold inside ${k(S.lo)} to ${k(S.hi)}; only ${S.above} above ${k(S.hi)}`, 'lab');
+});
+
+/* ---- sale-to-assessment ratio ---- */
+responsive($('#c-ratio'), (W, box, tip) => {
+  const R0 = DATA.ratio; const H = 200, L = 36, R = 8, Tp = 22, B = 24; const n = R0.length; const ymax = 2;
+  const bw = (W - L - R) / n; const x = i => L + i * bw; const y = v => Tp + (1 - v / ymax) * (H - Tp - B);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Median sale price divided by assessed value, 2022 to 2026: 1.80, 1.47, 1.31, 1.22, 1.16.' }, box);
+  for (let v = 0; v <= ymax; v += 0.5) { el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), class: 'grid' }, svg); txt(svg, { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, v.toFixed(1)); }
+  el('line', { x1: L, x2: W - R, y1: y(1), y2: y(1), stroke: 'var(--ink)', 'stroke-dasharray': '4 4' }, svg);
+  R0.forEach((d, i) => {
+    el('rect', { x: x(i) + bw * 0.2, y: y(d.ratio), width: bw * 0.6, height: y(0) - y(d.ratio), rx: 4, fill: 'var(--s1)' }, svg);
+    txt(svg, { x: x(i) + bw / 2, y: y(d.ratio) - 6, 'text-anchor': 'middle' }, d.ratio.toFixed(2), 'lab');
+    txt(svg, { x: x(i) + bw / 2, y: H - 8, 'text-anchor': 'middle' }, String(d.year));
+    hover(svg, box, tip, el('rect', { x: x(i), y: Tp, width: bw, height: H - Tp - B, fill: 'transparent' }, svg), () => `<b>${d.year}</b><br>sale ÷ assessment: ${d.ratio.toFixed(2)}`);
+  });
+  txt(svg, { x: L + 4, y: y(1) + 15 }, 'sale price = assessed value', 'lab');
+});
+
+/* ---- yearly price change line chart ---- */
+responsive($('#accel'), (W, box, tip) => {
+  const A = DATA.accel; const H = 200, L = 40, R = 12, Tp = 16, B = 24;
+  const vals = A.flatMap(a => [a.yoy, a.west]).filter(v => v != null);
+  const ymax = Math.ceil(Math.max(...vals) / 10) * 10, ymin = Math.min(0, Math.floor(Math.min(...vals) / 10) * 10);
+  const x = i => L + i / (A.length - 1) * (W - L - R), y = v => Tp + (ymax - v) / (ymax - ymin) * (H - Tp - B);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Yearly change in median price per square foot by quarter, 2019 to 2026, peaking near 32% in 2022 and about 5.5% in the latest quarter.' }, box);
+  for (let v = ymin; v <= ymax; v += 10) { el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), class: 'grid' }, svg); txt(svg, { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, v + '%'); }
+  A.forEach((a, i) => { if (a.q.endsWith('Q1') && +a.q.slice(0, 4) % 2 === 1) txt(svg, { x: x(i), y: H - 8, 'text-anchor': 'middle' }, a.q.slice(0, 4)); });
+  const line = (kk, c) => el('polyline', { points: A.map((a, i) => a[kk] == null ? null : `${x(i)},${y(a[kk])}`).filter(Boolean).join(' '), fill: 'none', stroke: c, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+  line('west', 'var(--s2)'); line('yoy', 'var(--s1)');
+  const last = A.length - 1; el('circle', { cx: x(last), cy: y(A[last].yoy), r: 5, fill: 'var(--s1)', stroke: 'var(--panel)', 'stroke-width': 2 }, svg);
+  txt(svg, { x: x(last) - 8, y: y(A[last].yoy) - 10, 'text-anchor': 'end' }, `+${A[last].yoy}% now`, 'lab');
+  const pk = A.reduce((m, a, i) => a.yoy > A[m].yoy ? i : m, 0); txt(svg, { x: x(pk), y: y(A[pk].yoy) - 8, 'text-anchor': 'middle' }, `${A[pk].yoy}% peak`);
+  const cross = el('line', { y1: Tp, y2: H - B, stroke: 'var(--muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
+  const dot = el('circle', { r: 4, fill: 'var(--s1)', stroke: 'var(--panel)', 'stroke-width': 2, visibility: 'hidden' }, svg);
+  const hit = el('rect', { x: L, y: Tp, width: W - L - R, height: H - Tp - B, fill: 'transparent' }, svg);
+  hit.addEventListener('pointermove', ev => { const r = box.getBoundingClientRect(); const sx = ev.clientX - r.left; const i = Math.max(0, Math.min(last, Math.round((sx - L) / (W - L - R) * last))); cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible'); dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(A[i].yoy)); dot.setAttribute('visibility', 'visible'); const a = A[i]; tip.innerHTML = `<b>${a.q.replace('Q', ' Q')}</b><br>Valley: ${a.yoy > 0 ? '+' : ''}${a.yoy}% · $${a.ppsf}/sq ft${a.west != null ? `<br>Greenwood side: ${a.west > 0 ? '+' : ''}${a.west}%` : ''}`; place(tip, box, sx, ev.clientY - r.top); });
+  hit.addEventListener('pointerleave', () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); });
+});
+{ const tb = $('#tbl-accel tbody'); for (const a of DATA.accel.slice(-8)) { const r = document.createElement('tr'); r.innerHTML = `<td>${a.q.replace('Q', ' Q')}</td><td class="n">$${a.ppsf}</td><td class="n">${a.yoy > 0 ? '+' : ''}${a.yoy}%</td><td class="n">${a.west == null ? '' : (a.west > 0 ? '+' : '') + a.west + '%'}</td>`; tb.appendChild(r); }
+  const ty = $('#tbl-yearly tbody'); for (const d of DATA.yearly) { const r = document.createElement('tr'); r.innerHTML = `<td>${d.year}${d.year === 2026 ? ' (to 28 Oct)' : ''}</td><td class="n">${d.n}</td><td class="n">${money(d.median)}</td><td class="n">$${d.ppsf}</td>`; ty.appendChild(r); } }
+
+/* ---- town bars (listing site, all detached, last 12 months) ---- */
+responsive($('#towns'), (W, box, tip) => {
+  const D = [...DATA.towns].sort((a, b) => b.price - a.price);
+  const rowH = 26, L = 84, R = 48, Tp = 8; const H = Tp + D.length * rowH + 8;
+  const max = Math.ceil(Math.max(...D.map(d => d.price)) / 100000) * 100000; const x = v => L + v / max * (W - L - R);
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Median sale price by town over the last 12 months, from $483k in Coldbrook to $315k in Middleton; Greenwood $435k, Kingston $470k.' }, box);
+  for (let v = 0; v <= max; v += 100000) el('line', { x1: x(v), x2: x(v), y1: Tp, y2: H - 6, class: 'grid' }, svg);
+  D.forEach((d, i) => {
+    const cy = Tp + i * rowH + rowH / 2;
+    const t = txt(svg, { x: L - 8, y: cy + 4, 'text-anchor': 'end' }, d.town, 'lab'); if (d.town === 'Greenwood') t.style.fontWeight = 700;
+    el('rect', { x: L, y: cy - 7, width: x(d.price) - L, height: 14, rx: 4, fill: d.side === 'West' ? 'var(--s1)' : 'var(--s2)' }, svg);
+    txt(svg, { x: x(d.price) + 6, y: cy + 4 }, k(d.price));
+    hover(svg, box, tip, el('rect', { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: 'transparent' }, svg), () => `<b>${d.town}</b> · ${d.side === 'West' ? 'Greenwood side' : 'Kentville side'}<br>${d.sales} sales · ${d.dom} days on market`);
+  });
+});
+{ const lg = document.createElement('div'); lg.className = 'legend'; lg.innerHTML = '<span><i style="background:var(--s1)"></i>Greenwood to Middleton side</span><span><i style="background:var(--s2)"></i>Kentville side</span>'; $('#towns').before(lg);
+  const tb = $('#tbl-towns tbody'); for (const d of [...DATA.towns].sort((a, b) => b.price - a.price)) { const r = document.createElement('tr'); r.innerHTML = `<td>${d.town}</td><td>${d.side === 'West' ? 'Greenwood side' : 'Kentville side'}</td><td class="n">${d.sales}</td><td class="n">${d.dom}</td><td class="n">${k(d.price)}</td>`; tb.appendChild(r); } }
+
+/* ---- decisions: closed rows; question, lean and decide-by visible, the rest behind the chevron ---- */
 const chev = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>';
-const DEC = {
-  dec: [
-    { q: 'Which lenders, and when?', by: 'early December', opts: ['Our bank only', 'A broker only', 'Our bank plus a broker'], lean: 2,
-      why: 'Two quotes keep each honest. We ask each for two down-payment scenarios, and we do it before any car loan.',
-      dep: 'a pay stub, an employment letter and tax slips; the move date', more: 'annex-options', label: 'Pre-approval and the stress test' },
-    { q: 'Buyer\'s agent, or search on our own?', by: 'pick by early January', opts: ['Agent only', 'Our own system only', 'Our own system plus an agent'], lean: 2,
-      why: 'An agent brings live listing stats and the offer paperwork; our own system prices every home from recorded sales.',
-      dep: 'a shortlist in December', more: 'annex-options', label: 'Agents and listing data' },
-    { q: 'Keep or sell the home we rent out?', by: 'after pre-approval, mid-December', opts: ['Keep it as a rental', 'Sell it and use the proceeds', 'Decide later'], lean: 0,
-      why: 'Pat leans keep, expecting that market to rise. The sales data does not show that rise yet, so this is a lean, not a call.',
-      dep: 'the two pre-approval scenarios and the tax election check', more: 'annex-options', label: 'Keep or sell: the trade-offs' },
-    { q: 'Which towns, and which price band?', by: 'after pre-approval', opts: ['Greenwood side only', 'Kentville side only', 'Either, decided by the listing'], lean: 2,
-      why: 'Middleton to Kentville, within 30 to 40 minutes of Greenwood. Homes like ours sold for a median of $497,250 in 2025 to 2026, and pricier homes have risen less since 2022 (top fifth +13.2%, cheapest fifth +37.5%). Our own ceiling waits on pre-approval.',
-      dep: 'pre-approval; the comparable sales for each listing', more: 'annex-market', label: 'Market and price bands' },
-  ],
-  jan: [
-    { q: 'Buy on the January hunt, or rent first?', by: '15 February 2027', big: true, opts: ['Buy during the January to February hunt', 'Rent first, then buy within the 2-year window', 'Wait until summer if nothing fits'], lean: 0,
-      why: 'The market reads calm, not overheated, so a fair offer based on recorded sales is reasonable. We rent only if nothing passes our must-haves.',
-      dep: 'pre-approval, the monthly market check, the move date', more: 'annex-market', label: 'Market and price bands' },
-    { q: 'When do we open the FHSAs?', by: 'before 1 January 2027', opts: ['December 2026', 'On or after 1 January 2027', 'Skip it'], lean: 1,
-      why: 'December would fail the four-year look-back; January passes it. $8,000 each, tax-deductible.',
-      dep: 'a written answer from CRA on the rental question', more: 'annex-costs', label: 'Costs, taxes and buyer programs' },
-    { q: 'If we rent first, where?', by: 'January', opts: ['Base housing', 'A private rental', 'A short stay with family'], lean: null,
-      why: 'Not decided yet. Base housing is the cheapest at $747 to $921 a month for a 3-bedroom, but its wait time isn\'t published.',
-      dep: 'the buy-or-rent decision', more: 'annex-options', label: 'Renting first' },
-  ]
-};
-const cardHTML = d => `<article class="panel card${d.big ? ' big' : ''}">
-  <div class="by"><h3>${esc(d.q)}</h3><span class="pill pick">Decide by: ${esc(d.by)}</span></div>
-  <ul class="opts" aria-label="Options">${d.opts.map((o, i) => `<li class="${i === d.lean ? 'lean' : ''}">${esc(o)}</li>`).join('')}</ul>
-  <div class="kv"><b>${d.lean == null ? 'Status' : 'Our lean'}</b><span>${esc(d.why)}</span><b>Depends on</b><span>${esc(d.dep)}</span></div>
-  <a class="btn" href="#${d.more}">Read more: ${esc(d.label)}${chev}</a>
-</article>`;
-$('#dec-dec').innerHTML = DEC.dec.map(cardHTML).join('');
-$('#dec-jan').innerHTML = DEC.jan.map(cardHTML).join('');
+const DEC = [
+  { q: 'Buy on the January hunt, or rent first?', by: '15 February 2027', opts: ['Buy during the January to February hunt', 'Rent first, then buy within the 2-year window', 'Wait until summer if nothing fits'], lean: 0,
+    why: 'The market reads calm, not overheated, so a fair offer based on recorded sales is reasonable. We rent only if nothing passes our must-haves.',
+    dep: 'pre-approval, the monthly market check, the move date', more: 'annex-options', label: 'Renting first' },
+  { q: 'Which lenders, and when?', by: 'early December', opts: ['Our bank only', 'A broker only', 'Our bank plus a broker'], lean: 2,
+    why: 'Two quotes keep each honest. We ask each for two down-payment scenarios, and we do it before any car loan.',
+    dep: 'a pay stub, an employment letter and tax slips; the move date', more: 'annex-options', label: 'Pre-approval and the stress test' },
+  { q: 'Buyer\'s agent, or search on our own?', by: 'pick by early January', opts: ['Agent only', 'Our own system only', 'Our own system plus an agent'], lean: 2,
+    why: 'An agent brings live listing stats and the offer paperwork; our own system prices every home from recorded sales.',
+    dep: 'a shortlist in December', more: 'annex-options', label: 'Agents and listing data' },
+  { q: 'Keep or sell the home we rent out?', by: 'after pre-approval, mid-December', opts: ['Keep it as a rental', 'Sell it and use the proceeds', 'Decide later'], lean: 0,
+    why: 'Pat leans keep, expecting that market to rise. The sales data does not show that rise yet, so this is a lean, not a call.',
+    dep: 'the two pre-approval scenarios and the tax election check', more: 'annex-options', label: 'Keep or sell: the trade-offs' },
+  { q: 'Which towns, and which price band?', by: 'after pre-approval', opts: ['Greenwood side only', 'Kentville side only', 'Either, decided by the listing'], lean: 2,
+    why: 'Middleton to Kentville, within 30 to 40 minutes of Greenwood. The price-band charts above say pricier homes have risen less since 2022; our own ceiling waits on pre-approval.',
+    dep: 'pre-approval; the comparable sales for each listing', more: 't-mkt', label: 'The market' },
+  { q: 'When do we open the FHSAs?', by: 'before 1 January 2027', opts: ['December 2026', 'On or after 1 January 2027', 'Skip it'], lean: 1,
+    why: 'December would fail the four-year look-back; January passes it. $8,000 each, tax-deductible.',
+    dep: 'a written answer from CRA on the rental question', more: 'annex-costs', label: 'Costs, taxes and buyer programs' },
+  { q: 'If we rent first, where?', by: 'January', opts: ['Base housing', 'A private rental', 'A short stay with family'], lean: null,
+    why: 'Not decided yet. Base housing is the cheapest at $747 to $921 a month for a 3-bedroom, but its wait time isn\'t published.',
+    dep: 'the buy-or-rent decision', more: 'annex-options', label: 'Renting first' },
+];
+$('#decs').innerHTML = DEC.map(d => `<details class="dec">
+  <summary><h3>${esc(d.q)}</h3><span class="meta">${d.lean == null ? '<b>Not decided yet</b>' : `<b class="lean">${esc(d.opts[d.lean])}</b>`}<span>Decide by: ${esc(d.by)}</span></span><span class="chev"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg></span></summary>
+  <div class="detail wide">
+    <ul class="opts" aria-label="Options">${d.opts.map((o, i) => `<li class="${i === d.lean ? 'lean' : ''}">${esc(o)}</li>`).join('')}</ul>
+    <div class="kv"><b>${d.lean == null ? 'Status' : 'Why'}</b><span>${esc(d.why)}</span><b>Depends on</b><span>${esc(d.dep)}</span></div>
+    <a class="btn" href="#${d.more}">Read more: ${esc(d.label)}${chev}</a>
+  </div>
+</details>`).join('');
 
 /* ---- links into expanders: open the panel, then scroll ---- */
 function openTarget(hash) {
@@ -639,30 +744,6 @@ document.addEventListener('click', ev => {
 });
 if (location.hash) setTimeout(() => openTarget(location.hash), 50);
 addEventListener('hashchange', () => openTarget(location.hash));
-
-/* ---- status tiles ---- */
-const T = [
-  ['Overheating', 'Calm', 'ok', '3.7 to 3.9 months of homes for sale; most sell in about 5 weeks. No tested line yet.'],
-  ['Price acceleration', 'Green', 'ok', '+5.5% a year and slowing for 3 quarters.'],
-  ['Overvaluation', 'Partly checked', 'none', 'Sales ran 1.16 times assessment in 2026, down from 1.80 in 2022. Rents and incomes still to collect.'],
-  ['Overbuilding', 'Baseline set', 'base', '26 new builds listed against about 30 sales a month; we compare each month.'],
-];
-for (const [name, word, cls, note] of T) {
-  const d = document.createElement('div'); d.className = 'panel tile';
-  d.innerHTML = `<p class="eyebrow">${name}</p><span class="pill ${cls}"><svg viewBox="0 0 12 12" aria-hidden="true">${cls === 'ok' ? '<path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/>' : '<circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="2" fill="none"/>'}</svg>${word}</span><p class="muted small">${note}</p>`;
-  $('#tiles').appendChild(d);
-}
-
-/* ---- chart helpers: each chart draws at the container's pixel width so text stays legible on a phone ---- */
-function tipFor(box) { const t = document.createElement('div'); t.className = 'tip'; t.hidden = true; box.appendChild(t); return t; }
-function place(tip, box, x, y) { const w = box.clientWidth; tip.hidden = false; const tw = tip.offsetWidth; tip.style.left = Math.max(0, Math.min(w - tw, x - tw / 2)) + 'px'; tip.style.top = Math.max(0, y - tip.offsetHeight - 14) + 'px'; }
-function responsive(box, draw) {
-  let last = 0;
-  const run = () => { const w = Math.max(300, Math.floor(box.clientWidth)); if (w === last) return; last = w; box.innerHTML = ''; draw(w, box, tipFor(box)); };
-  run();
-  if ('ResizeObserver' in window) new ResizeObserver(() => requestAnimationFrame(run)).observe(box); else addEventListener('resize', run);
-}
-const fmtD = d => new Date(d + 'T12:00:00').toLocaleDateString('en-CA', { day: 'numeric', month: 'short' });
 
 /* ---- Gantt ---- */
 responsive($('#gantt'), (W, box, tip) => {
@@ -686,63 +767,62 @@ responsive($('#gantt'), (W, box, tip) => {
   const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Timeline from November 2026 to March 2027: agent and pre-approval in December, FHSAs on 1 January, the hunt in January and February with a 15 February switch date, the move and closing target in March.' }, box);
   for (let m = new Date(start); m <= end; m.setMonth(m.getMonth() + 1)) {
     const gx = x(m); el('line', { x1: gx, x2: gx, y1: top - 8, y2: H - 6, class: 'grid' }, svg);
-    if (m < end) { const t = el('text', { x: gx + 5, y: 18 }, svg); t.textContent = m.toLocaleDateString('en-CA', { month: 'short' }) + (m.getMonth() === 0 || +m === +start ? ' ' + m.getFullYear() : ''); }
+    if (m < end) txt(svg, { x: gx + 5, y: 18 }, m.toLocaleDateString('en-CA', { month: 'short' }) + (m.getMonth() === 0 || +m === +start ? ' ' + m.getFullYear() : ''));
   }
-  const now = new Date(DATA.built); if (now >= start && now <= end) { el('line', { x1: x(now), x2: x(now), y1: top - 8, y2: H - 6, stroke: 'var(--ink)', 'stroke-dasharray': '4 4', 'stroke-width': 1.5 }, svg); const t = el('text', { x: x(now) + 4, y: H - 4 }, svg); t.textContent = 'today'; }
+  const now = new Date(DATA.built); if (now >= start && now <= end) { el('line', { x1: x(now), x2: x(now), y1: top - 8, y2: H - 6, stroke: 'var(--ink)', 'stroke-dasharray': '4 4', 'stroke-width': 1.5 }, svg); txt(svg, { x: x(now) + 4, y: H - 4 }, 'today'); }
   tasks.forEach((t, i) => {
     const y = top + i * rowH; const cy = narrow ? y + rowH - 12 : y + rowH / 2;
-    const lab = el('text', narrow ? { x: left, y: y + 14, class: 'lab' } : { x: left - 10, y: cy + 4, 'text-anchor': 'end', class: 'lab' }, svg); lab.textContent = t.l; lab.style.fill = 'var(--ink)'; if (t.hot) lab.style.fontWeight = 700;
+    const lab = txt(svg, narrow ? { x: left, y: y + 14 } : { x: left - 10, y: cy + 4, 'text-anchor': 'end' }, t.l, 'lab'); if (t.hot) lab.style.fontWeight = 700;
     if (t.s) el('rect', { x: x(t.s), y: cy - 7, width: Math.max(6, x(t.e) - x(t.s)), height: 14, rx: 4, fill: t.hot ? 'var(--pick)' : 'var(--accent)' }, svg);
     for (const d of (t.m ? [t.m] : t.ms || [])) { const cx = x(d); el('path', { d: `M${cx} ${cy - 8}L${cx + 8} ${cy}L${cx} ${cy + 8}L${cx - 8} ${cy}Z`, fill: t.m ? 'var(--pick)' : 'var(--accent)', stroke: 'var(--panel)', 'stroke-width': 2 }, svg); }
-    const hit = el('rect', { x: 0, y, width: W, height: rowH, fill: 'transparent' }, svg);
     const when = t.s ? `${fmtD(t.s)} to ${fmtD(t.e)}` : t.m ? fmtD(t.m) : 'the 3rd of each month';
-    hit.addEventListener('pointermove', ev => { const r = box.getBoundingClientRect(); tip.innerHTML = `<b>${esc(t.l)}</b><br>${when} · ${t.who}`; place(tip, box, ev.clientX - r.left, ev.clientY - r.top); });
-    hit.addEventListener('pointerleave', () => tip.hidden = true);
+    hover(svg, box, tip, el('rect', { x: 0, y, width: W, height: rowH, fill: 'transparent' }, svg), () => `<b>${esc(t.l)}</b><br>${when} · ${t.who}`);
   });
 });
 
-/* ---- yearly price change line chart ---- */
-responsive($('#accel'), (W, box, tip) => {
-  const A = DATA.accel; const narrow = W < 620; const H = narrow ? 220 : 280, L = 40, R = 12, Tp = 16, B = 28;
-  const vals = A.flatMap(a => [a.yoy, a.west]).filter(v => v != null);
-  const ymax = Math.ceil(Math.max(...vals) / 10) * 10, ymin = Math.min(0, Math.floor(Math.min(...vals) / 10) * 10);
-  const x = i => L + i / (A.length - 1) * (W - L - R), y = v => Tp + (ymax - v) / (ymax - ymin) * (H - Tp - B);
-  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Yearly change in median price per square foot by quarter, 2019 to 2026, peaking near 32% in 2022 and about 5.5% in the latest quarter.' }, box);
-  for (let v = ymin; v <= ymax; v += 10) { el('line', { x1: L, x2: W - R, y1: y(v), y2: y(v), class: 'grid' }, svg); const t = el('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, svg); t.textContent = v + '%'; }
-  A.forEach((a, i) => { if (a.q.endsWith('Q1') && (!narrow || +a.q.slice(0, 4) % 2 === 1)) { const t = el('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, svg); t.textContent = a.q.slice(0, 4); } });
-  const line = (k, c) => el('polyline', { points: A.map((a, i) => a[k] == null ? null : `${x(i)},${y(a[k])}`).filter(Boolean).join(' '), fill: 'none', stroke: c, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-  line('west', 'var(--s2)'); line('yoy', 'var(--s1)');
-  const last = A.length - 1; el('circle', { cx: x(last), cy: y(A[last].yoy), r: 5, fill: 'var(--s1)', stroke: 'var(--panel)', 'stroke-width': 2 }, svg);
-  const lt = el('text', { x: x(last) - 8, y: y(A[last].yoy) - 10, 'text-anchor': 'end' }, svg); lt.textContent = `+${A[last].yoy}% now`; lt.style.fill = 'var(--ink)';
-  const pk = A.reduce((m, a, i) => a.yoy > A[m].yoy ? i : m, 0); const pt = el('text', { x: x(pk), y: y(A[pk].yoy) - 8, 'text-anchor': 'middle' }, svg); pt.textContent = `${A[pk].yoy}% peak`;
-  const cross = el('line', { y1: Tp, y2: H - B, stroke: 'var(--muted)', 'stroke-width': 1, visibility: 'hidden' }, svg);
-  const dot = el('circle', { r: 4, fill: 'var(--s1)', stroke: 'var(--panel)', 'stroke-width': 2, visibility: 'hidden' }, svg);
-  const hit = el('rect', { x: L, y: Tp, width: W - L - R, height: H - Tp - B, fill: 'transparent' }, svg);
-  hit.addEventListener('pointermove', ev => { const r = box.getBoundingClientRect(); const sx = ev.clientX - r.left; const i = Math.max(0, Math.min(last, Math.round((sx - L) / (W - L - R) * last))); cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible'); dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(A[i].yoy)); dot.setAttribute('visibility', 'visible'); const a = A[i]; tip.innerHTML = `<b>${a.q.replace('Q', ' Q')}</b><br>Valley: ${a.yoy > 0 ? '+' : ''}${a.yoy}% · $${a.ppsf}/sq ft${a.west != null ? `<br>Greenwood side: ${a.west > 0 ? '+' : ''}${a.west}%` : ''}`; place(tip, box, sx, ev.clientY - r.top); });
-  hit.addEventListener('pointerleave', () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); });
+/* ---- next steps per person, with per-viewer checkbox memory (localStorage, optional) ---- */
+const store = {
+  key: 'hp-steps-v1',
+  read() { try { return JSON.parse(localStorage.getItem(this.key) || '{}'); } catch (e) { return {}; } },
+  write(o) { try { localStorage.setItem(this.key, JSON.stringify(o)); } catch (e) { /* private window or blocked storage: the page still works */ } }
+};
+let done = store.read();
+const STEPS = [
+  ['Pat', [
+    ['pat-move', 'Ask this week when the move date will be confirmed', 'this week'],
+    ['pat-tax', 'Check the tax election on the home we rent out', 'November'],
+    ['pat-vp', 'Start the monthly listing-site check on the PC once', 'before 2 December'],
+    ['pat-pre', 'Book pre-approval with our bank and a mortgage broker, two down-payment scenarios', 'early December']]],
+  ['Julia', [
+    ['jul-read', 'Read this page and flag anything that\'s off', 'this week'],
+    ['jul-work', 'Say when work starts after leave', 'November'],
+    ['jul-agent', 'Shortlist buyer\'s agents with Pat', 'December']]],
+  ['Together', [
+    ['tog-cra', 'Write to CRA about the FHSA rental question', 'November'],
+    ['tog-agent', 'Pick the buyer\'s agent', 'by early January'],
+    ['tog-fhsa', 'Open an FHSA each and put in $8,000', 'from 1 January'],
+    ['tog-keep', 'Decide: keep or sell the home we rent out', 'after pre-approval'],
+    ['tog-hunt', 'House hunt', 'January to February'],
+    ['tog-switch', 'Switch date: buy, or rent first', '15 February']]],
+  ['Claude', [
+    ['cl-research', 'Research filed and the market check built', 'done', true],
+    ['cl-monthly', 'Monthly market check', '3rd of each month'],
+    ['cl-fair', 'Fair-price method and the house tracker', 'November']]],
+];
+const all = STEPS.flatMap(([, items]) => items);
+const isDone = s => !!(s[3] || done[s[0]]);
+function todoHTML(s) {
+  const d = isDone(s);
+  return `<div class="todo${d ? ' is-done' : ''}" data-id="${s[0]}"><button type="button" class="${d ? 'done' : ''}" aria-pressed="${d}" aria-label="${d ? 'Done: ' : 'Mark done: '}${esc(s[1])}"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" stroke-width="2" fill="none"/></svg></button><span><span class="t">${esc(s[1])}</span><span class="when">${esc(s[2])}</span></span></div>`;
+}
+function renderSteps() { $('#people').innerHTML = STEPS.map(([who, items]) => `<div><h3 style="margin-bottom:10px">${who}</h3><ul>${items.map(s => `<li>${todoHTML(s)}</li>`).join('')}</ul></div>`).join(''); }
+renderSteps();
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('.todo button'); if (!b) return;
+  const id = b.closest('.todo').dataset.id; const s = all.find(x => x[0] === id); if (!s || s[3]) return;
+  if (done[id]) delete done[id]; else done[id] = true;
+  store.write(done); renderSteps();
 });
-{ const tb = $('#tbl-accel tbody'); for (const a of DATA.accel.slice(-8)) { const r = document.createElement('tr'); r.innerHTML = `<td>${a.q.replace('Q', ' Q')}</td><td class="n">$${a.ppsf}</td><td class="n">${a.yoy > 0 ? '+' : ''}${a.yoy}%</td><td class="n">${a.west == null ? '' : (a.west > 0 ? '+' : '') + a.west + '%'}</td>`; tb.appendChild(r); } }
-
-/* ---- town bars ---- */
-responsive($('#towns'), (W, box, tip) => {
-  const D = [...DATA.towns].sort((a, b) => b.price - a.price);
-  const rowH = 28, L = 88, R = 48, Tp = 8; const H = Tp + D.length * rowH + 8;
-  const max = Math.ceil(Math.max(...D.map(d => d.price)) / 100000) * 100000;
-  const x = v => L + v / max * (W - L - R);
-  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'Median sale price by town over the last 12 months, from $483k in Coldbrook to $315k in Middleton; Greenwood $435k, Kingston $470k.' }, box);
-  for (let v = 0; v <= max; v += 100000) el('line', { x1: x(v), x2: x(v), y1: Tp, y2: H - 6, class: 'grid' }, svg);
-  D.forEach((d, i) => {
-    const cy = Tp + i * rowH + rowH / 2;
-    const t = el('text', { x: L - 8, y: cy + 4, 'text-anchor': 'end' }, svg); t.textContent = d.town; t.style.fill = 'var(--ink)'; if (d.town === 'Greenwood') t.style.fontWeight = 700;
-    el('rect', { x: L, y: cy - 7, width: x(d.price) - L, height: 14, rx: 4, fill: d.side === 'West' ? 'var(--s1)' : 'var(--s2)' }, svg);
-    const v = el('text', { x: x(d.price) + 6, y: cy + 4 }, svg); v.textContent = '$' + Math.round(d.price / 1000) + 'k';
-    const hit = el('rect', { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: 'transparent' }, svg);
-    hit.addEventListener('pointermove', ev => { const r = box.getBoundingClientRect(); tip.innerHTML = `<b>${d.town}</b> · ${d.side === 'West' ? 'Greenwood side' : 'Kentville side'}<br>${d.sales} sales · ${d.dom} days on market`; place(tip, box, ev.clientX - r.left, ev.clientY - r.top); });
-    hit.addEventListener('pointerleave', () => tip.hidden = true);
-  });
-});
-{ const lg = document.createElement('div'); lg.className = 'legend'; lg.innerHTML = '<span><i style="background:var(--s1)"></i>Greenwood to Middleton side</span><span><i style="background:var(--s2)"></i>Kentville side</span>'; $('#towns').before(lg);
-  const tb = $('#tbl-towns tbody'); for (const d of [...DATA.towns].sort((a, b) => b.price - a.price)) { const r = document.createElement('tr'); r.innerHTML = `<td>${d.town}</td><td>${d.side === 'West' ? 'Greenwood side' : 'Kentville side'}</td><td class="n">${d.sales}</td><td class="n">${d.dom}</td><td class="n">$${Math.round(d.price / 1000)}k</td>`; tb.appendChild(r); } }
 </script>
 
 </body>

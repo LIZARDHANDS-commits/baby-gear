@@ -304,7 +304,7 @@ function candCard(c, p){
         ${pr.note?`<div><b>Price note:</b> ${md1(pr.note)}</div>`:''}${pr.perYear?`<div><b>Per year of use:</b> about ${money(pr.perYear)}</div>`:''}
         ${pr.otherPrices&&pr.otherPrices.length?`<div><b>Other prices seen:</b><ul>${pr.otherPrices.map(o=>`<li><span class="num">${money(o.amount)}</span> ${esc(o.seller||'')}${o.url?` · <a href="${esc(o.url)}" target="_blank" rel="noopener">page</a>`:''}${o.readDate?', read '+esc(o.readDate):''}</li>`).join('')}</ul></div>`:''}
         ${c.gate1Note?`<div><b>Safety gate (${esc(c.gate1||'unknown')}):</b> ${md1(c.gate1Note)}</div>`:''}${c.gate2Note?`<div><b>Quality bar (${esc(c.gate2||'unknown')}):</b> ${md1(c.gate2Note)}</div>`:''}
-        ${c.warranty?`<div><b>Warranty:</b> ${md1(c.warranty)}</div>`:''}${c.returns?`<div><b>Returns:</b> ${md1(c.returns)}</div>`:''}
+        ${c.availability?`<div><b>Availability:</b> ${md1(c.availability)}</div>`:''}${c.warranty?`<div><b>Warranty:</b> ${md1(c.warranty)}</div>`:''}${c.returns?`<div><b>Returns:</b> ${md1(c.returns)}</div>`:''}
         ${(c.flags||[]).length?`<div><b>All flags:</b> ${c.flags.map(f=>`<span class="chip">${esc(f)}</span>`).join(' ')}</div>`:''}
         ${c.swot?`<div><b>Strengths, weaknesses, opportunities, threats</b><div class="swot"><div><h4>Strengths</h4>${list(c.swot.strengths)}</div><div><h4>Weaknesses</h4>${list(c.swot.weaknesses)}</div><div><h4>Opportunities</h4>${list(c.swot.opportunities)}</div><div><h4>Threats</h4>${list(c.swot.threats)}</div></div></div>`:''}
         ${c.ownerReviews?`<div><b>Owner reviews</b> ${c.ownerReviews.stars?`· ${esc(c.ownerReviews.stars)}`:''}<div class="swot"><div><h4>Praise</h4>${list(c.ownerReviews.praise)}</div><div><h4>Complaints</h4>${list(c.ownerReviews.complaints)}</div></div>${c.ownerReviews.longTerm?`<p style="margin-top:6px"><b>Long-term use:</b> ${md1(c.ownerReviews.longTerm)}</p>`:''}</div>`:''}
@@ -342,7 +342,7 @@ function viewPart(p){
       <div><b>Checks before buying (${(p.checksBeforeBuying||[]).length})</b>${list(p.checksBeforeBuying)}</div>
       <div><b>Questions for Pat and Julia (${(p.questions||[]).length})</b>${(p.questions||[]).length?'<ul>'+p.questions.map(q=>`<li>${md1(q.text||q)}</li>`).join('')+'</ul>':'<span class="muted"> none</span>'}</div>
       <div><b>What grading found (${(p.gradingNotes||[]).length})</b>${list(p.gradingNotes)}</div>
-      ${p.need?`<div><b>What it must do:</b> ${esc(p.need)}${p.yearsOfUse?` <span class="muted">Years of use assumed: ${esc(p.yearsOfUse)}.</span>`:''}</div>`:''}
+      ${p.need?`<div><b>What it must do:</b> ${esc(p.need)}</div>`:''}${p.yearsOfUse?`<div><b>Years of use assumed:</b> ${esc(p.yearsOfUse)}${p.yearsOfUseNote?' · '+md1(p.yearsOfUseNote):''}</div>`:''}
     </div></details>
   </div></div>
   <details class="more" style="border-top:0;padding-top:0"><summary>Other candidates (${others.length}): price, score, why</summary>
